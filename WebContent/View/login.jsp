@@ -5,28 +5,26 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Skybook - Login</title>
-<%@include  file="header.html" %>
+<%@include  file="../header.html" %>
 </head>
 <body>
-	<center><img src="IMAGES\logo.png" alt="Italian Trulli" style="width:300px;height:200px;"></center>
 	<div class="login-form">
-		<form action="/examples/actions/confirmation.php" method="post">
+		<form action="<%=request.getContextPath()%>/login" method="post">
 			<h1 class="text-center">Sky Book</h1>
 			<h3 class="text-center">Manages Skyzer Support Calls</h3>
 			<div class="form-group">
-				<input type="text" class="form-control" placeholder="Username"
+				<input type="text" class="form-control" placeholder="Username" name="username"
 					required="required">
 			</div>
 			<div class="form-group">
-				<input type="password" class="form-control" placeholder="Password"
+				<input type="password" class="form-control" placeholder="Password" name="password"
 					required="required">
 			</div>
 			<div class="form-group">
-				<button type="submit" class="btn btn-primary btn-block">Log
-					in</button>
+				<input type="submit" class="btn btn-primary btn-block" value="Login"/>
 			</div>
 		</form>
 	</div>
-	<%@include  file="footer.html" %>
+	<%@include  file="../footer.html" %>
 </body>
 </html>
