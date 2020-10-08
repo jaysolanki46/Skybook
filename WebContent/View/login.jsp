@@ -10,7 +10,7 @@
 <body>
 	<div class="login-form">
 		<form action="<%=request.getContextPath()%>/login" method="post">
-			<h1 class="text-center">Sky Book</h1>
+			<h1 class="text-center">Skyzer - Sky Book</h1>
 			<h3 class="text-center">Manages Skyzer Support Calls</h3>
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="Username" name="username"
