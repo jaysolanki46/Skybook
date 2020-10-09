@@ -1,7 +1,11 @@
 package web;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,23 +35,31 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		PrintWriter out = response.getWriter(); 
+		HttpSession session = request.getSession();
 		String username = request.getParameter("username");
         String password = request.getParameter("password");
         User user = new User();
         user.setName(username);
         user.setPass(password);
         
+        
         try {
-            if (loginDao.validate(user)) {
-                //HttpSession session = request.getSession();
-                // session.setAttribute("username",username);
+        	
+        	ResultSet rs = loginDao.validate(user);
+        	
+            if (rs.next()) {
+            	session.setAttribute("userId",rs.getString("id"));
+                session.setAttribute("username",username);
                 response.sendRedirect("View/Index.jsp");
             } else {
-                //HttpSession session = request.getSession();
-                //session.setAttribute("user", username);
-                response.sendRedirect("View/login.jsp");
+            	
+            	response.getWriter().write("<html><body><script>alert('Invalid username or password!')</script></body></html>");
+            	RequestDispatcher rd = request.getRequestDispatcher("View/login.jsp");
+            	rd.include(request, response);
+            	
             }
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 	}

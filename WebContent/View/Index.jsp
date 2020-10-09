@@ -1,11 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page session="true" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="ISO-8859-1">
 <title>Skybook - Book</title>
 <%@include  file="../header.html" %>
+
+	<%
+		String username;
+		if(session.getAttribute("username") != null) {
+			username = session.getAttribute("username").toString();
+		} else {
+			response.sendRedirect("../View/login.jsp");
+		}
+	%>
+
 </head>
 <body>
 <%@include  file="../navbar.html" %>
@@ -148,6 +159,7 @@
 					
 					<div class="card bg-light mb-3" style="max-width: 26rem;">
 						<h5 class="card-header" style="background-color: transparent;">Follow Up</h5>
+						<label class="col-sm-10 col-form-label" style="font-weight: bold">LOGID-####</label>
 						<input type="date" name="bday" max="3000-12-31" min="1000-01-01" class="form-control col-sm-10 center_div">						
 						<input type="time" id="appt" name="appt" min="09:00" max="18:00" class="form-control col-sm-10 center_div">
         				<textarea class="col-sm-10 form-control center_div" placeholder="Follow up details..." rows="3"></textarea>

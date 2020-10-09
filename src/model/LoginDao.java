@@ -10,8 +10,8 @@ import db.DBConfig;
 
 public class LoginDao {
 	
-	private boolean status = false;
 	private Connection cnn;
+	private ResultSet rs;
 	
 	public LoginDao() throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated constructor stub
@@ -19,7 +19,7 @@ public class LoginDao {
 		cnn = DBConfig.connection();
 	}
 
-	public boolean validate(User user) throws ClassNotFoundException {
+	public ResultSet validate(User user) throws ClassNotFoundException {
 
         try {
         	
@@ -28,13 +28,12 @@ public class LoginDao {
             preparedStatement.setString(2, user.getPass());
 
             System.out.println(preparedStatement);
-            ResultSet rs = preparedStatement.executeQuery();
-            status = rs.next();
-
+            rs = preparedStatement.executeQuery();
+            
         } catch (SQLException e) {
            	e.printStackTrace();
         }
-        return status;
+        
+		return rs;
     }
-	
 }

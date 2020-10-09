@@ -6,6 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Skybook - Login</title>
 <%@include  file="../header.html" %>
+<%
+	session.invalidate();
+
+%>
 </head>
 <body>
 	<div class="login-form">
