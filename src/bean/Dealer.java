@@ -1,10 +1,9 @@
 package bean;
 
-public class User {
+public class Dealer {
 
 	private Integer id;
 	private String name;
-	private String pass;
 	
 	public Integer getId() {
 		return id;
@@ -17,11 +16,5 @@ public class User {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getPass() {
-		return pass;
-	}
-	public void setPass(String pass) {
-		this.pass = pass;
 	}
 }
