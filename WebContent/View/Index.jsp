@@ -92,9 +92,9 @@
 						
 							</datalist>
 							
-							 <div class="input-group" style="margin-left: auto; width:50%;">
-							 <input type="checkbox" class="form-check-input" name="isUnknown">
-   							 <label class="form-check-label">Unknown</label>
+							 <div class="input-group" style="margin-left: auto; width:47%;">
+							 <input type="checkbox" class="form-check-input" name="isNew">
+   							 <label class="form-check-label">Add New</label>
 						</div>
 						</div>
 						
@@ -107,16 +107,27 @@
 						<div class="form-group row">
 						
 							<label class="col-sm-1 col-form-label">Serial:</label>
-							<input type="text" class="col-sm-2 form-control" name="serial">
+							<input type="text" class="col-sm-4 form-control" name="serial">
 							
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;
 							
 							<label class="col-sm-1 col-form-label">Terminal:</label> 
 							<select class="custom-select col-sm-4" name="terminal">
 								<option selected>Select terminal...</option>
-								<option value="1">ICT250</option>
-								<option value="2">MOVE5000</option>
-								<option value="3">DESK3200</option>
+								<%	
+								rs = st.executeQuery("SELECT * FROM terminals");
+								
+							    while(rs.next())
+							    {   
+									%>
+							    		<option value="<%=rs.getString("id") %>"><%=rs.getString("name") %></option>
+							    	<%
+							    }    
+						    
+							%>
 							</select>
 							
 						</div>
@@ -128,30 +139,38 @@
 					<div class="card-body" style="padding: 10px">
 						<h5 class="card-title">Issue</h5>
 						<div class="form-group row">
-						
-							<label class="col-sm-2 col-form-label">Category:</label>
-							<select class="custom-select col-sm-4" name="category">
-								<option selected>Select category...</option>
-								<option value="1">TMS</option>
-								<option value="2">NITRO</option>
-								<option value="3">RKI</option>
-							</select>
-							
-						</div>
-						<div class="form-group row">
 							<label class="col-sm-2 col-form-label">Issue:</label>
-							<select class="custom-select col-sm-4" name="issue">
-								<option selected>Select issue...</option>
-								<option value="1">Latest software</option>
-								<option value="2">Transmission error</option>
-								<option value="3">Put prevent download</option>
-							</select>
+							<input class="col-sm-8" list="issues" id="issue" name="issue" onfocusout="">
+							<datalist id="issues">
+							<%	
+								rs = st.executeQuery("SELECT * FROM issues");
+								
+							    while(rs.next())
+							    {   
+									%>
+							    		<option data-value="<%=rs.getString("name") %>"><%=rs.getString("name") %></option>
+							    	<%
+							    }    
+						    
+							%>
+							</datalist>
 							
 							&nbsp;&nbsp;&nbsp;
 							
-							<img alt="" width="22px" src="../IMAGES/answer.svg" name="hint">
-							
+							<button class="btn-skyzer-icon-background" type="button" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><i class="fa fa-bars"></i></button>
+								
 						</div>
+						
+						<div class="form-group row">
+						
+							<label class="col-sm-2 col-form-label">Category:</label>
+							<div class="form-group">
+							<input class="form-control" type="text" style="width: 459px" readonly>
+							<small class="form-text text-muted">Note: Category will come up automatically...</small>
+							</div>
+						</div>
+						
+						
 					</div>
 				</div>
 				
@@ -192,14 +211,22 @@
 						<h5 class="card-header" style="background-color: transparent;">Status</h5>
 						<div class="row" style="margin-left: 0px;">
 						
-						<select class="custom-select col-sm-8 center_div" name="status">
+						<select class="custom-select col-sm-8 center_div" id="status" name="status" onchange="updateStatus()">
 								<option selected>Select status...</option>
-								<option value="1">Instructed</option>
-								<option value="2">Awaiting</option>
-								<option value="3">Resolved</option>
+								<%	
+								rs = st.executeQuery("SELECT * FROM status");
+								
+							    while(rs.next())
+							    {   
+									%>
+							    		<option value="<%=rs.getString("id") %>"><%=rs.getString("name") %></option>
+							    	<%
+							    }    
+						    
+							%>
 						</select>
 						
-						<img alt="" width="22px" src="../IMAGES/task-complete.svg" name="statusImg">
+						<img alt="" width="22px" src="../IMAGES/task-complete.svg" id="statusImg" style="visibility:hidden;">
 						</div>
 					</div>
 					
@@ -210,7 +237,7 @@
 						<input type="date" name="followUpDate" max="31-12-3000" min="01-01-1000" class="form-control col-sm-10 center_div">						
 						<input type="time" name="followUpTime" name="appt" min="09:00" max="18:00" class="form-control col-sm-10 center_div">
         				<textarea class="col-sm-10 form-control center_div" placeholder="Follow up notes..." rows="3" name="followUpNote"></textarea>
-						<button name="generateTicket" type="button" class="btn btn-skyzer col-sm-10 center_div">Generate Ticket</button>
+						<button name="generateTicket" type="button" class="btn btn-skyzer col-sm-10 center_div" onclick="ticket()">Generate Ticket</button>
 					</div>
 				</div>
 				
@@ -248,6 +275,26 @@ function freezeLogTime() {
 	
 	var x = document.getElementById("time");
     x.innerHTML = time;
+}
+$(function () {
+	  $('[data-toggle="popover"]').popover()
+	})
+function updateStatus() {
+  var x = parseInt(document.getElementById("status").value);
+ 
+  if (x === 2)
+	  document.getElementById("statusImg").style.visibility = "visible";
+  else
+	  document.getElementById("statusImg").style.visibility = "hidden";
+}
+function ticket() {
+	
+	swal({
+		  title: "Ticket created!",
+		  text: "",
+		  icon: "success",
+		  button: "Aww yiss!",
+		});
 }
 </script>
 </html>
