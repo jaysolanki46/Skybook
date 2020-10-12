@@ -79,18 +79,20 @@
 							<datalist id="dealers">
 							
 							<%	
-								rs = st.executeQuery("SELECT * FROM dealers");
+								rs = st.executeQuery("select dt.id as dtID, dt.name as technician, d.name as dealer from dealer_technicians as dt INNER JOIN dealers as d ON dt.dealer = d.id");
 								
 							    while(rs.next())
 							    {   
 									%>
-							    		<option value='<%=rs.getString("name") %>'><%=rs.getString("name") %></option>
+							    		<option data-id=<%=rs.getString("dtID") %> value='<%=rs.getString("technician") %>'><%=rs.getString("dealer") %></option>
 							    	<%
 							    }    
 						    
 							%>
 						
 							</datalist>
+							
+							<input type="hidden" id="userID" name="userID"/>
 							
 							 <div class="input-group" style="margin-left: auto; width:47%;">
 							 <input type="checkbox" class="form-check-input" name="isNew">
@@ -334,6 +336,15 @@ $("#issue").change(function() {
 	 $('#solution').attr("data-content",  solution);
 	 
 })
+$("#dealer").change(function() {
+	var val = $('#dealer').val()
+    var userID = $('#dealers option').filter(function() {
+        return this.value == val;
+    }).data('id');
+	 
+	 document.getElementById("userID").value  = userID;
+	 
+})
 $("#isFollowUp").change(function() {
 	
 	var isFollowUp = $('#isFollowUp')[0].checked;
@@ -348,7 +359,7 @@ $("#isFollowUp").change(function() {
 })
 function validate() {
 	
-	var name = document.getElementById("dealer").value;
+	var userID = document.getElementById("userID").value;
 	var category = document.getElementById("category").value;
 	var newIssue = document.getElementById("newIssue").value;
 	var newSolution = document.getElementById("newSolution").value;
@@ -357,7 +368,9 @@ function validate() {
 	var followUpDate = document.getElementById("followUpDate").value;
 	var followUpTime = document.getElementById("followUpTime").value;
 	
-	if(name === "" || category  === "" || status == 0) {
+	if(userID == "undefined") {
+		swal("Error!", "Invalid dealer name!", "error");
+	} else if (name === "" || category  === "" || status == 0) {
 		swal("Error!", "Please fill all details!", "error");
 	} else {
 		if(category == "undefined" &&  (newIssue === "" || newSolution === "")) {
@@ -365,11 +378,11 @@ function validate() {
 		} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
 			swal("Error!", "Invalid follow up details!", "error");
 		} else {
-			
+		
 			document.getElementById("book").submit();
 		}
 	}
-		
+	
 }
 </script>
 </html>
