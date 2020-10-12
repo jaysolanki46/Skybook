@@ -22,7 +22,7 @@
 		String DB_URL = "jdbc:mysql://localhost:3306/skybook?useSSL=false";
 		
 		String USER = "root";
-		String pass = "Sisterbro46@";
+		String pass = "Js0322!@";
 		Connection dbConn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -112,7 +112,7 @@
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							&nbsp;&nbsp;
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							
 							<label class="col-sm-1 col-form-label">Terminal:</label> 
 							<select class="custom-select col-sm-4" name="terminal">
@@ -140,16 +140,16 @@
 						<h5 class="card-title">Issue</h5>
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label">Issue:</label>
-							<input class="col-sm-8" list="issues" id="issue" name="issue" onfocusout="">
+							<input class="col-sm-8" list="issues" id="issue" name="issue">
 							<datalist id="issues">
 							<%	
-								rs = st.executeQuery("SELECT * FROM issues");
+								rs = st.executeQuery("SELECT i.name as issue, im.name as category, i.solution as solution FROM skybook.issues i INNER JOIN issue_master im ON i.issue_master = im.id");
 								
 							    while(rs.next())
 							    {   
 									%>
-							    		<option data-value="<%=rs.getString("name") %>"><%=rs.getString("name") %></option>
-							    	<%
+							    		<option data-solution='<%=rs.getString("solution") %>' data-value=<%=rs.getString("category") %>><%=rs.getString("issue") %></option>
+							    	<%	System.out.println(rs.getString("solution"));
 							    }    
 						    
 							%>
@@ -157,7 +157,7 @@
 							
 							&nbsp;&nbsp;&nbsp;
 							
-							<button class="btn-skyzer-icon-background" type="button" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><i class="fa fa-bars"></i></button>
+							<button id="solution" class="btn-skyzer-icon-background" type="button" data-toggle="popover" title="Solution" data-content="----"><i class="fa fa-bars"></i></button>
 								
 						</div>
 						
@@ -165,11 +165,15 @@
 						
 							<label class="col-sm-2 col-form-label">Category:</label>
 							<div class="form-group">
-							<input class="form-control" type="text" style="width: 459px" readonly>
+							<input id="category" class="form-control" type="text" style="width: 505px" readonly>
 							<small class="form-text text-muted">Note: Category will come up automatically...</small>
 							</div>
 						</div>
 						
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Description:</label>
+							<textarea class="col-sm-8 form-control" placeholder="" rows="3" name="description"></textarea>
+						</div>
 						
 					</div>
 				</div>
@@ -180,13 +184,13 @@
 						<div class="form-group row">
 						
 							<label class="col-sm-2 col-form-label">Issue:</label>
-							<textarea class="col-sm-9 form-control" placeholder="New issue..." rows="3" name="newIssue"></textarea>
+							<textarea class="col-sm-9 form-control" placeholder="New issue..." rows="4"  name="newIssue" id="newIssue"></textarea>
 						
 						</div>
 						
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label">Solution:</label>
-							<textarea class="col-sm-9 form-control" placeholder="New solution..." rows="3" name="newSolution"></textarea>
+							<textarea class="col-sm-9 form-control" placeholder="New solution..." rows="4" name="newSolution" id="newSolution"></textarea>
 						</div>
 					</div>
 				</div>
@@ -197,7 +201,7 @@
 					<div class="card-body" style="padding: 10px">
 						
 						<input type="reset" class="btn btn-danger float-right" style="margin-left:10px;" value="Cancel">
-						<input type="submit" class="btn btn-skyzer float-right" value="Complete">
+						<input type="button" class="btn btn-skyzer float-right" value="Complete" onclick="validate()">
 						
 					</div>
 				</div>
@@ -212,7 +216,7 @@
 						<div class="row" style="margin-left: 0px;">
 						
 						<select class="custom-select col-sm-8 center_div" id="status" name="status" onchange="updateStatus()">
-								<option selected>Select status...</option>
+								<option value="0" selected>Select status...</option>
 								<%	
 								rs = st.executeQuery("SELECT * FROM status");
 								
@@ -228,16 +232,18 @@
 						
 						<img alt="" width="22px" src="../IMAGES/task-complete.svg" id="statusImg" style="visibility:hidden;">
 						</div>
+						<div class="input-group center_div" style="margin-left: 12%;">
+							 <input type="checkbox" class="form-check-input" name="isFollowUp" id="isFollowUp">
+   							 <label class="form-check-label">Follow Up</label>
+						</div>
 					</div>
 					
-					<div class="card bg-light mb-3" style="max-width: 26rem;">
+					<div class="card bg-light mb-3" style="max-width: 26rem; display: none;" id="followUp">
 						<h5 class="card-header" style="background-color: transparent;">Follow Up</h5>
-						
-						<label class="col-sm-10 col-form-label" style="font-weight: bold" name="logID">LOGID-####</label>
-						<input type="date" name="followUpDate" max="31-12-3000" min="01-01-1000" class="form-control col-sm-10 center_div">						
-						<input type="time" name="followUpTime" name="appt" min="09:00" max="18:00" class="form-control col-sm-10 center_div">
+						<input type="date" id="followUpDate" name="followUpDate" max="31-12-3000" min="01-01-1000" class="form-control col-sm-10 center_div">						
+						<input type="time" id="followUpTime" name="followUpTime" name="appt" min="09:00" max="18:00" class="form-control col-sm-10 center_div">
         				<textarea class="col-sm-10 form-control center_div" placeholder="Follow up notes..." rows="3" name="followUpNote"></textarea>
-						<button name="generateTicket" type="button" class="btn btn-skyzer col-sm-10 center_div" onclick="ticket()">Generate Ticket</button>
+						
 					</div>
 				</div>
 				
@@ -295,6 +301,58 @@ function ticket() {
 		  icon: "success",
 		  button: "Aww yiss!",
 		});
+}
+$("#issue").change(function() {
+	 var val = $('#issue').val()
+     var category = $('#issues option').filter(function() {
+         return this.value == val;
+     }).data('value');
+	 
+	 document.getElementById("category").value  = category;
+	 
+	 var solution = $('#issues option').filter(function() {
+         return this.value == val;
+     }).data('solution');
+	 
+	 $('#solution').attr("data-content",  solution);
+	 
+})
+$("#isFollowUp").change(function() {
+	
+	var isFollowUp = $('#isFollowUp')[0].checked;
+   	var followUpDiv = document.getElementById("followUp");
+	
+   	if(isFollowUp) {
+   		followUpDiv.style.display = "block";
+	} else {
+		followUpDiv.style.display = "none";
+	}
+	 
+})
+function validate() {
+	
+	var name = document.getElementById("dealer").value;
+	var category = document.getElementById("category").value;
+	var newIssue = document.getElementById("newIssue").value;
+	var newSolution = document.getElementById("newSolution").value;
+	var status = document.getElementById("status").value;
+	var isFollowUp = document.getElementById("isFollowUp").checked;
+	var followUpDate = document.getElementById("followUpDate").value;
+	var followUpTime = document.getElementById("followUpTime").value;
+	alert(followUpDate + " " + followUpTime);
+	
+	if(name === "" || category  === "" || status == 0) {
+		swal("Error!", "You clicked the button!", "error");
+	} else {
+		if(category == "undefined" &&  (newIssue === "" || newSolution === "")) {
+			swal("Error!", "You clicked the button!", "error");
+		} else if (isFollowUp) {
+			
+		} else {
+			swal("Good job!", "You clicked the button!", "success");
+		}
+	}
+		
 }
 </script>
 </html>
