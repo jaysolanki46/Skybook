@@ -22,7 +22,7 @@
 		String DB_URL = "jdbc:mysql://localhost:3306/skybook?useSSL=false";
 		
 		String USER = "root";
-		String pass = "Js0322!@";
+		String pass = "@";
 		Connection dbConn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -35,7 +35,7 @@
 </head>
 <body>
 <%@include  file="../navbar.html" %>
-	<form action="<%=request.getContextPath()%>/book" method="post">
+	<form id="book" action="<%=request.getContextPath()%>/book" method="post">
 	<div class="card center_div">
 	
 		<div class="card-header"
@@ -84,7 +84,7 @@
 							    while(rs.next())
 							    {   
 									%>
-							    		<option value=<%=rs.getString("name") %>><%=rs.getString("name") %></option>
+							    		<option value='<%=rs.getString("name") %>'><%=rs.getString("name") %></option>
 							    	<%
 							    }    
 						    
@@ -149,7 +149,7 @@
 							    {   
 									%>
 							    		<option data-solution='<%=rs.getString("solution") %>' data-value=<%=rs.getString("category") %>><%=rs.getString("issue") %></option>
-							    	<%	System.out.println(rs.getString("solution"));
+							    	<%
 							    }    
 						    
 							%>
@@ -241,7 +241,7 @@
 					<div class="card bg-light mb-3" style="max-width: 26rem; display: none;" id="followUp">
 						<h5 class="card-header" style="background-color: transparent;">Follow Up</h5>
 						<input type="date" id="followUpDate" name="followUpDate" max="31-12-3000" min="01-01-1000" class="form-control col-sm-10 center_div">						
-						<input type="time" id="followUpTime" name="followUpTime" name="appt" min="09:00" max="18:00" class="form-control col-sm-10 center_div">
+						<input type="time" id="followUpTime" name="followUpTime" name="appt" min="00:00" max="23:59" class="form-control col-sm-10 center_div">
         				<textarea class="col-sm-10 form-control center_div" placeholder="Follow up notes..." rows="3" name="followUpNote"></textarea>
 						
 					</div>
@@ -254,6 +254,23 @@
 	</div>
 	</form>
 	<%@include  file="../footer.html" %>
+		<%
+			if (session.getAttribute("insertStatus") != null) {
+				if (session.getAttribute("insertStatus").toString().equals("success")) {
+					%>
+					<script>
+						swal({
+							title : "Good job!",
+							text : "",
+							icon : "success",
+							button : "Aww yiss!",
+						});
+					</script>
+					<%
+						session.setAttribute("insertStatus", "failed");
+							}
+						}
+		%>
 </body>
 
 <script type="text/javascript">
@@ -339,17 +356,17 @@ function validate() {
 	var isFollowUp = document.getElementById("isFollowUp").checked;
 	var followUpDate = document.getElementById("followUpDate").value;
 	var followUpTime = document.getElementById("followUpTime").value;
-	alert(followUpDate + " " + followUpTime);
 	
 	if(name === "" || category  === "" || status == 0) {
-		swal("Error!", "You clicked the button!", "error");
+		swal("Error!", "Please fill all details!", "error");
 	} else {
 		if(category == "undefined" &&  (newIssue === "" || newSolution === "")) {
-			swal("Error!", "You clicked the button!", "error");
-		} else if (isFollowUp) {
-			
+			swal("Error!", "Attention to new issue!", "error");
+		} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
+			swal("Error!", "Invalid follow up details!", "error");
 		} else {
-			swal("Good job!", "You clicked the button!", "success");
+			
+			document.getElementById("book").submit();
 		}
 	}
 		
