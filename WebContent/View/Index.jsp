@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="db.DBConfig" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page session="true" %>
@@ -20,16 +21,9 @@
 			response.sendRedirect("../View/login.jsp");
 		}
 				
-		String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-		String DB_URL = "jdbc:mysql://localhost:3306/skybook?useSSL=false";
-		
-		String USER = "root";
-		String pass = "Sisterbro46@";
-		Connection dbConn = null;
+		Connection dbConn = DBConfig.connection(); ;
 		Statement st = null;
 		ResultSet rs = null;
-		Class.forName(JDBC_DRIVER);
-		dbConn = DriverManager.getConnection(DB_URL, USER, pass);
 		st = dbConn.createStatement();
 
 	%>
@@ -60,7 +54,7 @@
 						
 						<div class="input-group" >
 							<label class="col-sm-1 col-form-label">Time:</label>  &nbsp;&nbsp;
-							<input id="time" name="time" class="" type="text" style="width: 500px" value="00:00:00" readonly>
+							<input id="time" name="time" class="" type="text" style="width: 41%" value="00:00:00" readonly>
 						</div>
 						
 						<div class="input-group" style="margin-left: auto; width:10%;">
@@ -171,10 +165,10 @@
 						<div class="form-group row">
 						
 							<label class="col-sm-2 col-form-label">Category:</label>
-							<div class="form-group">
-							<input id="category" class="form-control" type="text" style="width: 505px" readonly>
-							<small class="form-text text-muted">Note: Category will come up automatically...</small>
-							<input type="hidden" id="hiddenIssueMasterID" name="hiddenIssueMasterID"/>
+							<div class="form-group ">
+								<input id="category" class="form-control" type="text" style="width: 205%" readonly>
+								<small class="form-text text-muted">Note: Category will come up automatically...</small>
+								<input type="hidden" id="hiddenIssueMasterID" name="hiddenIssueMasterID"/>
 							</div>
 						</div>
 						
@@ -217,7 +211,7 @@
 			</div>
 
 			<!--  side card -->
-			<div class="card" style="width:23%">
+			<div class="card" style="width:25%">
 				<div class="card-body" >
 					<div class="card bg-light mb-3" style="max-width: 26rem;">
 						<h5 class="card-header" style="background-color: transparent;">Status</h5>

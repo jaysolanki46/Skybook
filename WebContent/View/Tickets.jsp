@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="db.DBConfig" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page session="true" %>
@@ -19,19 +20,11 @@
 		} else {
 			response.sendRedirect("../View/login.jsp");
 		}
-				
-		String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-		String DB_URL = "jdbc:mysql://localhost:3306/skybook?useSSL=false";
 		
-		String USER = "root";
-		String pass = "Sisterbro46@";
-		Connection dbConn = null;
+		Connection dbConn = DBConfig.connection(); ;
 		Statement st = null;
 		ResultSet rs = null;
-		Class.forName(JDBC_DRIVER);
-		dbConn = DriverManager.getConnection(DB_URL, USER, pass);
 		st = dbConn.createStatement();
-
 	%>
 
 </head>
@@ -48,7 +41,7 @@
 			</div>
 		</div>
 
-		<div class="card-group" style="max-height: 750px; overflow-y: auto;">
+		<div class="card-group overflow-auto" style="max-height: 770px;">
 			<div class="card-body row">
 				<!-- Begin -->
 				
@@ -64,6 +57,86 @@
 						      </div>
 						      <div class="card-body">
 						        <h5 class="card-title">Richard (1204 Eftpos Specialist CHCH)</h5>
+						        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+						      </div>
+						      <div class="card-footer bg-transparent border-success"><b>Created by: <%=username %></b></div>
+						    </div>
+						  </div>
+						  
+						  <div class="col mb-4">
+						    <div class="card">
+						      <div class="card-header bg-transparent border-success" style="background-color: #0066cb; display: flex; justify-content: space-around">
+						      <h5>T#01111</h5>
+								<div style="margin-left: auto;">
+									<span> 14/05/2020 - 22:30</span>
+								</div>
+						      </div>
+						      <div class="card-body">
+						        <h5 class="card-title">Card title</h5>
+						        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+						      </div>
+						      <div class="card-footer bg-transparent border-success"><b>Created by: <%=username %></b></div>
+						    </div>
+						  </div>
+						  
+						  <div class="col mb-4">
+						    <div class="card">
+						      <div class="card-header bg-transparent border-success" style="background-color: #0066cb; display: flex; justify-content: space-around">
+						      <h5>T#01111</h5>
+								<div style="margin-left: auto;">
+									<span> 14/05/2020 - 22:30</span>
+								</div>
+						      </div>
+						      <div class="card-body">
+						        <h5 class="card-title">Card title</h5>
+						        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+						      </div>
+						      <div class="card-footer bg-transparent border-success"><b>Created by: <%=username %></b></div>
+						    </div>
+						  </div>
+						  
+						  <div class="col mb-4">
+						    <div class="card">
+						      <div class="card-header bg-transparent border-success" style="background-color: #0066cb; display: flex; justify-content: space-around">
+						      <h5>T#01111</h5>
+								<div style="margin-left: auto;">
+									<span> 14/05/2020 - 22:30</span>
+								</div>
+						      </div>
+						      <div class="card-body">
+						        <h5 class="card-title">Card title</h5>
+						        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+						      </div>
+						      <div class="card-footer bg-transparent border-success"><b>Created by: <%=username %></b></div>
+						    </div>
+						  </div>
+						  
+						  <div class="col mb-4">
+						    <div class="card">
+						      <div class="card-header bg-transparent border-success" style="background-color: #0066cb; display: flex; justify-content: space-around">
+						      <h5>T#01111</h5>
+								<div style="margin-left: auto;">
+									<span> 14/05/2020 - 22:30</span>
+								</div>
+						      </div>
+						      <div class="card-body">
+						        <h5 class="card-title">Card title</h5>
+						        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+						      </div>
+						      <div class="card-footer bg-transparent border-success"><b>Created by: <%=username %></b></div>
+						    </div>
+						  </div>
+						  
+						  <div class="col mb-4">
+						    <div class="card">
+						      <div class="card-header bg-transparent border-success" style="background-color: #0066cb; display: flex; justify-content: space-around">
+						      <h5>T#01111</h5>
+								<div style="margin-left: auto;">
+									<span> 14/05/2020 - 22:30</span>
+								</div>
+						      </div>
+						      <div class="card-body">
+						        <h5 class="card-title">Card title</h5>
 						        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
 						      </div>
 						      <div class="card-footer bg-transparent border-success"><b>Created by: <%=username %></b></div>

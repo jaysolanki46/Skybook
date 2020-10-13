@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="db.DBConfig" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page session="true" %>
@@ -20,16 +21,9 @@
 			response.sendRedirect("../View/login.jsp");
 		}
 				
-		String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-		String DB_URL = "jdbc:mysql://localhost:3306/skybook?useSSL=false";
-		
-		String USER = "root";
-		String pass = "Sisterbro46!@";
-		Connection dbConn = null;
+		Connection dbConn = DBConfig.connection(); ;
 		Statement st = null;
 		ResultSet rs = null;
-		Class.forName(JDBC_DRIVER);
-		dbConn = DriverManager.getConnection(DB_URL, USER, pass);
 		st = dbConn.createStatement();
 
 	%>
