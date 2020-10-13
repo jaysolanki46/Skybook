@@ -8,12 +8,12 @@ import java.sql.SQLException;
 import bean.User;
 import db.DBConfig; 
 
-public class LoginDao {
+public class LoginDAO {
 	
 	private Connection cnn;
 	private ResultSet rs;
 	
-	public LoginDao() throws ClassNotFoundException, SQLException {
+	public LoginDAO() throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated constructor stub
 		new DBConfig();
 		cnn = DBConfig.connection();

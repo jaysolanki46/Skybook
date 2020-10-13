@@ -12,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import bean.User;
-import model.LoginDao;
+import model.LoginDAO;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private LoginDao loginDao;
+	private LoginDAO loginDao;
 	
 	public void init() {
         try {
-			loginDao = new LoginDao();
+			loginDao = new LoginDAO();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
         	ResultSet rs = loginDao.validate(user);
         	
             if (rs.next()) {
-            	session.setAttribute("userId",rs.getString("id"));
+            	session.setAttribute("userID",rs.getString("id"));
                 session.setAttribute("username",username);
                 
                 response.sendRedirect("View/Index.jsp");

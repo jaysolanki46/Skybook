@@ -11,9 +11,11 @@
 <%@include  file="../header.html" %>
 
 	<%
-		String username;
+		String username = "";
+		String userID = "";
 		if(session.getAttribute("username") != null) {
 			username = session.getAttribute("username").toString();
+			userID = session.getAttribute("userID").toString();
 		} else {
 			response.sendRedirect("../View/login.jsp");
 		}
@@ -22,7 +24,7 @@
 		String DB_URL = "jdbc:mysql://localhost:3306/skybook?useSSL=false";
 		
 		String USER = "root";
-		String pass = "@";
+		String pass = "Js0322!@";
 		Connection dbConn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -42,6 +44,7 @@
 			style="color: white; background-color: #0066cb; display: flex; justify-content: space-around">
 			<h5 style="color: white;">Customer call book</h5>
 			<div style="color: white; margin-left: auto;">
+				<b><span><%=username %></span></b> /
 				<span id="clock"></span>
 			</div>
 		</div>
@@ -50,18 +53,21 @@
 		
 			<div class="card-body" style="width:66%">
 				<div class="card mb-3">
+				
 					<div class="card-body" style="padding: 10px">
 						<h5 class="card-title">Time</h5>
-						<div style="display: flex; justify-content: space-around">
-						<div class="input-group" style="width:30%">
-							<label class="col-form-label">Time:</label> &nbsp;&nbsp;&nbsp; 
-							<label class="col-form-label" id="time">00:00:00</label>
+						<div style="display: flex;">
+						
+						<div class="input-group" >
+							<label class="col-sm-1 col-form-label">Time:</label>  &nbsp;&nbsp;
+							<input id="time" name="time" class="" type="text" style="width: 500px" value="00:00:00" readonly>
 						</div>
-						<div class="input-group" style="margin-left: auto; width:30%;">
+						
+						<div class="input-group" style="margin-left: auto; width:10%;">
 							 <input type="checkbox" class="form-check-input" name="isVoicemail">
    							 <label class="form-check-label">Voice mail</label>
 						</div>
-						<div class="input-group" style="margin-left: auto; width:30%;">
+						<div class="input-group" style="margin-left: auto; width:10%;">
 							 <input type="checkbox" class="form-check-input" name="isInstructed">
    							 <label class="form-check-label">Instructed</label>
 						</div>
@@ -79,12 +85,13 @@
 							<datalist id="dealers">
 							
 							<%	
-								rs = st.executeQuery("select dt.id as dtID, dt.name as technician, d.name as dealer from dealer_technicians as dt INNER JOIN dealers as d ON dt.dealer = d.id");
-								
+								 rs = st.executeQuery("select dt.id as dtID, dt.dealer as dID, dt.name as technician, d.name as dealer from dealer_technicians as dt INNER JOIN dealers as d ON dt.dealer = d.id");
+
 							    while(rs.next())
 							    {   
 									%>
-							    		<option data-id=<%=rs.getString("dtID") %> value='<%=rs.getString("technician") %>'><%=rs.getString("dealer") %></option>
+										<option data-dealer=<%=rs.getString("dID") %> data-dealer-technician=<%=rs.getString("dtID") %> value='<%=rs.getString("technician") %>'><%=rs.getString("dealer") %></option>
+
 							    	<%
 							    }    
 						    
@@ -92,12 +99,10 @@
 						
 							</datalist>
 							
-							<input type="hidden" id="userID" name="userID"/>
+							<input type="hidden" id="user" name="user" value='<%=userID%>' />
+							<input type="hidden" id="hiddenDealerTechnicianID" name="hiddenDealerTechnicianID"/>
+	                        <input type="hidden" id="hiddenDealerID" name="hiddenDealerID"/>
 							
-							 <div class="input-group" style="margin-left: auto; width:47%;">
-							 <input type="checkbox" class="form-check-input" name="isNew">
-   							 <label class="form-check-label">Add New</label>
-						</div>
 						</div>
 						
 					</div>
@@ -145,18 +150,18 @@
 							<input class="col-sm-8" list="issues" id="issue" name="issue">
 							<datalist id="issues">
 							<%	
-								rs = st.executeQuery("SELECT i.name as issue, im.name as category, i.solution as solution FROM skybook.issues i INNER JOIN issue_master im ON i.issue_master = im.id");
+								rs = st.executeQuery("SELECT i.id as issueID, im.id as issueMasterID, i.name as issue, im.name as category, i.solution as solution FROM skybook.issues i INNER JOIN issue_master im ON i.issue_master = im.id");
 								
 							    while(rs.next())
 							    {   
 									%>
-							    		<option data-solution='<%=rs.getString("solution") %>' data-value=<%=rs.getString("category") %>><%=rs.getString("issue") %></option>
+							    		<option data-issue-id=<%=rs.getString("issueID") %> data-issue-master-id=<%=rs.getString("issueMasterID") %> data-solution='<%=rs.getString("solution") %>' data-value=<%=rs.getString("category") %>><%=rs.getString("issue") %></option>
 							    	<%
 							    }    
 						    
 							%>
 							</datalist>
-							
+							<input type="hidden" id="hiddenIssueID" name="hiddenIssueID"/>
 							&nbsp;&nbsp;&nbsp;
 							
 							<button id="solution" class="btn-skyzer-icon-background" type="button" data-toggle="popover" title="Solution" data-content="----"><i class="fa fa-bars"></i></button>
@@ -169,6 +174,7 @@
 							<div class="form-group">
 							<input id="category" class="form-control" type="text" style="width: 505px" readonly>
 							<small class="form-text text-muted">Note: Category will come up automatically...</small>
+							<input type="hidden" id="hiddenIssueMasterID" name="hiddenIssueMasterID"/>
 							</div>
 						</div>
 						
@@ -269,9 +275,21 @@
 						});
 					</script>
 					<%
-						session.setAttribute("insertStatus", "failed");
-							}
-						}
+						session.setAttribute("insertStatus", "killed");
+				} else if (session.getAttribute("insertStatus").toString().equals("error")) {
+					%>
+					<script>
+						swal({
+							title : "Something went wrong!",
+							text : "",
+							icon : "error",
+							button : "Aww okiee!",
+						});
+					</script>
+					<%
+						session.setAttribute("insertStatus", "killed");
+				}
+			}
 		%>
 </body>
 
@@ -294,12 +312,11 @@ function myTimer() {
 	setTimeout(myTimer, 1000);//This method will call for every second
 }
 function freezeLogTime() {
-    
 	var now = new Date();	
 	time = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
 	
 	var x = document.getElementById("time");
-    x.innerHTML = time;
+    x.value = time;
 }
 $(function () {
 	  $('[data-toggle="popover"]').popover()
@@ -322,7 +339,8 @@ function ticket() {
 		});
 }
 $("#issue").change(function() {
-	 var val = $('#issue').val()
+	 
+	var val = $('#issue').val()
      var category = $('#issues option').filter(function() {
          return this.value == val;
      }).data('value');
@@ -335,14 +353,30 @@ $("#issue").change(function() {
 	 
 	 $('#solution').attr("data-content",  solution);
 	 
+	 var issueID = $('#issues option').filter(function() {
+         return this.value == val;
+     }).data('issue-id');
+	 
+	 var issueMasterID = $('#issues option').filter(function() {
+         return this.value == val;
+     }).data('issue-master-id');
+	 
+	 document.getElementById("hiddenIssueID").value  = issueID;
+	 document.getElementById("hiddenIssueMasterID").value  = issueMasterID;
+	 
 })
 $("#dealer").change(function() {
 	var val = $('#dealer').val()
-    var userID = $('#dealers option').filter(function() {
+    var dealerTechnicianID = $('#dealers option').filter(function() {
         return this.value == val;
-    }).data('id');
+    }).data('dealer-technician');
+	
+	 var dealerID = $('#dealers option').filter(function() {
+	        return this.value == val;
+	    }).data('dealer');
 	 
-	 document.getElementById("userID").value  = userID;
+	 document.getElementById("hiddenDealerTechnicianID").value  = dealerTechnicianID;
+	 document.getElementById("hiddenDealerID").value  = dealerID;
 	 
 })
 $("#isFollowUp").change(function() {
@@ -359,8 +393,8 @@ $("#isFollowUp").change(function() {
 })
 function validate() {
 	
-	var userID = document.getElementById("userID").value;
-	var category = document.getElementById("category").value;
+	var dealerTechnicianID = document.getElementById("hiddenDealerTechnicianID").value;
+	var category = document.getElementById("hiddenIssueMasterID").value;
 	var newIssue = document.getElementById("newIssue").value;
 	var newSolution = document.getElementById("newSolution").value;
 	var status = document.getElementById("status").value;
@@ -368,9 +402,9 @@ function validate() {
 	var followUpDate = document.getElementById("followUpDate").value;
 	var followUpTime = document.getElementById("followUpTime").value;
 	
-	if(userID == "undefined") {
+	if(dealerTechnicianID == "undefined") {
 		swal("Error!", "Invalid dealer name!", "error");
-	} else if (name === "" || category  === "" || status == 0) {
+	} else if (dealerTechnicianID === "" || category  === "" || status == 0) {
 		swal("Error!", "Please fill all details!", "error");
 	} else {
 		if(category == "undefined" &&  (newIssue === "" || newSolution === "")) {
