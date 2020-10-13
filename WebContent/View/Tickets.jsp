@@ -24,7 +24,7 @@
 		String DB_URL = "jdbc:mysql://localhost:3306/skybook?useSSL=false";
 		
 		String USER = "root";
-		String pass = "Js0322!@";
+		String pass = "Sisterbro46@";
 		Connection dbConn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -49,25 +49,45 @@
 		</div>
 
 		<div class="card-group" style="max-height: 750px; overflow-y: auto;">
-			<div class="card-body">
+			<div class="card-body row">
 				<!-- Begin -->
 				
-					<div class="card text-white bg-secondary mb-3" style="max-height: 18rem;">
-					  <div class="card-header">Ticket #0002</div>
-					  <div class="card-body row">
-					  
-					  	<div>
-					  		<img alt="" width="100px" src="../IMAGES/ticket_user.jpg">
-					  		<p>John</p>
-					  		<p>1205 - EFTPOS SPECIALIST CHCH</hp>
-					  	</div>
-					 	
-					    <h5 class="card-title">Secondary card title</h5>
-					    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					  </div>
-					</div>
-					
-				
+					<div class="row row-cols-1 row-cols-md-2">
+						  
+						  <div class="col mb-4">
+						    <div class="card">
+						      <div class="card-header bg-transparent border-success" style="background-color: #0066cb; display: flex; justify-content: space-around">
+						      <h5>T#01111</h5>
+								<div style="margin-left: auto;">
+									<span> 14/05/2020 - 22:30</span>
+								</div>
+						      </div>
+						      <div class="card-body">
+						        <h5 class="card-title">Richard (1204 Eftpos Specialist CHCH)</h5>
+						        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+						      </div>
+						      <div class="card-footer bg-transparent border-success"><b>Created by: <%=username %></b></div>
+						    </div>
+						  </div>
+						  
+						  <div class="col mb-4">
+						    <div class="card">
+						      <div class="card-header bg-transparent border-success" style="background-color: #0066cb; display: flex; justify-content: space-around">
+						      <h5>T#01111</h5>
+								<div style="margin-left: auto;">
+									<span> 14/05/2020 - 22:30</span>
+								</div>
+						      </div>
+						      <div class="card-body">
+						        <h5 class="card-title">Card title</h5>
+						        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+						      </div>
+						      <div class="card-footer bg-transparent border-success"><b>Created by: <%=username %></b></div>
+						    </div>
+						  </div>
+						  
+						  
+						</div>
 				<!-- End -->
 			</div>
 		</div>

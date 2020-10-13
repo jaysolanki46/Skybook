@@ -24,7 +24,7 @@
 		String DB_URL = "jdbc:mysql://localhost:3306/skybook?useSSL=false";
 		
 		String USER = "root";
-		String pass = "Js0322!@";
+		String pass = "Sisterbro46!@";
 		Connection dbConn = null;
 		Statement st = null;
 		ResultSet rs = null;
