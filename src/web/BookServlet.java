@@ -71,6 +71,7 @@ public class BookServlet extends HttpServlet {
 		
 		String followUpDate = request.getParameter("followUpDate");
 		String followUpTime = request.getParameter("followUpTime");
+		String followUpContact = request.getParameter("followUpContact");
 		String followUpNote = request.getParameter("followUpNote");
 		
 		User user = new User();
@@ -139,6 +140,7 @@ public class BookServlet extends HttpServlet {
     				FollowUp followUp = new FollowUp();
     				followUp.setFollowUpDate(followUpDate);
     				followUp.setFollowUpTime(followUpTime);
+    				followUp.setFollowUpContact(followUpContact);
     				followUp.setNote(followUpNote);
     				followUp.setStatus(false);
     				followUp.setLog(log);

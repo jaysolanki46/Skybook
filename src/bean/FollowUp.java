@@ -5,6 +5,7 @@ public class FollowUp {
 	private Integer id;
 	private String followUpDate;
 	private String followUpTime;
+	private String followUpContact;
 	private String note;
 	private Boolean status;
 	private Log log;
@@ -26,6 +27,12 @@ public class FollowUp {
 	}
 	public void setFollowUpTime(String followUpTime) {
 		this.followUpTime = followUpTime;
+	}
+	public String getFollowUpContact() {
+		return followUpContact;
+	}
+	public void setFollowUpContact(String followUpContact) {
+		this.followUpContact = followUpContact;
 	}
 	public String getNote() {
 		return note;

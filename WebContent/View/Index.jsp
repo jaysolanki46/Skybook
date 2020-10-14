@@ -35,12 +35,8 @@
 	<div class="card center_div">
 	
 		<div class="card-header"
-			style="color: white; background-color: #0066cb; display: flex; justify-content: space-around">
+			style="color: white; background-color: #0066cb;">
 			<h5 style="color: white;">Customer call book</h5>
-			<div style="color: white; margin-left: auto;">
-				<b><span><%=username %></span></b> /
-				<span id="clock"></span>
-			</div>
 		</div>
 
 		<div class="card-group">
@@ -63,7 +59,7 @@
 						</div>
 						<div class="input-group" style="margin-left: auto; width:10%;">
 							 <input type="checkbox" class="form-check-input" name="isInstructed">
-   							 <label class="form-check-label">Instructed</label>
+   							 <label class="form-check-label">Instructed/Outgoing</label>
 						</div>
 						</div>
 					</div>
@@ -243,7 +239,8 @@
 					<div class="card bg-light mb-3" style="max-width: 26rem; display: none;" id="followUp">
 						<h5 class="card-header" style="background-color: transparent;">Follow Up</h5>
 						<input type="date" id="followUpDate" name="followUpDate" max="31-12-3000" min="01-01-1000" class="form-control col-sm-10 center_div">						
-						<input type="time" id="followUpTime" name="followUpTime" name="appt" min="00:00" max="23:59" class="form-control col-sm-10 center_div">
+						<input type="time" id="followUpTime" name="followUpTime" min="00:00" max="23:59" class="form-control col-sm-10 center_div">
+						<input type="text" id="followUpContact" name="followUpContact" placeholder="Email/Phone" class="form-control col-sm-10 center_div">
         				<textarea class="col-sm-10 form-control center_div" placeholder="Follow up notes..." rows="3" name="followUpNote"></textarea>
 						
 					</div>
@@ -285,8 +282,25 @@
 				}
 			}
 		%>
+		
+		 <footer id="sticky-footer" class="py-0 bg-dark text-white-50 fixed-bottom">
+		    
+		   <div style="color: white; background-color: #0066cb; display: flex; justify-content: space-around">
+			<div>
+				<img alt="" width="15px" src="../IMAGES/user.svg">
+				<small style="color: white;"><%=username %></small>
+			</div>
+			<div style="color: white; margin-left: auto; margin-right: 5px;">
+				
+				<small >
+					<img alt="" width="15px" src="../IMAGES/clock.svg">
+					<span id="clock"></span>
+				</small>
+			</div>
+			
+		</div>
+	  </footer>
 </body>
-
 <script type="text/javascript">
 var myVar=setInterval(function () {myTimer()}, 1000);
 var counter = 0;

@@ -33,12 +33,8 @@
 	<div class="card center_div"  >
 	
 		<div class="card-header"
-			style="color: white; background-color: #0066cb; display: flex; justify-content: space-around">
+			style="color: white; background-color: #0066cb;">
 			<h5 style="color: white;">Tickets</h5>
-			<div style="color: white; margin-left: auto;">
-				<b><span><%=username %></span></b> /
-				<span id="clock"></span>
-			</div>
 		</div>
 
 		<div class="card-group overflow-auto" style="max-height: 770px;">
@@ -48,7 +44,7 @@
 					<div class="row row-cols-1 row-cols-md-2">
 						  
 						  <div class="col mb-4">
-						    <div class="card">
+						    <div class="card border-dark">
 						      <div class="card-header bg-transparent border-success" style="background-color: #0066cb; display: flex; justify-content: space-around">
 						      <h5>T#01111</h5>
 								<div style="margin-left: auto;">
@@ -158,13 +154,28 @@
 						      <div class="card-footer bg-transparent border-success"><b>Created by: <%=username %></b></div>
 						    </div>
 						  </div>
-						  
-						  
 						</div>
 				<!-- End -->
 			</div>
 		</div>
 	</div>
+	<footer id="sticky-footer" class="py-0 bg-dark text-white-50 fixed-bottom">
+		    
+		   <div style="color: white; background-color: #0066cb; display: flex; justify-content: space-around">
+			<div>
+				<img alt="" width="15px" src="../IMAGES/user.svg">
+				<small style="color: white;"><%=username %></small>
+			</div>
+			<div style="color: white; margin-left: auto; margin-right: 5px;">
+				
+				<small >
+					<img alt="" width="15px" src="../IMAGES/clock.svg">
+					<span id="clock"></span>
+				</small>
+			</div>
+			
+		</div>
+	  </footer>
 	<%@include  file="../footer.html" %>
 </body>
 
