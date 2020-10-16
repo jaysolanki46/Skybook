@@ -8,7 +8,11 @@
     <ul class="nav nav-pills card-header-pills">
       <li class="nav-item" style="margin-left: 20px;">
         <a class="navbar-brand" href="../View/Index.jsp" style="color: white;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='white'">Book</a>
-        <a class="navbar-brand" href="../View/Tickets.jsp" style="color: white;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='white'">Ticket</a>
+        <a class="navbar-brand dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false" style="color: white;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='white'">Ticket</a>
+        	 <div class="dropdown-menu">
+		      <a class="dropdown-item" href="../View/AwaitingTickets.jsp">Awaiting Tickets</a>
+		      <a class="dropdown-item" href="../View/CompletedTickets.jsp">Completed Tickets</a>
+		    </div>
         <a class="navbar-brand" href="#" style="color: white;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='white'">Call Logs</a>
         <a class="navbar-brand" href="../View/login.jsp" style="color: white;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='white'">Logout</a>
         <a class="navbar-brand" href="../View/Standard.jsp" style="color: white;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='white'">Standard/Test</a>

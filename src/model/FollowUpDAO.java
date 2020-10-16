@@ -26,7 +26,7 @@ public class FollowUpDAO {
 
 		try {
 
-			PreparedStatement preparedStatement = cnn.prepareStatement("Insert into follow_up "
+			PreparedStatement preparedStatement = cnn.prepareStatement("Insert into follow_ups "
 					+ "(follow_up_date, follow_up_time, contact, note, status, log)"
 					+ "values (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setString(1, followUp.getFollowUpDate());

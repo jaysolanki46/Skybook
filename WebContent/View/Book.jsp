@@ -25,6 +25,10 @@
 		Statement st = null;
 		ResultSet rs = null;
 		st = dbConn.createStatement();
+		rs = st.executeQuery("select dt.id as dtID, dt.dealer as dID, dt.name as technician, d.name as dealer" +
+								" from dealer_technicians as dt INNER JOIN dealers as d ON dt.dealer = d.id");
+
+		
 
 	%>
 
