@@ -124,7 +124,7 @@
 										      <div class="card-header bg-transparent" style="display: flex; justify-content: space-around">
 										      <p>Created By: <%=rs.getString("user") %></p>
 												<div style="margin-left: auto;">
-													<a href=../View/Book.jsp?log=<%=rs.getString("log") %>><img alt="" width="20px" src="../IMAGES/info.svg"></a>
+													<a href=../View/LogDetails.jsp?log=<%=rs.getString("log") %>><img alt="" width="20px" src="../IMAGES/info.svg"></a>
 												</div>
 										      </div>
 										     </div>

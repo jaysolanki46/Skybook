@@ -25,22 +25,27 @@
 		Statement st = null;
 		ResultSet rs = null;
 		st = dbConn.createStatement();
-		rs = st.executeQuery("select dt.id as dtID, dt.dealer as dID, dt.name as technician, d.name as dealer" +
-								" from dealer_technicians as dt INNER JOIN dealers as d ON dt.dealer = d.id");
-
 		
-
+		String log = request.getParameter("log");
+		
+		rs = st.executeQuery("select l.id, l.log_date, l.log_time, l.is_voicemail, l.is_instructed, l.serial, ter.name as terminal, dt.name as technician, d.name as dealer, u.name as user from " +
+				"follow_ups fup INNER JOIN logs as l ON fup.log = l.id " +
+				"INNER JOIN terminals as  ter ON l.terminal =  ter.id " +
+				"INNER JOIN dealer_technicians as dt ON l.dealer_technician = dt.id " +
+				"INNER JOIN dealers as d ON dt.dealer = d.id " +
+				"INNER JOIN users as u ON l.user = u.id WHERE l.id=" + log);
 	%>
 
 </head>
 <body>
 <%@include  file="../navbar.html" %>
-	<form id="book" action="<%=request.getContextPath()%>/book" method="post">
+	<form id="book" action=#" method="post">
+	<% while(rs.next()) { %>
 	<div class="card center_div">
 	
 		<div class="card-header"
 			style="color: white; background-color: #0066cb;">
-			<h5 style="color: white;">Customer call book</h5>
+			<h5 style="color: white;">Log #<%=rs.getString("id") %> [<%=rs.getString("log_date") %>]</h5>
 		</div>
 
 		<div class="card-group">
@@ -54,15 +59,27 @@
 						
 						<div class="input-group" >
 							<label class="col-sm-1 col-form-label">Time:</label>  &nbsp;&nbsp;
-							<input id="time" name="time" class="" type="text" style="width: 41.5%" value="00:00:00" readonly>
+							<label class="col-sm-1 col-form-label"><%=rs.getString("log_time") %></label>
 						</div>
 						
 						<div class="input-group" style="margin-left: auto; width:10%;">
-							 <input type="checkbox" class="form-check-input" name="isVoicemail">
+							 <input type="checkbox" class="form-check-input" name="isVoicemail" onclick="return false;"
+							 <%
+							 	if(rs.getString("is_voicemail") != null) 
+							 		if(rs.getString("is_voicemail").equals("1")) 
+										%> checked<%
+							 
+							 %>>
    							 <label class="form-check-label">Voice mail</label>
 						</div>
 						<div class="input-group" style="margin-left: auto; width:10%;">
-							 <input type="checkbox" class="form-check-input" name="isInstructed">
+							 <input type="checkbox" class="form-check-input" name="isInstructed" onclick="return false;" 
+							 <%
+							 	if(rs.getString("is_instructed") != null) 
+							 		if(rs.getString("is_instructed").equals("1")) 
+										%> checked<%
+							 
+							 %>>
    							 <label class="form-check-label">Instructed/Outgoing</label>
 						</div>
 						</div>
@@ -75,27 +92,7 @@
 						<div class="form-group row">
 						
 							<label class="col-sm-1 col-form-label">Name:</label>
-							<input class="col-sm-4" list="dealers" id="dealer" name="dealer" onfocusout="freezeLogTime()">
-							<datalist id="dealers">
-							
-							<%	
-								 rs = st.executeQuery("select dt.id as dtID, dt.dealer as dID, dt.name as technician, d.name as dealer from dealer_technicians as dt INNER JOIN dealers as d ON dt.dealer = d.id");
-
-							    while(rs.next())
-							    {   
-									%>
-										<option data-dealer=<%=rs.getString("dID") %> data-dealer-technician=<%=rs.getString("dtID") %> value='<%=rs.getString("technician") %>'><%=rs.getString("dealer") %></option>
-
-							    	<%
-							    }    
-						    
-							%>
-						
-							</datalist>
-							
-							<input type="hidden" id="user" name="user" value='<%=userID%>' />
-							<input type="hidden" id="hiddenDealerTechnicianID" name="hiddenDealerTechnicianID"/>
-	                        <input type="hidden" id="hiddenDealerID" name="hiddenDealerID"/>
+							<label class="col-sm-4 col-form-label"><%=rs.getString("technician") %> - <%=rs.getString("dealer") %></label>
 							
 						</div>
 						
@@ -108,7 +105,7 @@
 						<div class="form-group row">
 						
 							<label class="col-sm-1 col-form-label">Serial:</label>
-							<input type="text" class="col-sm-4 form-control" name="serial">
+							<label class="col-sm-4 col-form-label"><%=rs.getString("serial") %></label>
 							
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -116,20 +113,7 @@
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							
 							<label class="col-sm-1 col-form-label">Terminal:</label> 
-							<select class="custom-select col-sm-4" name="terminal">
-								<option selected>Select terminal...</option>
-								<%	
-								rs = st.executeQuery("SELECT * FROM terminals");
-								
-							    while(rs.next())
-							    {   
-									%>
-							    		<option value="<%=rs.getString("id") %>"><%=rs.getString("name") %></option>
-							    	<%
-							    }    
-						    
-							%>
-							</select>
+							<label class="col-sm-4 col-form-label"><%=rs.getString("terminal") %></label>
 							
 						</div>
 					</div>
@@ -255,6 +239,7 @@
 			
 		</div>
 	</div>
+	<% } %>
 	</form>
 	<%@include  file="../footer.html" %>
 		<%
