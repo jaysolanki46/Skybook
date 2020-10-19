@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,6 +23,7 @@ import bean.FollowUp;
 import bean.Issue;
 import bean.IssueMaster;
 import bean.Log;
+import bean.Release;
 import bean.Status;
 import bean.Terminal;
 import bean.User;
@@ -51,6 +54,18 @@ public class BookServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		
+		String logID = request.getParameter("hiddenLogID");
+		
+		if(logID == null) {
+			insertLog(request, response);
+		} else { 
+			updateLog(request, response);
+		}
+		
+	}
+	
+	private void insertLog(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession insertStatus = request.getSession();
 		String userID =  request.getParameter("user");
 		String date =  LocalDate.now().toString();
@@ -61,6 +76,7 @@ public class BookServlet extends HttpServlet {
 		String dealerTechnicianID =  request.getParameter("hiddenDealerTechnicianID");
 		String serial =  request.getParameter("serial");
 		String terminalID =  request.getParameter("terminal");
+		String releaseID =  request.getParameter("release");
 		String issueMasterID =  request.getParameter("hiddenIssueMasterID");
 		String issueID =  request.getParameter("hiddenIssueID");
 		String description =  request.getParameter("description");
@@ -82,9 +98,6 @@ public class BookServlet extends HttpServlet {
 		
 		DealerTechnician dealerTechnician = new DealerTechnician();
 		dealerTechnician.setId(Integer.parseInt(dealerTechnicianID));
-		
-		Terminal terminal = new Terminal();
-		terminal.setId(Integer.parseInt(terminalID));
 		
 		IssueMaster issueMaster = new IssueMaster();
 		issueMaster.setId(Integer.parseInt(issueMasterID));
@@ -115,7 +128,20 @@ public class BookServlet extends HttpServlet {
 		log.setDealer(dealer);
 		log.setDealerTechnician(dealerTechnician);
 		log.setSerial(serial);
-		log.setTerminal(terminal);
+		
+		if(!terminalID.equals("0")) {
+			Terminal terminal = new Terminal();
+			terminal.setId(Integer.parseInt(terminalID));
+			log.setTerminal(terminal);
+		}
+		
+		if(!releaseID.equals("0")) {
+			Release release = new Release();
+			release.setId(Integer.parseInt(releaseID));
+			log.setCurrentRelease(release);
+		}
+		
+		
 		log.setIssueMaster(issueMaster);
 		log.setIssue(issue);
 		log.setDescription(description);
@@ -169,5 +195,71 @@ public class BookServlet extends HttpServlet {
         	insertStatus.setAttribute("insertStatus", "error");
     		response.sendRedirect("View/Index.jsp");
         }
+	}
+
+	private void updateLog(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		HttpSession updateStatus = request.getSession();
+		String userID =  request.getParameter("user");
+		
+		String logID = request.getParameter("hiddenLogID");
+		String description =  request.getParameter("description");
+		String newIssue =  request.getParameter("newIssue");
+		String newSolution =  request.getParameter("newSolution");
+		String statusID =  request.getParameter("status");
+		
+		String followUpID = request.getParameter("hiddenFollowUpID");
+		String followUpDate = request.getParameter("followUpDate");
+		String followUpTime = request.getParameter("followUpTime");
+		String followUpContact = request.getParameter("followUpContact");
+		String followUpNote = request.getParameter("followUpNote");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now();  
+		
+		try {
+			Status status = new Status();
+			status.setId(Integer.parseInt(statusID));
+			
+			User user = new User();
+			user.setId(Integer.parseInt(userID));
+			
+			Log log = new Log();
+			log.setId(Integer.parseInt(logID));
+			log.setDescription(description);
+			log.setNewIssue(newIssue);
+			log.setNewSolution(newSolution);
+			log.setStatus(status);
+			Boolean isLogUpdated = logDao.update(log);
+			
+			FollowUp followUp = new FollowUp();
+			followUp.setId(Integer.parseInt(followUpID));
+			followUp.setFollowUpDate(followUpDate);
+			followUp.setFollowUpTime(followUpTime);
+			followUp.setFollowUpContact(followUpContact);
+			followUp.setNote(followUpNote);
+			followUp.setUpdatedBy(user);
+			followUp.setUpdatedOn(dtf.format(now));
+			
+			if(statusID.equals("1")) {
+				followUp.setStatus(true);
+			} else {
+				followUp.setStatus(false);
+			}
+			Boolean isFollowUpUpdated = followUpDAO.update(followUp);
+			
+			if(isLogUpdated && isFollowUpUpdated) {
+				updateStatus.setAttribute("updateStatus", "success");
+	    		response.sendRedirect("View/AwaitingTickets.jsp");
+			} else {
+				updateStatus.setAttribute("updateStatus", "error");
+	    		response.sendRedirect("View/LogDetails.jsp?log=" + logID);
+			}
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+			updateStatus.setAttribute("updateStatus", "error");
+    		response.sendRedirect("View/LogDetails.jsp?log=" + logID);
+		}
+		
 	}
 }

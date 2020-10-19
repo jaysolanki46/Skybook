@@ -9,6 +9,8 @@ public class FollowUp {
 	private String note;
 	private Boolean status;
 	private Log log;
+	private User updatedBy;
+	private String updatedOn;
 	
 	public Integer getId() {
 		return id;
@@ -51,5 +53,17 @@ public class FollowUp {
 	}
 	public void setLog(Log log) {
 		this.log = log;
+	}
+	public User getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(User updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	public String getUpdatedOn() {
+		return updatedOn;
+	}
+	public void setUpdatedOn(String updatedOn) {
+		this.updatedOn = updatedOn;
 	}
 }

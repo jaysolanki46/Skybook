@@ -158,6 +158,35 @@
 		</div>
 	  </footer>
 	<%@include  file="../footer.html" %>
+	<%
+			if (session.getAttribute("updateStatus") != null) {
+				if (session.getAttribute("updateStatus").toString().equals("success")) {
+					%>
+					<script>
+						swal({
+							title : "Good job!",
+							text : "",
+							icon : "success",
+							button : "Aww yiss!",
+						});
+					</script>
+					<%
+						session.setAttribute("updateStatus", "killed");
+				} else if (session.getAttribute("updateStatus").toString().equals("error")) {
+					%>
+					<script>
+						swal({
+							title : "Something went wrong!",
+							text : "",
+							icon : "error",
+							button : "Aww okiee!",
+						});
+					</script>
+					<%
+						session.setAttribute("updateStatus", "killed");
+				}
+			}
+		%>
 </body>
 
 <script type="text/javascript">

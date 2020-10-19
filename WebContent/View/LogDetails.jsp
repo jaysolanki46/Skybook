@@ -24,28 +24,39 @@
 		Connection dbConn = DBConfig.connection(); ;
 		Statement st = null;
 		ResultSet rs = null;
+		Statement stStatus = null;
+		ResultSet rsStatus = null;
 		st = dbConn.createStatement();
+		stStatus = dbConn.createStatement();
 		
 		String log = request.getParameter("log");
 		
-		rs = st.executeQuery("select l.id, l.log_date, l.log_time, l.is_voicemail, l.is_instructed, l.serial, ter.name as terminal, dt.name as technician, d.name as dealer, u.name as user from " +
+		rs = st.executeQuery(
+				"select l.id, l.log_date, l.log_time, l.is_voicemail, l.is_instructed, l.serial, l.description, l.new_issue, l.new_solution, l.status, " + 
+				"ter.name as terminal, rel.name as current_release, dt.name as technician, d.name as dealer, " +
+				"u.name as user, iss.name as issue, issmaster.name as category, fup.id as follow_up_id, fup.follow_up_date, fup.follow_up_time, fup.contact, fup.note from " +
 				"follow_ups fup INNER JOIN logs as l ON fup.log = l.id " +
 				"INNER JOIN terminals as  ter ON l.terminal =  ter.id " +
+				"INNER JOIN releases as rel ON l.current_release =  rel.id " +
 				"INNER JOIN dealer_technicians as dt ON l.dealer_technician = dt.id " +
 				"INNER JOIN dealers as d ON dt.dealer = d.id " +
+				"INNER JOIN issues as iss ON iss.id = l.issue " +
+				"INNER JOIN issue_master as issmaster ON issmaster.id = l.issue_master " +
 				"INNER JOIN users as u ON l.user = u.id WHERE l.id=" + log);
 	%>
 
 </head>
 <body>
 <%@include  file="../navbar.html" %>
-	<form id="book" action=#" method="post">
+	<form id="book" action="<%=request.getContextPath()%>/book" method="post" class="disable">
 	<% while(rs.next()) { %>
 	<div class="card center_div">
 	
 		<div class="card-header"
 			style="color: white; background-color: #0066cb;">
 			<h5 style="color: white;">Log #<%=rs.getString("id") %> [<%=rs.getString("log_date") %>]</h5>
+			<input type="hidden" name="hiddenLogID" value=<%=rs.getString("id") %>>
+			<input type="hidden" id="user" name="user" value='<%=userID%>' />
 		</div>
 
 		<div class="card-group">
@@ -104,16 +115,15 @@
 						<h5 class="card-title">Terminal</h5>
 						<div class="form-group row">
 						
-							<label class="col-sm-1 col-form-label">Serial:</label>
-							<label class="col-sm-4 col-form-label"><%=rs.getString("serial") %></label>
-							
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							
 							<label class="col-sm-1 col-form-label">Terminal:</label> 
-							<label class="col-sm-4 col-form-label"><%=rs.getString("terminal") %></label>
+							<label class="col-sm-2 col-form-label"><%=rs.getString("terminal") %></label>
+							
+							<label class="col-sm-1 col-form-label">Serial:</label>
+							<label class="col-sm-2 col-form-label"><%=rs.getString("serial") %></label>
+							
+							<label class="col-sm-1 col-form-label">Release:</label>
+							<label class="col-sm-4 col-form-label"><%=rs.getString("current_release") %></label>
+							
 							
 						</div>
 					</div>
@@ -125,40 +135,18 @@
 						<h5 class="card-title">Issue</h5>
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label">Issue:</label>
-							<input class="col-sm-8" list="issues" id="issue" name="issue">
-							<datalist id="issues">
-							<%	
-								rs = st.executeQuery("SELECT i.id as issueID, im.id as issueMasterID, i.name as issue, im.name as category, i.solution as solution FROM skybook.issues i INNER JOIN issue_master im ON i.issue_master = im.id");
-								
-							    while(rs.next())
-							    {   
-									%>
-							    		<option data-issue-id=<%=rs.getString("issueID") %> data-issue-master-id=<%=rs.getString("issueMasterID") %> data-solution='<%=rs.getString("solution") %>' data-value=<%=rs.getString("category") %>><%=rs.getString("issue") %></option>
-							    	<%
-							    }    
-						    
-							%>
-							</datalist>
-							<input type="hidden" id="hiddenIssueID" name="hiddenIssueID"/>
-							&nbsp;&nbsp;&nbsp;
-							
-							<button id="solution" class="btn-skyzer-icon-background" type="button" data-toggle="popover" title="Solution" data-content="----"><i class="fa fa-bars"></i></button>
-								
+							<label class="col-sm-4 col-form-label"><%=rs.getString("issue") %></label>
 						</div>
 						
 						<div class="form-group row">
 						
 							<label class="col-sm-2 col-form-label">Category:</label>
-							<div class="form-group ">
-								<input id="category" class="form-control" type="text" style="width: 207%" readonly>
-								<small class="form-text text-muted">Note: Category will come up automatically...</small>
-								<input type="hidden" id="hiddenIssueMasterID" name="hiddenIssueMasterID"/>
-							</div>
+							<label class="col-sm-4 col-form-label"><%=rs.getString("category") %></label>
 						</div>
 						
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label">Description:</label>
-							<textarea class="col-sm-8 form-control" placeholder="" rows="3" name="description"></textarea>
+							<textarea class="col-sm-8 form-control" placeholder="" rows="3" name="description"><%=rs.getString("description") %></textarea>
 						</div>
 						
 					</div>
@@ -170,13 +158,13 @@
 						<div class="form-group row">
 						
 							<label class="col-sm-2 col-form-label">Issue:</label>
-							<textarea class="col-sm-9 form-control" placeholder="New issue..." rows="4"  name="newIssue" id="newIssue"></textarea>
+							<textarea class="col-sm-9 form-control" placeholder="New issue..." rows="4"  name="newIssue" id="newIssue"><%=rs.getString("new_issue") %></textarea>
 						
 						</div>
 						
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label">Solution:</label>
-							<textarea class="col-sm-9 form-control" placeholder="New solution..." rows="4" name="newSolution" id="newSolution"></textarea>
+							<textarea class="col-sm-9 form-control" placeholder="New solution..." rows="4" name="newSolution" id="newSolution"><%=rs.getString("new_solution") %></textarea>
 						</div>
 					</div>
 				</div>
@@ -187,7 +175,7 @@
 					<div class="card-body" style="padding: 10px">
 						
 						<input type="reset" class="btn btn-danger float-right" style="margin-left:10px;" value="Cancel">
-						<input type="button" class="btn btn-skyzer float-right" value="Complete" onclick="validate()">
+						<input type="button" class="btn btn-skyzer float-right" value="Update" onclick="validate()">
 						
 					</div>
 				</div>
@@ -204,12 +192,18 @@
 						<select class="custom-select col-sm-8 center_div" id="status" name="status" onchange="updateStatus()">
 								<option value="0" selected>Select status...</option>
 								<%	
-								rs = st.executeQuery("SELECT * FROM status");
+								rsStatus = stStatus.executeQuery("SELECT * FROM status");
 								
-							    while(rs.next())
+							    while(rsStatus.next())
 							    {   
 									%>
-							    		<option value="<%=rs.getString("id") %>"><%=rs.getString("name") %></option>
+							    		<option value="<%=rsStatus.getString("id") %>" <%
+							    		
+							    		if(rs.getString("status").equals(rsStatus.getString("id"))) {
+							    			%>selected<%
+							    		}
+							    		
+							    		%>><%=rsStatus.getString("name") %></option>
 							    	<%
 							    }    
 						    
@@ -219,17 +213,18 @@
 						<img alt="" width="22px" src="../IMAGES/task-complete.svg" id="statusImg" style="visibility:hidden;">
 						</div>
 						<div class="input-group center_div" style="margin-left: 12%;">
-							 <input type="checkbox" class="form-check-input" name="isFollowUp" id="isFollowUp">
+							 <input type="checkbox" class="form-check-input" name="isFollowUp" id="isFollowUp" onclick="return false;" checked="checked">
    							 <label class="form-check-label">Follow Up</label>
 						</div>
 					</div>
 					
-					<div class="card bg-light mb-3" style="max-width: 26rem; display: none;" id="followUp">
+					<div class="card bg-light mb-3" style="max-width: 26rem;" id="followUp">
 						<h5 class="card-header" style="background-color: transparent;">Follow Up</h5>
-						<input type="date" id="followUpDate" name="followUpDate" max="31-12-3000" min="01-01-1000" class="form-control col-sm-10 center_div">						
-						<input type="time" id="followUpTime" name="followUpTime" min="00:00" max="23:59" class="form-control col-sm-10 center_div">
-						<input type="text" id="followUpContact" name="followUpContact" placeholder="Email/Phone" class="form-control col-sm-10 center_div">
-        				<textarea class="col-sm-10 form-control center_div" placeholder="Follow up notes..." rows="3" name="followUpNote"></textarea>
+						<input type="hidden" name="hiddenFollowUpID" value=<%=rs.getString("follow_up_id") %>>
+						<input type="date" id="followUpDate" name="followUpDate" max="31-12-3000" min="01-01-1000" class="form-control col-sm-10 center_div" value=<%=rs.getString("follow_up_date") %>>						
+						<input type="time" id="followUpTime" name="followUpTime" min="00:00" max="23:59" class="form-control col-sm-10 center_div" value=<%=rs.getString("follow_up_time") %>>
+						<input type="text" id="followUpContact" name="followUpContact" placeholder="Email/Phone" class="form-control col-sm-10 center_div" value=<%=rs.getString("contact") %>>
+        				<textarea class="col-sm-10 form-control center_div" placeholder="Follow up notes..." rows="3" name="followUpNote"><%=rs.getString("note") %></textarea>
 						
 					</div>
 				</div>
@@ -243,8 +238,8 @@
 	</form>
 	<%@include  file="../footer.html" %>
 		<%
-			if (session.getAttribute("insertStatus") != null) {
-				if (session.getAttribute("insertStatus").toString().equals("success")) {
+			if (session.getAttribute("updateStatus") != null) {
+				if (session.getAttribute("updateStatus").toString().equals("success")) {
 					%>
 					<script>
 						swal({
@@ -255,8 +250,8 @@
 						});
 					</script>
 					<%
-						session.setAttribute("insertStatus", "killed");
-				} else if (session.getAttribute("insertStatus").toString().equals("error")) {
+						session.setAttribute("updateStatus", "killed");
+				} else if (session.getAttribute("updateStatus").toString().equals("error")) {
 					%>
 					<script>
 						swal({
@@ -267,7 +262,7 @@
 						});
 					</script>
 					<%
-						session.setAttribute("insertStatus", "killed");
+						session.setAttribute("updateStatus", "killed");
 				}
 			}
 		%>
@@ -316,15 +311,25 @@ function freezeLogTime() {
     x.value = time;
 }
 $(function () {
-	  $('[data-toggle="popover"]').popover()
+	  $('[data-toggle="popover"]').popover();
+	  var status = parseInt(document.getElementById("status").value);
+	  
+	  if(status === 1) {
+		  $(':input').attr('readonly','readonly');  
+		  document.getElementById("statusImg").style.visibility = "visible";
+	  }
+	  
 	})
 function updateStatus() {
   var x = parseInt(document.getElementById("status").value);
  
-  if (x === 2)
+  if (x === 1) {
+	  $(':input').attr('readonly','readonly');  
 	  document.getElementById("statusImg").style.visibility = "visible";
-  else
+  } else {
+	  $(':input').attr('readonly', false);  
 	  document.getElementById("statusImg").style.visibility = "hidden";
+  }
 }
 function ticket() {
 	
@@ -390,28 +395,17 @@ $("#isFollowUp").change(function() {
 })
 function validate() {
 	
-	var dealerTechnicianID = document.getElementById("hiddenDealerTechnicianID").value;
-	var category = document.getElementById("hiddenIssueMasterID").value;
-	var newIssue = document.getElementById("newIssue").value;
-	var newSolution = document.getElementById("newSolution").value;
 	var status = document.getElementById("status").value;
 	var isFollowUp = document.getElementById("isFollowUp").checked;
 	var followUpDate = document.getElementById("followUpDate").value;
 	var followUpTime = document.getElementById("followUpTime").value;
 	
-	if(dealerTechnicianID == "undefined") {
-		swal("Error!", "Invalid dealer name!", "error");
-	} else if (dealerTechnicianID === "" || category  === "" || status == 0) {
-		swal("Error!", "Please fill all details!", "error");
-	} else {
-		if(category == "undefined" &&  (newIssue === "" || newSolution === "")) {
-			swal("Error!", "Attention to new issue!", "error");
-		} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
+	if (status == 0) {
+		swal("Error!", "Invalid status!", "error");
+	} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
 			swal("Error!", "Invalid follow up details!", "error");
-		} else {
-		
+	} else {
 			document.getElementById("book").submit();
-		}
 	}
 	
 }

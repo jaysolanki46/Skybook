@@ -103,19 +103,30 @@
 						<h5 class="card-title">Terminal</h5>
 						<div class="form-group row">
 						
-							<label class="col-sm-1 col-form-label">Serial:</label>
-							<input type="text" class="col-sm-4 form-control" name="serial">
-							
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							
 							<label class="col-sm-1 col-form-label">Terminal:</label> 
-							<select class="custom-select col-sm-4" name="terminal">
-								<option selected>Select terminal...</option>
+							<select class="custom-select col-sm-2" name="terminal">
+								<option value ="0" selected>Select terminal...</option>
 								<%	
 								rs = st.executeQuery("SELECT * FROM terminals");
+								
+							    while(rs.next())
+							    {   
+									%>
+							    		<option value="<%=rs.getString("id") %>"><%=rs.getString("name") %></option>
+							    	<%
+							    }    
+						    
+							%>
+							</select>
+							
+							<label class="col-sm-1 col-form-label">Serial:</label>
+							<input type="text" class="col-sm-2 form-control" name="serial">
+							
+							<label class="col-sm-1 col-form-label">Release:</label> 
+							<select class="custom-select col-sm-4" name="release">
+								<option value ="0" selected>Select release...</option>
+								<%	
+								rs = st.executeQuery("SELECT * FROM releases");
 								
 							    while(rs.next())
 							    {   
@@ -332,7 +343,7 @@ $(function () {
 function updateStatus() {
   var x = parseInt(document.getElementById("status").value);
  
-  if (x === 2)
+  if (x === 1)
 	  document.getElementById("statusImg").style.visibility = "visible";
   else
 	  document.getElementById("statusImg").style.visibility = "hidden";
@@ -403,28 +414,27 @@ function validate() {
 	
 	var dealerTechnicianID = document.getElementById("hiddenDealerTechnicianID").value;
 	var category = document.getElementById("hiddenIssueMasterID").value;
+	var isUnknownCategory = document.getElementById("category").value;
 	var newIssue = document.getElementById("newIssue").value;
 	var newSolution = document.getElementById("newSolution").value;
 	var status = document.getElementById("status").value;
 	var isFollowUp = document.getElementById("isFollowUp").checked;
 	var followUpDate = document.getElementById("followUpDate").value;
 	var followUpTime = document.getElementById("followUpTime").value;
-	
-	if(dealerTechnicianID == "undefined") {
+
+	if(dealerTechnicianID == "undefined" || dealerTechnicianID == "") {
 		swal("Error!", "Invalid dealer name!", "error");
-	} else if (dealerTechnicianID === "" || category  === "" || status == 0) {
-		swal("Error!", "Please fill all details!", "error");
+	} else if (category  === "") {
+		swal("Error!", "Please fill issue", "error");
+	} else if ((category == "undefined" || isUnknownCategory == "Unknown") &&  (newIssue === "" || newSolution === "")) {
+		swal("Error!", "Required attention on new issue!", "error");
+	} else if(status == 0) {
+		swal("Error!", "Please update status!", "error");
+	} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
+		swal("Error!", "Invalid follow up details!", "error");
 	} else {
-		if(category == "undefined" &&  (newIssue === "" || newSolution === "")) {
-			swal("Error!", "Attention to new issue!", "error");
-		} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
-			swal("Error!", "Invalid follow up details!", "error");
-		} else {
-		
-			document.getElementById("book").submit();
-		}
+		document.getElementById("book").submit();
 	}
-	
 }
 </script>
 </html>

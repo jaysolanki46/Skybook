@@ -13,12 +13,14 @@ public class Log {
 	private DealerTechnician dealerTechnician;
 	private String serial;
 	private Terminal terminal;
+	private Release currentRelease;
 	private IssueMaster issueMaster;
 	private Issue issue;
 	private String description;
 	private String newIssue;
 	private String newSolution;
 	private Status status;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -78,6 +80,13 @@ public class Log {
 	}
 	public void setTerminal(Terminal terminal) {
 		this.terminal = terminal;
+	}
+	
+	public Release getCurrentRelease() {
+		return currentRelease;
+	}
+	public void setCurrentRelease(Release currentRelease) {
+		this.currentRelease = currentRelease;
 	}
 	public IssueMaster getIssueMaster() {
 		return issueMaster;
