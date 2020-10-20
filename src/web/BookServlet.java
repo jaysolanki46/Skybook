@@ -248,8 +248,13 @@ public class BookServlet extends HttpServlet {
 			Boolean isFollowUpUpdated = followUpDAO.update(followUp);
 			
 			if(isLogUpdated && isFollowUpUpdated) {
-				updateStatus.setAttribute("updateStatus", "success");
-	    		response.sendRedirect("View/AwaitingTickets.jsp");
+				if(statusID.equals("1")) {
+					updateStatus.setAttribute("updateStatus", "success");
+		    		response.sendRedirect("View/CompletedTickets.jsp");
+				} else {
+					updateStatus.setAttribute("updateStatus", "success");
+		    		response.sendRedirect("View/AwaitingTickets.jsp");
+				}
 			} else {
 				updateStatus.setAttribute("updateStatus", "error");
 	    		response.sendRedirect("View/LogDetails.jsp?log=" + logID);
