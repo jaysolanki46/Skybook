@@ -1,9 +1,9 @@
+<%@page import="com.sun.org.apache.xpath.internal.operations.Bool"%>
 <%@page import="java.util.Date"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" import="java.sql.*" %>
 <%@ page language="java" import="db.DBConfig" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page session="true" %>
 <%@ page import="java.io.*,java.util.*, javax.servlet.*, java.text.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -24,13 +24,22 @@
 		}
 		
 		Connection dbConn = DBConfig.connection(); ;
+		
 		Statement stUser = null;
 		ResultSet rsUser = null;
 		stUser = dbConn.createStatement();
 		
+		Statement stTerminal = null;
+		ResultSet rsTerminal = null;
+		stTerminal = dbConn.createStatement();
+		
 		Statement stTechnician = null;
 		ResultSet rsTechnician = null;
 		stTechnician = dbConn.createStatement();
+		
+		Statement stRelease = null;
+		ResultSet rsRelease = null;
+		stRelease = dbConn.createStatement();
 		
 		Statement stDealer = null;
 		ResultSet rsDealer = null;
@@ -53,31 +62,73 @@
 		st = dbConn.createStatement();
 		 
 		
-		String[] isVoicemail = request.getParameterValues("isVoicemail");
-		String[] isInstructed = request.getParameterValues("isInstructed");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String user =  request.getParameter("user");
+		String terminal =  request.getParameter("terminal");
+		String release =  request.getParameter("release");
 		String dealer =  request.getParameter("hiddenDealerID");
 		String issueMaster =  request.getParameter("hiddenIssueMasterID");
 		String issue =  request.getParameter("hiddenIssueID");
 		String status =  request.getParameter("status");
+		String[] voicemail = request.getParameterValues("isVoicemail");
+		String[] instructed = request.getParameterValues("isInstructed");
+		Boolean isVoicemail = false;
+		Boolean isInstructed = false;
 		
-		System.out.println(isVoicemail);
-		System.out.println(isInstructed);
+		if(voicemail != null)
+			isVoicemail = true;
+		
+		if(instructed != null)
+			isInstructed = true;
+		
 		System.out.println(startDate);
 		System.out.println(endDate);
 		System.out.println(user);
+		System.out.println(terminal);
+		System.out.println(release);
 		System.out.println(dealer);
 		System.out.println(issueMaster);
 		System.out.println(issue);
 		System.out.println(status);
+		System.out.println(isVoicemail);
+		System.out.println(isInstructed);
+		
+		String clause = "";
+		
+
+		if((startDate != null && startDate != "") &&
+				(endDate != null && endDate != "") &&
+				(!user.equals("0") && user != null) &&
+				(!terminal.equals("0") && terminal != null) &&
+				(!release.equals("0") && release != null) &&
+				(!dealer.equals("0") && dealer != null) &&
+				(!issueMaster.equals("0") && issueMaster != null) &&
+				(!issue.equals("0") && issue != null) &&
+				(!status.equals("0") && status != null) &&
+				(isVoicemail != null) &&
+				(isInstructed != null)) {
+			
+			clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate + "'" +
+						" and l.user = " + user +
+						" and l.terminal = " + terminal +
+						" and l.current_release = " + release +
+						" and l.dealer = " + dealer +
+						" and l.issue_master = " + issueMaster +
+						" and l.issue = " + issue +
+						" and l.status = " + status +
+						" and l.is_voicemail = " + isVoicemail +
+						" and l.is_instructed = " + isInstructed;
+		}
+		
+		
+		System.out.print(clause);
 	%>
 
 </head>
 <body>
 <%@include  file="../navbar.html" %>
-	<div class="card center_div"  >
+	<div class="card center_div">
 	
 	 	<div class="card-header" style="color: white; background-color: #0066cb; ">
 			<h5 style="color: white;">Report</h5>
@@ -89,11 +140,15 @@
 					<div class="card mb-3">
 				
 						<div class="card-body" style="padding: 10px;">
-							<form action="../View/Report.jsp" method="post">		
+							<form action="../View/MasterReport.jsp" method="post">		
 								 
 								 <div class="form-inline" action="#" method="post">
 								 	 
-								 	 <select class="custom-select col-sm-2" name="user">
+								 	<input type="date"  max="31-12-3000" min="01-01-1000" class="form-control col-sm-2" name="startDate">	
+									&nbsp; To &nbsp;
+									<input type="date"  max="31-12-3000" min="01-01-1000" class="form-control col-sm-2" name="endDate">
+									&nbsp;
+								 	<select class="form-control col-sm-2" name="user">
 										<option value="0" selected>Select user...</option>
 										<%
 											rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1");
@@ -105,19 +160,37 @@
 											}
 										%>
 									</select>
-									&nbsp; 
-									<input type="date"  max="31-12-3000" min="01-01-1000" class="form-control col-sm-2" name="startDate">	
-									&nbsp; To &nbsp;
-									<input type="date"  max="31-12-3000" min="01-01-1000" class="form-control col-sm-2" name="endDate">	
-									&nbsp;&nbsp;&nbsp;
-									<input type="checkbox" class="form-check-input" name="isVoicemail">
-   							 		<label class="form-check-label">Voice mail</label>
-   							 		&nbsp;&nbsp;&nbsp;
-   							 		<input type="checkbox" class="form-check-input" name="isInstructed">
-   							 		<label class="form-check-label">Instructed/Outgoing</label>
+									&nbsp;
+	                        		<select class="form-control col-sm-2 center_div" id="terminal" name="terminal">
+										<option value="0" selected>Select terminal...</option>
+											<%	
+											rsTerminal = stTerminal.executeQuery("SELECT * FROM terminals");
+											
+										    while(rsTerminal.next())
+										    {   
+												%>
+										    		<option value="<%=rsTerminal.getString("id") %>"><%=rsTerminal.getString("name") %></option>
+										    	<%
+										    }    
+									    
+											%>
+									</select>
+									&nbsp;
+	                        		<select class="form-control col-sm-3 center_div" id="release" name="release">
+										<option value="0" selected>Select software release...</option>
+											<%	
+											rsRelease = stRelease.executeQuery("SELECT * FROM releases");
+											
+										    while(rsRelease.next())
+										    {   
+												%>
+										    		<option value="<%=rsRelease.getString("id") %>"><%=rsRelease.getString("name") %></option>
+										    	<%
+										    }    
+									    
+											%>
+									</select>
 								</div>
-								
-								&nbsp;
 								
 								<div class="form-inline" action="#" method="post">
 								 	 
@@ -136,8 +209,8 @@
 										%>
 									</datalist>
 	                        		<input type="hidden" id="hiddenDealerID" name="hiddenDealerID" value="0"/>
-	                        		&nbsp;
-									<input class=" form-control col-sm-3" list="issuesMaster" id="issueMaster" name="issueMaster" placeholder="Select issue category...">
+	                        		&nbsp;&nbsp;&nbsp;
+									<input class=" form-control col-sm-2" list="issuesMaster" id="issueMaster" name="issueMaster" placeholder="Select issue category...">
 									<datalist id="issuesMaster">
 										<%	
 											 rsIssueMaster = stIssueMaster.executeQuery("select * from issue_master");
@@ -152,8 +225,8 @@
 										%>
 									</datalist>
 	                        		<input type="hidden" id="hiddenIssueMasterID" name="hiddenIssueMasterID" value="0"/>
-	                        		&nbsp;
-									<input class=" form-control col-sm-3" list="issues" id="issue" name="issue" placeholder="Select issue...">
+	                        		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input class=" form-control col-sm-2" list="issues" id="issue" name="issue" placeholder="Select issue...">
 									<datalist id="issues">
 										<%	
 											 rsIssue = stIssue.executeQuery("select * from issues");
@@ -183,7 +256,12 @@
 									    
 											%>
 									</select>
-	                        		
+									&nbsp;&nbsp;&nbsp;&nbsp;
+	                        		<input type="checkbox" class="form-check-input" name="isVoicemail">
+   							 		<label class="form-check-label">Voicemail</label>
+   							 		&nbsp;&nbsp;&nbsp;
+   							 		<input type="checkbox" class="form-check-input" name="isInstructed">
+   							 		<label class="form-check-label">Outgoing</label>
 									<button type="submit" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();">Search</button>
 									<button type="button" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-download"></i>&nbsp;Export</button>
 									<a href="../View/Report.jsp"><button type="button" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
@@ -223,14 +301,15 @@
 							        "issmaster.name as category, "+
 							        "st.name as status from "+
 										"logs as l "+
-                                        "INNER JOIN terminals as ter ON l.terminal = ter.id "+
-                                        "INNER JOIN releases as rel ON l.current_release = rel.id "+
 		                                "INNER JOIN dealer_technicians as dt ON l.dealer_technician = dt.id "+
 										"INNER JOIN dealers as d ON dt.dealer = d.id "+
 										"INNER JOIN issues as iss ON iss.id = l.issue "+
 										"INNER JOIN issue_master as issmaster ON issmaster.id = l.issue_master "+
 										"INNER JOIN users as u ON l.user = u.id "+
-		                                "INNER JOIN status as st ON l.status = st.id ");
+		                                "INNER JOIN status as st ON l.status = st.id "+
+		                                "LEFT JOIN terminals as ter ON l.terminal = ter.id "+
+                                        "LEFT JOIN releases as rel ON l.current_release = rel.id " +
+                                        clause);
 					
 								while (rs.next()) {
 										
@@ -239,7 +318,7 @@
 										%><td style="white-space: nowrap;"><%=rs.getString("log_date") + " <br/> <small>" + rs.getString("log_time") + "</small>"%></td><%	
 										%><td style="white-space: nowrap;"><%=rs.getString("technician") + " <br/> <small>" + rs.getString("dealer") + "</small>"%></td><%
 										%><td style="white-space: nowrap;"><%=rs.getString("terminal") + " - " + rs.getString("serialNumber") + " <br/> <small>" + rs.getString("current_release") + "</small>" %></td><%
-										%><td style="white-space: nowrap;"><%=rs.getString("issue") + " - " + rs.getString("category") %></td><%
+										%><td style="white-space: nowrap;"><%=rs.getString("issue") + " <br/> <small>" + rs.getString("category") + "</small>" %></td><%
 										%><td><small><%=rs.getString("description") %></small></td><%
 										%><td><small><%=rs.getString("new_issue") %></small></td><%
 										%><td><small><%=rs.getString("new_solution") %></small></td><%

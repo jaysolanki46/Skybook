@@ -136,12 +136,13 @@
 							        "issmaster.name as category, " +
 							        "st.name as status from " +
 										"logs as l " +
-		                                "INNER JOIN dealer_technicians as dt ON l.dealer_technician = dt.id " +
-										"INNER JOIN dealers as d ON dt.dealer = d.id " +
-										"INNER JOIN issues as iss ON iss.id = l.issue " +
-										"INNER JOIN issue_master as issmaster ON issmaster.id = l.issue_master " +
-										"INNER JOIN users as u ON l.user = u.id " +
-		                                "INNER JOIN status as st ON l.status = st.id " + clause);
+		                                "LEFT JOIN dealer_technicians as dt ON l.dealer_technician = dt.id " +
+										"LEFT JOIN dealers as d ON dt.dealer = d.id " +
+										"LEFT JOIN issues as iss ON iss.id = l.issue " +
+										"LEFT JOIN issue_master as issmaster ON issmaster.id = l.issue_master " +
+										"LEFT JOIN users as u ON l.user = u.id " +
+		                                "LEFT JOIN status as st ON l.status = st.id " +
+										clause);
 					
 								while (rs.next()) {
 										
