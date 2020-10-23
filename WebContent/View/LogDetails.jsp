@@ -32,17 +32,18 @@
 		String log = request.getParameter("log");
 		
 		rs = st.executeQuery(
-				"select l.id, l.log_date, l.log_time, l.is_voicemail, l.is_instructed, l.serial, l.description, l.new_issue, l.new_solution, l.status, " + 
-				"ter.name as terminal, rel.name as current_release, dt.name as technician, d.name as dealer, " +
+				"select l.id, l.log_date, l.log_time, l.is_voicemail, l.is_instructed, l.serial, l.description, l.new_issue, l.new_solution, l.status, l.technician, " + 
+				"ter.name as terminal, rel.name as current_release, d.name as dealer, " +
 				"u.name as user, iss.name as issue, issmaster.name as category, fup.id as follow_up_id, fup.follow_up_date, fup.follow_up_time, fup.contact, fup.note from " +
-				"follow_ups fup INNER JOIN logs as l ON fup.log = l.id " +
-				"INNER JOIN terminals as  ter ON l.terminal =  ter.id " +
-				"INNER JOIN releases as rel ON l.current_release =  rel.id " +
-				"INNER JOIN dealer_technicians as dt ON l.dealer_technician = dt.id " +
-				"INNER JOIN dealers as d ON dt.dealer = d.id " +
-				"INNER JOIN issues as iss ON iss.id = l.issue " +
-				"INNER JOIN issue_master as issmaster ON issmaster.id = l.issue_master " +
-				"INNER JOIN users as u ON l.user = u.id WHERE l.id=" + log);
+				"logs as l " +
+				"LEFT JOIN follow_ups fup ON fup.log = l.id " +
+				"LEFT JOIN terminals as  ter ON l.terminal =  ter.id " +
+				"LEFT JOIN releases as rel ON l.current_release =  rel.id " +
+				"LEFT JOIN dealers as d ON l.dealer = d.id " +
+				"LEFT JOIN issues as iss ON iss.id = l.issue " +
+				"LEFT JOIN issue_master as issmaster ON issmaster.id = l.issue_master " +
+				"LEFT JOIN users as u ON l.user = u.id WHERE l.id=" + log);
+		System.out.println(log);
 	%>
 
 </head>
@@ -172,9 +173,8 @@
 				</div>
 				
 				<div class="card mb-3">
-					<div class="card-body" style="padding: 10px">
-						
-						<input type="reset" class="btn btn-danger float-right" style="margin-left:10px;" value="Cancel">
+					<div class="card-body" style="padding: 10px" id="buttonDiv">
+						<a href="../View/Index.jsp"><input type="button" class="btn btn-danger float-right" style="margin-left:10px;" value="Cancel"></a>
 						<input type="button" class="btn btn-skyzer float-right" value="Update" onclick="validate()">
 						
 					</div>
@@ -315,11 +315,13 @@ $(function () {
 	  var status = parseInt(document.getElementById("status").value);
 	  
 	  if(status === 1) {
-		  $(':input').attr('readonly','readonly');  
+		  $(':input').attr('readonly','readonly');
+		  $("#status").css("pointer-events","none");
 		  document.getElementById("statusImg").style.visibility = "visible";
+		  document.getElementById("buttonDiv").style.display = "none";;
 	  }
 	  
-	})
+})
 function updateStatus() {
   var x = parseInt(document.getElementById("status").value);
  

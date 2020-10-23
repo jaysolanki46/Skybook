@@ -10,7 +10,7 @@ public class Log {
 	private Boolean isVoicemail;
 	private Boolean isInstructed;
 	private Dealer dealer;
-	private DealerTechnician dealerTechnician;
+	private String technician;
 	private String serial;
 	private Terminal terminal;
 	private Release currentRelease;
@@ -63,11 +63,11 @@ public class Log {
 	public void setDealer(Dealer dealer) {
 		this.dealer = dealer;
 	}
-	public DealerTechnician getDealerTechnician() {
-		return dealerTechnician;
+	public String getTechnician() {
+		return technician;
 	}
-	public void setDealerTechnician(DealerTechnician dealerTechnician) {
-		this.dealerTechnician = dealerTechnician;
+	public void setTechnician(String technician) {
+		this.technician = technician;
 	}
 	public String getSerial() {
 		return serial;

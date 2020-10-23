@@ -6,19 +6,13 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
-
 import bean.Dealer;
-import bean.DealerTechnician;
 import bean.FollowUp;
 import bean.Issue;
 import bean.IssueMaster;
@@ -73,7 +67,7 @@ public class BookServlet extends HttpServlet {
 		String[] isVoicemail = request.getParameterValues("isVoicemail");
 		String[] isInstructed = request.getParameterValues("isInstructed");
 		String dealerID =  request.getParameter("hiddenDealerID");
-		String dealerTechnicianID =  request.getParameter("hiddenDealerTechnicianID");
+		String technician =  request.getParameter("technician");
 		String serial =  request.getParameter("serial");
 		String terminalID =  request.getParameter("terminal");
 		String releaseID =  request.getParameter("release");
@@ -95,9 +89,6 @@ public class BookServlet extends HttpServlet {
 		
 		Dealer dealer = new Dealer();
 		dealer.setId(Integer.parseInt(dealerID));
-		
-		DealerTechnician dealerTechnician = new DealerTechnician();
-		dealerTechnician.setId(Integer.parseInt(dealerTechnicianID));
 		
 		IssueMaster issueMaster = new IssueMaster();
 		issueMaster.setId(Integer.parseInt(issueMasterID));
@@ -126,7 +117,7 @@ public class BookServlet extends HttpServlet {
 		}
 		
 		log.setDealer(dealer);
-		log.setDealerTechnician(dealerTechnician);
+		log.setTechnician(technician);
 		log.setSerial(serial);
 		
 		if(!terminalID.equals("0")) {

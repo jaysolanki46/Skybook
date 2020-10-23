@@ -25,7 +25,7 @@ public class LogDAO {
 		try {
         	
             PreparedStatement preparedStatement =  cnn.prepareStatement("Insert into logs "
-            		+ "(user, log_date, log_time, is_voicemail, is_instructed, dealer, dealer_technician, serial, "
+            		+ "(user, log_date, log_time, is_voicemail, is_instructed, dealer, technician, serial, "
             		+ "issue_master, issue, description, new_issue, new_solution, status, terminal, current_release)" 
             		+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, log.getUser().getId().toString());
@@ -34,7 +34,7 @@ public class LogDAO {
             preparedStatement.setBoolean(4, log.getIsVoicemail());
             preparedStatement.setBoolean(5, log.getIsInstructed());
             preparedStatement.setString(6, log.getDealer().getId().toString());
-            preparedStatement.setString(7, log.getDealerTechnician().getId().toString());
+            preparedStatement.setString(7, log.getTechnician());
             preparedStatement.setString(8, log.getSerial());
             preparedStatement.setString(9, log.getIssueMaster().getId().toString());
             preparedStatement.setString(10, log.getIssue().getId().toString());

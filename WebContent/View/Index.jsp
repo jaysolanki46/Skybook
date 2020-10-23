@@ -71,27 +71,26 @@
 						<div class="form-group row">
 						
 							<label class="col-sm-1 col-form-label">Name:</label>
-							<input class="col-sm-4" list="dealers" id="dealer" name="dealer" onfocusout="freezeLogTime()">
+							<input class="col-sm-1"  id="technician" name="technician" placeholder="Technician..." onfocusout="freezeLogTime()">
+							<input class="col-sm-3" list="dealers" id="dealer" name="dealer" placeholder="Dealer...">
+							&nbsp;&nbsp;&nbsp;
 							<datalist id="dealers">
 							
 							<%	
-								 rs = st.executeQuery("select dt.id as dtID, dt.dealer as dID, dt.name as technician, d.name as dealer from dealer_technicians as dt INNER JOIN dealers as d ON dt.dealer = d.id");
+								 rs = st.executeQuery("select * from dealers");
 
 							    while(rs.next())
 							    {   
 									%>
-										<option data-dealer=<%=rs.getString("dID") %> data-dealer-technician=<%=rs.getString("dtID") %> value='<%=rs.getString("technician") %>'><%=rs.getString("dealer") %></option>
+										<option data-dealer=<%=rs.getString("id") %>><%=rs.getString("name") %></option>
 
 							    	<%
 							    }    
 						    
 							%>
-						
-							</datalist>
-							
-							<input type="hidden" id="user" name="user" value='<%=userID%>' />
-							<input type="hidden" id="hiddenDealerTechnicianID" name="hiddenDealerTechnicianID"/>
-	                        <input type="hidden" id="hiddenDealerID" name="hiddenDealerID"/>
+							</datalist> 
+							<input type="hidden" id="user" name="user" value='<%=userID%>'/>
+	                        <input type="hidden" id="hiddenDealerID" name="hiddenDealerID" value="0"/>
 							
 						</div>
 						
@@ -105,7 +104,7 @@
 						
 							<label class="col-sm-1 col-form-label">Terminal:</label> 
 							<select class="custom-select col-sm-2" name="terminal">
-								<option value ="0" selected>Select terminal...</option>
+								<option value ="0" selected>Select terminal type...</option>
 								<%	
 								rs = st.executeQuery("SELECT * FROM terminals");
 								
@@ -119,8 +118,8 @@
 							%>
 							</select>
 							
-							<label class="col-sm-1 col-form-label">Serial:</label>
-							<input type="text" class="col-sm-2 form-control" name="serial">
+							<label class="col-sm-1 col-form-label">Serial No:</label>
+							<input type="text" class="col-sm-2 form-control" name="serial" placeholder="Ex. 3542874">
 							
 							<label class="col-sm-1 col-form-label">Release:</label> 
 							<select class="custom-select col-sm-4" name="release">
@@ -165,7 +164,7 @@
 							<input type="hidden" id="hiddenIssueID" name="hiddenIssueID"/>
 							&nbsp;&nbsp;&nbsp;
 							
-							<button id="solution" class="btn-skyzer-icon-background" type="button" data-toggle="popover" title="Solution" data-content="----"><i class="fa fa-bars"></i></button>
+							<button id="solution" class="btn-skyzer-icon-background" type="button" data-toggle="popover" title="Solution" data-content="-"><i class="fa fa-bars"></i></button>
 								
 						</div>
 						
@@ -181,7 +180,7 @@
 						
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label">Description:</label>
-							<textarea class="col-sm-8 form-control" placeholder="" rows="3" name="description"></textarea>
+							<textarea class="col-sm-8 form-control" placeholder="Description..." rows="3" name="description"></textarea>
 						</div>
 						
 					</div>
@@ -241,7 +240,7 @@
 						
 						<img alt="" width="22px" src="../IMAGES/task-complete.svg" id="statusImg" style="visibility:hidden;">
 						</div>
-						<div class="input-group center_div" style="margin-left: 12%;">
+						<div class="input-group center_div" style="margin-left: 12%;" id="isFollowUpCheckbox">
 							 <input type="checkbox" class="form-check-input" name="isFollowUp" id="isFollowUp">
    							 <label class="form-check-label">Follow Up</label>
 						</div>
@@ -343,10 +342,15 @@ $(function () {
 function updateStatus() {
   var x = parseInt(document.getElementById("status").value);
  
-  if (x === 1)
+  if (x === 1) {
+	  document.getElementById("isFollowUp").checked = false;
+	  document.getElementById("followUp").style.display = "none";
+	  document.getElementById("isFollowUpCheckbox").style.visibility = "hidden";
 	  document.getElementById("statusImg").style.visibility = "visible";
-  else
+  } else {
+	  document.getElementById("isFollowUpCheckbox").style.visibility = "visible";
 	  document.getElementById("statusImg").style.visibility = "hidden";
+  }
 }
 function ticket() {
 	
@@ -385,18 +389,13 @@ $("#issue").change(function() {
 	 
 })
 $("#dealer").change(function() {
-	var val = $('#dealer').val()
-    var dealerTechnicianID = $('#dealers option').filter(function() {
-        return this.value == val;
-    }).data('dealer-technician');
 	
-	 var dealerID = $('#dealers option').filter(function() {
+	var val = $('#dealer').val();
+	var dealerID = $('#dealers option').filter(function() {
 	        return this.value == val;
 	    }).data('dealer');
 	 
-	 document.getElementById("hiddenDealerTechnicianID").value  = dealerTechnicianID;
 	 document.getElementById("hiddenDealerID").value  = dealerID;
-	 
 })
 $("#isFollowUp").change(function() {
 	
@@ -412,7 +411,7 @@ $("#isFollowUp").change(function() {
 })
 function validate() {
 	
-	var dealerTechnicianID = document.getElementById("hiddenDealerTechnicianID").value;
+	var dealer = document.getElementById("hiddenDealerID").value;
 	var category = document.getElementById("hiddenIssueMasterID").value;
 	var isUnknownCategory = document.getElementById("category").value;
 	var newIssue = document.getElementById("newIssue").value;
@@ -422,14 +421,14 @@ function validate() {
 	var followUpDate = document.getElementById("followUpDate").value;
 	var followUpTime = document.getElementById("followUpTime").value;
 
-	if(dealerTechnicianID == "undefined" || dealerTechnicianID == "") {
-		swal("Error!", "Invalid dealer name!", "error");
-	} else if (category  === "") {
-		swal("Error!", "Please fill issue", "error");
-	} else if ((category == "undefined" || isUnknownCategory == "Unknown") &&  (newIssue === "" || newSolution === "")) {
+	if(dealer == 0) {
+		swal("Error!", "Invalid dealer", "error");
+	} else if (category  === "" || category == "undefined") {
+		swal("Error!", "Invalid issue", "error");
+	} else if ((isUnknownCategory == "Unknown") &&  (newIssue === "" || newSolution === "")) {
 		swal("Error!", "Required attention on new issue!", "error");
 	} else if(status == 0) {
-		swal("Error!", "Please update status!", "error");
+		swal("Error!", "Invalid status!", "error");
 	} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
 		swal("Error!", "Invalid follow up details!", "error");
 	} else {

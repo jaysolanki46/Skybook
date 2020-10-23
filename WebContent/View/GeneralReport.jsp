@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Skybook - Book</title>
+<title>Skybook - General Report</title>
 <%@include  file="../header.html" %>
 
 	<%
@@ -24,41 +24,35 @@
 		}
 		
 		Connection dbConn = DBConfig.connection(); ;
-		Statement stUser = null;
-		ResultSet rsUser = null;
-		stUser = dbConn.createStatement();
-		
 		Statement st = null;
 		ResultSet rs = null;
 		st = dbConn.createStatement();
-		 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	    Date date = new Date();
-	    String today = dateFormat.format(date);
+		
+		String clause = "";
+	    String startDate = request.getParameter("startDate");
+	    String endDate = request.getParameter("endDate");
 	    
-	    String filteredUser = request.getParameter("filterUser");
-	    String filteredDate = request.getParameter("filterDate");
+	    if(startDate != null && endDate != null) {
+		   	 if(startDate == "" || endDate == "") {
+			    	%>
+			    	<script type='text/javascript'>
+			    	document.addEventListener("DOMContentLoaded", function(event) {		
+			    			swal({
+								title : "Invalid dates!",
+								text : "",
+								icon : "error",
+								button : "Aww okiee!",
+							});
+			    	});
+					</script>
+			    	<%
+			    } else {
+			    	clause = "WHERE log_date between '" + startDate + "' and '" + endDate + "'";
+			    }
+		   }
+		
+		 System.out.println(clause);
 	    
-	    
-	    if(filteredUser == null) {
-	    	filteredUser = userID;
-	    }
-	    
-	    if(filteredDate == null) {
-	    	filteredDate = today;
-	    }
-	    
-	    String clause = ""; 
-	    
-	    if(filteredUser.equals("0")) {
-	    	clause = "WHERE l.log_date = '" + filteredDate + "'";
-	    } else {
-	    	clause = "WHERE u.id = " + filteredUser + " and l.log_date = '" + filteredDate + "'";
-	    }
-	    
-	    System.out.println(filteredUser);
-	    System.out.println(filteredDate);
-	    System.out.println(clause);
 	%>
 
 </head>
@@ -67,7 +61,7 @@
 	<div class="card center_div"  >
 	
 	 	<div class="card-header" style="color: white; background-color: #0066cb; ">
-			<h5 style="color: white;">Call History</h5>
+			<h5 style="color: white;">General Report</h5>
 		</div>
 		
 		<div class="card-group">
@@ -78,33 +72,15 @@
 						<div class="card-body" style="padding: 10px;">
 									
 								 
-								 <form class="form-inline" action="../View/CallHistory.jsp" method="post">
+								 <form class="form-inline" action="../View/GeneralReport.jsp" method="post">
 								 	 
-								 	 <label class="col-sm-0 col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">User:</label> 
-									 <select class="custom-select col-sm-2" name="filterUser">
-										<option value="0">All</option>
-										<%
-											rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1");
-					
-										while (rsUser.next()) {
-										%>
-											<option value="<%=rsUser.getString("id")%>" <%
-							    		
-							    		if(rsUser.getString("id").equals(filteredUser)) {
-							    			%>selected<%
-							    		}
-							    		
-							    		%>><%=rsUser.getString("name")%></option>
-										<%
-											}
-										%>
-									</select>
-									
-									<label class="col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">Date:</label> 
-									<input type="date" id="filterDate" name="filterDate" max="31-12-3000" min="01-01-1000" value=<%=filteredDate %>	class="form-control col-sm-2">	
+								 	 <label class="col-sm-0 col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">Date:</label> 
+									 <input type="date" id="startDate" name="startDate" max="31-12-3000" min="01-01-1000" value="<%=startDate %>" class="form-control col-sm-2">	
+									 <label class="col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">To</label> 
+									 <input type="date" id="endDate" name="endDate" max="31-12-3000" min="01-01-1000" value="<%=endDate %>" class="form-control col-sm-2">	
 									
 									<button type="submit" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();">Search</button>
-									<a href="../View/CallHistory.jsp"><button type="button" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
+									<a href="../View/GeneralReport.jsp"><button type="button" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
 								</form>
 								
 							</div>

@@ -25,6 +25,23 @@
 		Statement st = null;
 		ResultSet rs = null;
 		st = dbConn.createStatement();
+		
+		Statement stUser = null;
+		ResultSet rsUser = null;
+		stUser = dbConn.createStatement();
+		
+		 String clause = ""; 
+		 String filteredUser = request.getParameter("user");
+		 
+		 if(filteredUser == null) {
+		    	filteredUser = userID;
+		  }
+		 
+		 if(!filteredUser.equals("0")) {
+			 clause = "and l.user = '" + filteredUser + "'";
+		 }
+		 
+		 System.out.println(clause);
 	%>
 
 </head>
@@ -39,14 +56,19 @@
 			<div style="color: white; margin-left: auto; margin-right: 5px; width: 10%;">
 				 <form action="../View/CompletedTickets.jsp" method="post">
 					 <select class="custom-select" name="user" onchange="this.form.submit();">
-						<option selected>Select user...</option>
 						<option value="0">All</option>
 						<%
-							rs = st.executeQuery("SELECT * FROM users where is_support = 1");
+						rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1");
 	
-						while (rs.next()) {
+						while (rsUser.next()) {
 						%>
-							<option value="<%=rs.getString("id")%>"><%=rs.getString("name")%></option>
+							<option value="<%=rsUser.getString("id")%>" <%
+							    		
+							    		if(rsUser.getString("id").equals(filteredUser)) {
+							    			%> selected <% 
+							    		}
+							    		%>
+							> <%=rsUser.getString("name")%>  </option>
 						<%
 							}
 						%>
@@ -62,28 +84,12 @@
 						<div class="row row-cols-4 row-cols-md-4">
 						
 						<%	
-								String queryParameter;
-								queryParameter = request.getParameter("user");
-								
-								if(queryParameter == null || queryParameter.equals("0")) {
-									rs = st.executeQuery("select fup.*, dt.name as technician, d.name as dealer, u.name as user from " +
-											"follow_ups fup INNER JOIN logs as l ON fup.log = l.id " +
-											"INNER JOIN dealer_technicians as dt ON l.dealer_technician = dt.id " +
-											"INNER JOIN dealers as d ON dt.dealer = d.id " +
-											"INNER JOIN users as u ON l.user = u.id " +
-											"WHERE fup.is_completed = 1 " +
-											"ORDER BY fup.follow_up_date, fup.follow_up_time");
-
-								} else {
-									rs = st.executeQuery("select fup.*, dt.name as technician, d.name as dealer, u.name as user from " +
-											"follow_ups fup INNER JOIN logs as l ON fup.log = l.id " +
-											"INNER JOIN dealer_technicians as dt ON l.dealer_technician = dt.id " +
-											"INNER JOIN dealers as d ON dt.dealer = d.id " +
-											"INNER JOIN users as u ON l.user = u.id " +
-											"WHERE fup.is_completed = 1 and l.user =" + queryParameter + 
-											" ORDER BY fup.follow_up_date, fup.follow_up_time");
-
-								}
+						rs = st.executeQuery("select fup.*,l.technician, d.name as dealer, u.name as user from " +
+								"follow_ups fup INNER JOIN logs as l ON fup.log = l.id " +
+								"INNER JOIN dealers as d ON l.dealer = d.id " +
+								"INNER JOIN users as u ON l.user = u.id " +
+								"WHERE fup.is_completed = 1 " + clause +
+								" ORDER BY fup.follow_up_date, fup.follow_up_time");		
 																
 							    while(rs.next())
 							    {   
@@ -127,6 +133,7 @@
 													<a href=../View/LogDetails.jsp?log=<%=rs.getString("log") %>><img alt="" width="20px" src="../IMAGES/info.svg"></a>
 												</div>
 										      </div>
+										     
 										     </div>
 										    </div>
 										  </div>
