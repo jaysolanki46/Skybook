@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Skybook - Book</title>
+<title>Skybook - Status Report</title>
 <%@include  file="../header.html" %>
 
 	<%
@@ -24,41 +24,37 @@
 		}
 		
 		Connection dbConn = DBConfig.connection(); ;
+		Statement st = null;
+		ResultSet rs = null;
+		st = dbConn.createStatement();
+		
+		Statement stStatus = null;
+		ResultSet rsStatus = null;
+		stStatus = dbConn.createStatement();
+		
 		Statement stUser = null;
 		ResultSet rsUser = null;
 		stUser = dbConn.createStatement();
 		
-		Statement st = null;
-		ResultSet rs = null;
-		st = dbConn.createStatement();
-		 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	    Date date = new Date();
-	    String today = dateFormat.format(date);
+		String clause = "";
+	    String user = request.getParameter("user");
+	    String status = request.getParameter("status");
 	    
-	    String filteredUser = request.getParameter("filterUser");
-	    String filteredDate = request.getParameter("filterDate");
-	    
-	    
-	    if(filteredUser == null) {
-	    	filteredUser = userID;
+	    System.out.println(user);
+	    System.out.println(status);
+	 
+	    if(user != null && !user.equals("0")) {  
+	    	clause = "WHERE l.user = " + user;
+	    }
+	    if(status != null && !status.equals("0")) {  
+	    	clause = "WHERE l.status = " + status;
+	    }
+	    if(user != null && !user.equals("0") && status != null && !status.equals("0")) {  
+	    	clause = "WHERE l.user = " + user + " and status = " + status;
 	    }
 	    
-	    if(filteredDate == null) {
-	    	filteredDate = today;
-	    }
+		System.out.println(clause);
 	    
-	    String clause = ""; 
-	    
-	    if(filteredUser.equals("0")) {
-	    	clause = "WHERE l.log_date = '" + filteredDate + "'";
-	    } else {
-	    	clause = "WHERE u.id = " + filteredUser + " and l.log_date = '" + filteredDate + "'";
-	    }
-	    
-	    System.out.println(filteredUser);
-	    System.out.println(filteredDate);
-	    System.out.println(clause);
 	%>
 
 </head>
@@ -67,7 +63,7 @@
 	<div class="card center_div"  >
 	
 	 	<div class="card-header" style="color: white; background-color: #0066cb; ">
-			<h5 style="color: white;">Call History</h5>
+			<h5 style="color: white;">Status Report</h5>
 		</div>
 		
 		<div class="card-group">
@@ -78,33 +74,50 @@
 						<div class="card-body" style="padding: 10px;">
 									
 								 
-								 <form class="form-inline" action="../View/CallHistory.jsp" method="post">
+								 <form class="form-inline" action="../View/StatusReport.jsp" method="post">
 								 	 
 								 	 <label class="col-sm-0 col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">User:</label> 
-									 <select class="custom-select col-sm-2" name="filterUser">
-										<option value="0">All</option>
-										<%
-											rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1");
-					
-										while (rsUser.next()) {
-										%>
-											<option value="<%=rsUser.getString("id")%>" <%
+										<select class="form-control col-sm-2" name="user">
+											<option value="0" selected>All</option>
+											<%
+												rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1");
+						
+											while (rsUser.next()) {
+											%>
+												<option value="<%=rsUser.getString("id")%>" <%
 							    		
-							    		if(rsUser.getString("id").equals(filteredUser)) {
-							    			%>selected<%
-							    		}
+										    		if(rsUser.getString("id").equals(user)) {
+										    			%> selected <% 
+										    		}
+										    		%>><%=rsUser.getString("name")%></option>
+											<%
+												}
+											%>
+										</select>
+										
+									 <label class="col-sm-0 col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">Status:</label> 	
+										<select class="custom-select col-sm-2 center_div" id="status" name="status">
+										<option value="0" selected>All</option>
+											<%	
+											rsStatus = stStatus.executeQuery("SELECT * FROM status");
+											
+										    while(rsStatus.next())
+										    {   
+												%>
+										    		<option value="<%=rsStatus.getString("id") %>" <%
 							    		
-							    		%>><%=rsUser.getString("name")%></option>
-										<%
-											}
-										%>
+										    		if(rsStatus.getString("id").equals(status)) {
+										    			%> selected <% 
+										    		}
+										    		%>><%=rsStatus.getString("name") %></option>
+										    	<%
+										    }    
+									    
+											%>
 									</select>
 									
-									<label class="col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">Date:</label> 
-									<input type="date" id="filterDate" name="filterDate" max="31-12-3000" min="01-01-1000" value=<%=filteredDate %>	class="form-control col-sm-2">	
-									
 									<button type="submit" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();">Search</button>
-									<a href="../View/CallHistory.jsp"><button type="button" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
+									<a href="../View/StatusReport.jsp"><button type="button" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
 								</form>
 								
 							</div>
@@ -187,7 +200,7 @@
 										<% }
 									%></td><%									
 									%><td><%=rs.getString("status") %></td><%
-									%><td><center><a href=../View/HistoryDetails.jsp?log=<%=rs.getString("id") %>><i class="fas fa-edit"></i></a></center></td><%
+									%><td><center><a href=../View/LogDetails.jsp?log=<%=rs.getString("id") %>><i class="fas fa-edit"></i></a></center></td><%
 									%></tr><%
 								}
 						%>

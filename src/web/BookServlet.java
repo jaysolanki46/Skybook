@@ -198,7 +198,7 @@ public class BookServlet extends HttpServlet {
 		String newIssue =  request.getParameter("newIssue");
 		String newSolution =  request.getParameter("newSolution");
 		String statusID =  request.getParameter("status");
-		
+		String[] isFollowUp = request.getParameterValues("isFollowUp");
 		String followUpID = request.getParameter("hiddenFollowUpID");
 		String followUpDate = request.getParameter("followUpDate");
 		String followUpTime = request.getParameter("followUpTime");
@@ -223,20 +223,30 @@ public class BookServlet extends HttpServlet {
 			Boolean isLogUpdated = logDao.update(log);
 			
 			FollowUp followUp = new FollowUp();
-			followUp.setId(Integer.parseInt(followUpID));
+			if(!followUpID.equals("null") && followUpID != null) {
+				followUp.setId(Integer.parseInt(followUpID));
+			}
+			
 			followUp.setFollowUpDate(followUpDate);
 			followUp.setFollowUpTime(followUpTime);
 			followUp.setFollowUpContact(followUpContact);
 			followUp.setNote(followUpNote);
-			followUp.setUpdatedBy(user);
-			followUp.setUpdatedOn(dtf.format(now));
+			followUp.setLog(log);
 			
 			if(statusID.equals("1")) {
+				followUp.setUpdatedBy(user);
+				followUp.setUpdatedOn(dtf.format(now));
 				followUp.setStatus(true);
 			} else {
 				followUp.setStatus(false);
 			}
-			Boolean isFollowUpUpdated = followUpDAO.update(followUp);
+			Boolean isFollowUpUpdated = false;
+			if(!followUpID.equals("null") && isFollowUp != null) {
+				isFollowUpUpdated = followUpDAO.update(followUp);
+			} else if(isFollowUp != null) {
+				followUpDAO.insert(followUp);
+				isFollowUpUpdated = true;
+			}
 			
 			if(isLogUpdated && isFollowUpUpdated) {
 				if(statusID.equals("1")) {
@@ -248,13 +258,13 @@ public class BookServlet extends HttpServlet {
 				}
 			} else {
 				updateStatus.setAttribute("updateStatus", "error");
-	    		response.sendRedirect("View/LogDetails.jsp?log=" + logID);
+	    		response.sendRedirect("View/TicketDetails.jsp?log=" + logID);
 			}
     		
 		} catch (Exception e) {
 			e.printStackTrace();
 			updateStatus.setAttribute("updateStatus", "error");
-    		response.sendRedirect("View/LogDetails.jsp?log=" + logID);
+    		response.sendRedirect("View/TicketDetails.jsp?log=" + logID);
 		}
 		
 	}

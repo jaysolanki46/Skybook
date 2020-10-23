@@ -84,8 +84,9 @@
 						<div class="row row-cols-4 row-cols-md-4">
 						
 						<%	
-						rs = st.executeQuery("select fup.*,l.technician, d.name as dealer, u.name as user from " +
+						rs = st.executeQuery("select fup.*,l.technician, d.name as dealer, u.name as user, u1.name as updated_by_user from " +
 								"follow_ups fup INNER JOIN logs as l ON fup.log = l.id " +
+								"INNER JOIN users as u1 ON fup.updated_by = u1.id " +
 								"INNER JOIN dealers as d ON l.dealer = d.id " +
 								"INNER JOIN users as u ON l.user = u.id " +
 								"WHERE fup.is_completed = 1 " + clause +
@@ -128,9 +129,9 @@
 										      </div>
 										      <div class="bg-transparent" style="border-color: transparent; ">
 										      <div class="card-header bg-transparent" style="display: flex; justify-content: space-around">
-										      <p>Created By: <%=rs.getString("user") %></p>
+										      <p><img alt="" width="13px" src="../IMAGES/created-by.svg"> <%=rs.getString("user") %> <br/>  <img alt="" width="12px" src="../IMAGES/updated-by.svg">  <%=rs.getString("updated_by_user") %> (<%=rs.getString("updated_on") %>)</p>
 												<div style="margin-left: auto;">
-													<a href=../View/LogDetails.jsp?log=<%=rs.getString("log") %>><img alt="" width="20px" src="../IMAGES/info.svg"></a>
+													<a href=../View/TicketDetails.jsp?log=<%=rs.getString("log") %>><img alt="" width="20px" src="../IMAGES/info.svg"></a>
 												</div>
 										      </div>
 										     
