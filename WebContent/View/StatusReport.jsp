@@ -200,7 +200,7 @@
 										<% }
 									%></td><%									
 									%><td><%=rs.getString("status") %></td><%
-									%><td><center><a href=../View/LogDetails.jsp?log=<%=rs.getString("id") %>><i class="fas fa-edit"></i></a></center></td><%
+									%><td><center><a href=../View/HistoryDetails.jsp?log=<%=rs.getString("id") %>><i class="fas fa-edit"></i></a></center></td><%
 									%></tr><%
 								}
 						%>
