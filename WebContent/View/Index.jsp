@@ -59,7 +59,7 @@
 						</div>
 						<div class="input-group" style="margin-left: auto; width:10%;">
 							 <input type="checkbox" class="form-check-input" name="isInstructed">
-   							 <label class="form-check-label">Instructed/Outgoing</label>
+   							 <label class="form-check-label">Outgoing</label>
 						</div>
 						</div>
 					</div>
@@ -175,8 +175,8 @@
 						<div class="form-group row">
 						
 							<label class="col-sm-2 col-form-label">Category:</label>
-							<div class="form-group ">
-								<input id="category" class="form-control" type="text" style="width: 207%" readonly>
+							<div class="form-group col-sm-8" style="padding: 0px;">
+								<input id="category" class="form-control" type="text" readonly>
 								<small class="form-text text-muted">Note: Category will come up automatically...</small>
 								<input type="hidden" id="hiddenIssueMasterID" name="hiddenIssueMasterID"/>
 							</div>

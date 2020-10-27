@@ -193,6 +193,7 @@ public class BookServlet extends HttpServlet {
 		HttpSession updateStatus = request.getSession();
 		String userID =  request.getParameter("user");
 		
+		String redirectPage = request.getParameter("hiddenRedirectPage");
 		String logID = request.getParameter("hiddenLogID");
 		String description =  request.getParameter("description");
 		String newIssue =  request.getParameter("newIssue");
@@ -240,21 +241,25 @@ public class BookServlet extends HttpServlet {
 			} else {
 				followUp.setStatus(false);
 			}
-			Boolean isFollowUpUpdated = false;
-			if(!followUpID.equals("null") && followUpID != null) {
-				isFollowUpUpdated = followUpDAO.update(followUp);
+			if(followUp.getId() != null) {
+				followUpDAO.update(followUp);
 			} else if(isFollowUp != null) {
 				followUpDAO.insert(followUp);
-				isFollowUpUpdated = true;
 			}
 			
-			if(isLogUpdated && isFollowUpUpdated) {
-				if(statusID.equals("1")) {
+			if(isLogUpdated) {
+				
+				if(redirectPage != null) {
 					updateStatus.setAttribute("updateStatus", "success");
-		    		response.sendRedirect("View/CompletedTickets.jsp");
+		    		response.sendRedirect("View/" + redirectPage + "?log=" + log.getId());
 				} else {
-					updateStatus.setAttribute("updateStatus", "success");
-		    		response.sendRedirect("View/AwaitingTickets.jsp");
+					if(statusID.equals("1")) {
+						updateStatus.setAttribute("updateStatus", "success");
+			    		response.sendRedirect("View/CompletedTickets.jsp");
+					} else {
+						updateStatus.setAttribute("updateStatus", "success");
+			    		response.sendRedirect("View/AwaitingTickets.jsp");
+					}
 				}
 			} else {
 				updateStatus.setAttribute("updateStatus", "error");

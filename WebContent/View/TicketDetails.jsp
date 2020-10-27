@@ -71,7 +71,7 @@
 						
 						<div class="input-group" >
 							<label class="col-sm-1 col-form-label">Time:</label>  &nbsp;&nbsp;
-							<label class="col-sm-1 col-form-label"><%=rs.getString("log_time") %></label>
+							<label class="col-sm-2 col-form-label"><%=rs.getString("log_time") %></label>
 						</div>
 						
 						<div class="input-group" style="margin-left: auto; width:10%;">
@@ -92,7 +92,7 @@
 										%> checked<%
 							 
 							 %>>
-   							 <label class="form-check-label">Instructed/Outgoing</label>
+   							 <label class="form-check-label">Outgoing</label>
 						</div>
 						</div>
 					</div>

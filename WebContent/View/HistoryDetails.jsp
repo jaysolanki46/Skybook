@@ -58,6 +58,7 @@
 			<h5 style="color: white;">Call #<%=rs.getString("id") %> [<%=rs.getString("log_date") %>]</h5>
 			<input type="hidden" name="hiddenLogID" value=<%=rs.getString("id") %>>
 			<input type="hidden" id="user" name="user" value='<%=userID%>' />
+			<input type="hidden" name="hiddenRedirectPage" value="HistoryDetails.jsp">
 		</div>
 
 		<div class="card-group">
@@ -71,7 +72,7 @@
 						
 						<div class="input-group" >
 							<label class="col-sm-1 col-form-label">Time:</label>  &nbsp;&nbsp;
-							<label class="col-sm-1 col-form-label"><%=rs.getString("log_time") %></label>
+							<label class="col-sm-2 col-form-label"><%=rs.getString("log_time") %></label>
 						</div>
 						
 						<div class="input-group" style="margin-left: auto; width:10%;">
@@ -92,7 +93,7 @@
 										%> checked<%
 							 
 							 %>>
-   							 <label class="form-check-label">Instructed/Outgoing</label>
+   							 <label class="form-check-label">Outgoing</label>
 						</div>
 						</div>
 					</div>
