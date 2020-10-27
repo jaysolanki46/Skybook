@@ -55,7 +55,7 @@
 	
 		<div class="card-header"
 			style="color: white; background-color: #0066cb;">
-			<h5 style="color: white;">Log #<%=rs.getString("id") %> [<%=rs.getString("log_date") %>]</h5>
+			<h5 style="color: white;">Call #<%=rs.getString("id") %> [<%=rs.getString("log_date") %>]</h5>
 			<input type="hidden" name="hiddenLogID" value=<%=rs.getString("id") %>>
 			<input type="hidden" id="user" name="user" value='<%=userID%>' />
 		</div>
@@ -117,13 +117,13 @@
 						<div class="form-group row">
 						
 							<label class="col-sm-1 col-form-label">Terminal:</label> 
-							<label class="col-sm-2 col-form-label"><%=rs.getString("terminal") %></label>
+							<label class="col-sm-2 col-form-label"><% if(rs.getString("terminal") != null) out.print(rs.getString("terminal")); else out.print("-"); %></label>
 							
 							<label class="col-sm-1 col-form-label">Serial:</label>
 							<label class="col-sm-2 col-form-label"><%=rs.getString("serial") %></label>
 							
 							<label class="col-sm-1 col-form-label">Release:</label>
-							<label class="col-sm-4 col-form-label"><% if(rs.getString("current_release") != null) out.print(rs.getString("current_release")); %></label>
+							<label class="col-sm-4 col-form-label"><% if(rs.getString("current_release") != null) out.print(rs.getString("current_release")); else out.print("-"); %></label>
 							
 							
 						</div>

@@ -231,17 +231,17 @@ public class BookServlet extends HttpServlet {
 			followUp.setFollowUpTime(followUpTime);
 			followUp.setFollowUpContact(followUpContact);
 			followUp.setNote(followUpNote);
+			followUp.setUpdatedBy(user);
+			followUp.setUpdatedOn(dtf.format(now));
 			followUp.setLog(log);
 			
 			if(statusID.equals("1")) {
-				followUp.setUpdatedBy(user);
-				followUp.setUpdatedOn(dtf.format(now));
 				followUp.setStatus(true);
 			} else {
 				followUp.setStatus(false);
 			}
 			Boolean isFollowUpUpdated = false;
-			if(!followUpID.equals("null") && isFollowUp != null) {
+			if(!followUpID.equals("null") && followUpID != null) {
 				isFollowUpUpdated = followUpDAO.update(followUp);
 			} else if(isFollowUp != null) {
 				followUpDAO.insert(followUp);

@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Skybook - General Report</title>
+<title>Skybook - Issue Category Report</title>
 <%@include  file="../header.html" %>
 
 	<%
@@ -68,16 +68,28 @@
 		    	});
 				</script>
 		    	<%
-		   	} else if (issue.equals("0") && release.equals("0") && terminal.equals("0")) {
+		   	} else if ((issue.equals("0") || issue.equals("undefined")) && release.equals("0") && terminal.equals("0")) {
 		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + issueMaster;
-		   	} else if (!issue.equals("0") && release.equals("0") && terminal.equals("0")) {
+		   	} else if ((!issue.equals("0") && !issue.equals("undefined")) && release.equals("0") && terminal.equals("0")) {
 		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + issueMaster + " and l.issue = " + issue;
-		   	} else if (!issue.equals("0") && !release.equals("0") && terminal.equals("0")) {
+		   	} else if ((!issue.equals("0") && !issue.equals("undefined")) && !release.equals("0") && terminal.equals("0")) {
 		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
 		   					issueMaster + " and l.issue = " + issue + " and l.current_release = " + release;
-		   	} else if (!issue.equals("0") && !release.equals("0") && !terminal.equals("0")) {
+		   	} else if ((!issue.equals("0") && !issue.equals("undefined")) && !release.equals("0") && !terminal.equals("0")) {
 		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
 	   					issueMaster + " and l.issue = " + issue + " and l.current_release = " + release + " and l.terminal = " + terminal;
+	   		} else if ((issue.equals("0") || issue.equals("undefined")) && !release.equals("0") && !terminal.equals("0")) {
+		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
+	   					issueMaster + " and l.current_release = " + release + " and l.terminal = " + terminal;
+	   		} else if ((issue.equals("0") || issue.equals("undefined")) && release.equals("0") && !terminal.equals("0")) {
+		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
+	   					issueMaster + " and l.terminal = " + terminal;
+	   		} else if ((issue.equals("0") || issue.equals("undefined")) && !release.equals("0") && terminal.equals("0")) {
+		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
+	   					issueMaster + " and l.current_release = " + release;
+	   		} else if ((!issue.equals("0") || !issue.equals("undefined")) && release.equals("0") && !terminal.equals("0")) {
+		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
+	   					issueMaster + " and l.issue = " + issue + " and l.terminal = " + terminal;
 	   		}
 	   	}
 		
@@ -87,6 +99,7 @@
 		 System.out.println(issueMaster);
 		 System.out.println(issueMasterString);
 		 System.out.println(issue);
+		 System.out.println(issueString);
 		 System.out.println(release);
 		 System.out.println(terminal);
 		 System.out.println(clause);
@@ -100,7 +113,7 @@
 	<div class="card center_div"  >
 	
 	 	<div class="card-header" style="color: white; background-color: #0066cb; ">
-			<h5 style="color: white;">General Report</h5>
+			<h5 style="color: white;">Issue Category Report</h5>
 		</div>
 		
 		<div class="card-group">

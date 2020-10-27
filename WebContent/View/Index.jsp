@@ -164,8 +164,12 @@
 							<input type="hidden" id="hiddenIssueID" name="hiddenIssueID"/>
 							&nbsp;&nbsp;&nbsp;
 							
-							<button id="solution" class="btn-skyzer-icon-background" type="button" data-toggle="popover" title="Solution" data-content="-"><i class="fa fa-bars"></i></button>
-								
+							<a href="#" id="solutionpopup" class="popover-toggle" title="Solution"><i class="fa fa-bars"></i></a>
+							<div id="solutiondiv" style="display: none">
+					           
+					           <!-- solutions from javascript -->
+					        </div>	
+					        
 						</div>
 						
 						<div class="form-group row">
@@ -374,7 +378,15 @@ $("#issue").change(function() {
          return this.value == val;
      }).data('solution');
 	 
-	 $('#solution').attr("data-content",  solution);
+	 
+	 document.getElementById("solutiondiv").innerHTML = solution;
+	 $('#solutionpopup').popover({
+	      html : true, 
+	      content: function() {
+	        return $('#solutiondiv').html();
+	      } 
+	  });  
+	 
 	 
 	 var issueID = $('#issues option').filter(function() {
          return this.value == val;
