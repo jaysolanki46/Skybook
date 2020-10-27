@@ -164,7 +164,7 @@
 							<input type="hidden" id="hiddenIssueID" name="hiddenIssueID"/>
 							&nbsp;&nbsp;&nbsp;
 							
-							<a href="#" id="solutionpopup" class="popover-toggle" title="Solution"><i class="fa fa-bars"></i></a>
+							<a href="" id="solutionpopup" class="popover-toggle" title="Solution" onclick="return false;"><button type="button" class="btn btn-primary"><i class="fa fa-bars"></i></button></a>
 							<div id="solutiondiv" style="display: none">
 					           
 					           <!-- solutions from javascript -->
