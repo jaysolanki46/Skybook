@@ -148,7 +148,8 @@
 		                                "INNER JOIN status as st ON l.status = st.id "+
 		                                "LEFT JOIN terminals as ter ON l.terminal = ter.id "+
                                         "LEFT JOIN releases as rel ON l.current_release = rel.id " +
-                                        clause);
+                                        clause + 
+		                         		" ORDER BY l.id DESC");
 					
 								while (rs.next()) {
 										
