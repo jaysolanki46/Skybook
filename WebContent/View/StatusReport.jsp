@@ -238,8 +238,11 @@
 					    <tr>
 					      <th scope="col">#Call</th>
 					      <th scope="col">Date/Time</th>
+					      <th scope="col">Technician</th>
 					      <th scope="col">Dealer</th>
 					      <th scope="col">Terminal Details</th>
+					      <th scope="col">Current Release</th>
+					      <th scope="col">Issue Category</th>
 					      <th scope="col">Issue</th>
 					      <th scope="col">Description</th>
 					      <th scope="col">New Issue</th>
@@ -257,9 +260,9 @@
 									%><tr><%
 									%><td><%=rsExport.getString("id") %></td><%		
 									%><td><%='\"'+rsExport.getString("log_date") + " " + rsExport.getString("log_time") + '\"'%></td><%	
-									%><td><%='\"'+rsExport.getString("technician") + "," + rsExport.getString("dealer") + '\"'%></td><%
+									%><td><%='\"'+rsExport.getString("technician")+'\"'%></td><%
+									%><td><%='\"'+rsExport.getString("dealer")+'\"'%></td><%
 									%><td><%
-									
 									if(rsExport.getString("terminal") != null) {
 										out.print('\"' + rsExport.getString("terminal") + " ");
 									} else {
@@ -267,18 +270,21 @@
 									}
 																		
 									if(rsExport.getString("serialNumber") != null) {
-										out.print(rsExport.getString("serialNumber") + " ");
-									} else {
-										out.print(" " + '\"');	
-									}
-									
-									if(rsExport.getString("current_release") != null) {
-										out.print(rsExport.getString("current_release") + '\"');
+										out.print(rsExport.getString("serialNumber") + '\"');
 									} else {
 										out.print(" " + '\"');	
 									}
 									%></td><%
-									%><td><%='\"'+rsExport.getString("issue") + "," + rsExport.getString("category") + '\"'%></td><%
+									%><td><%
+									
+									if(rsExport.getString("current_release") != null) {
+										out.print('\"' + rsExport.getString("current_release") + '\"');
+									} else {
+										out.print('\"' + " " + '\"');	
+									}
+									%></td><%
+									%><td><%='\"'+rsExport.getString("category") + '\"'%></td><%
+									%><td><%='\"'+rsExport.getString("issue") + '\"'%></td><%
 									%><td><%='\"'+rsExport.getString("description") + '\"'%></td><%
 									%><td><%='\"'+rsExport.getString("new_issue") + '\"'%></td><%
 									%><td><%='\"'+rsExport.getString("new_solution") + '\"'%></td><%
