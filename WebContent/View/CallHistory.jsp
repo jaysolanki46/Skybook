@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Skybook - Book</title>
+<title>Skybook - Call History</title>
 <%@include  file="../header.html" %>
 
 	<%

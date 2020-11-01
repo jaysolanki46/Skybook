@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Skybook - Book</title>
+<title>Skybook - Completed Tickets</title>
 <%@include  file="../header.html" %>
 
 	<%
@@ -90,7 +90,7 @@
 								"INNER JOIN dealers as d ON l.dealer = d.id " +
 								"INNER JOIN users as u ON l.user = u.id " +
 								"WHERE fup.is_completed = 1 " + clause +
-								" ORDER BY fup.follow_up_date, fup.follow_up_time");		
+								" ORDER BY fup.follow_up_date DESC, fup.follow_up_time ASC");		
 																
 							    while(rs.next())
 							    {   
