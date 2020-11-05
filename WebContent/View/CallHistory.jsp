@@ -123,11 +123,12 @@
 					      <th scope="col">Terminal Details</th>
 					      <th scope="col">Issue</th>
 					      <th scope="col">Description</th>
-					      <th scope="col">New Issue</th>
-					      <th scope="col">New Solution</th>
+					      <th scope="col">N.Issue</th>
+					      <th scope="col">N.Solution</th>
 					      <th scope="col">Voicemail</th>
 					      <th scope="col">Outgoing</th>
 					      <th scope="col">Status</th>
+					      <th scope="col">Attendee</th>
 					      <th scope="col">Update</th>
 					    </tr>
 					  </thead>
@@ -190,6 +191,7 @@
 										<% }
 									%></td><%									
 									%><td><%=rs.getString("status") %></td><%
+									%><td><%=rs.getString("user") %></td><%
 									%><td><center><a href=../View/HistoryDetails.jsp?log=<%=rs.getString("id") %>><i class="fas fa-edit"></i></a></center></td><%
 									%></tr><%
 								}
@@ -208,6 +210,8 @@
 			<div>
 				<img alt="" width="15px" src="../IMAGES/user.svg">
 				<small style="color: white;"><%=username %></small>
+				<small style="color: white;">></small>
+				<a href=""><small style="color: white;">History</small></a>
 			</div>
 			<div style="color: white; margin-left: auto; margin-right: 5px;">
 				

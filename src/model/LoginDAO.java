@@ -15,14 +15,15 @@ public class LoginDAO {
 	
 	public LoginDAO() throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated constructor stub
-		new DBConfig();
-		cnn = DBConfig.connection();
+		
 	}
 
 	public ResultSet validate(User user) throws ClassNotFoundException {
 
         try {
-        	
+        	new DBConfig();
+    		cnn = DBConfig.connection();
+    		
             PreparedStatement preparedStatement =  cnn.prepareStatement("select * from users where name = ? and pass = ? ");
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPass());

@@ -274,6 +274,7 @@
 					      <th scope="col">Voicemail</th>
 					      <th scope="col">Outgoing</th>
 					      <th scope="col">Status</th>
+					       <th scope="col">Attendee</th>
 					      <th scope="col">Update</th>
 					    </tr>
 					  </thead>
@@ -319,6 +320,7 @@
 										<% }
 									%></td><%									
 									%><td><%=rs.getString("status") %></td><%
+									%><td><%=rs.getString("user") %></td><%
 									%><td><center><a href=../View/HistoryDetails.jsp?log=<%=rs.getString("id") %>><i class="fas fa-edit"></i></a></center></td><%
 									%></tr><%
 								}
@@ -344,6 +346,7 @@
 					      <th scope="col">Voicemail</th>
 					      <th scope="col">Outgoing</th>
 					      <th scope="col">Status</th>
+					       <th scope="col">Attendee</th>
 					    </tr>
 					  </thead>
 					  <tbody>
@@ -397,6 +400,7 @@
 											}
 									%></td><%									
 									%><td><%='\"'+rsExport.getString("status") + '\"'%></td><%
+									%><td><%='\"'+rsExport.getString("user") + '\"'%></td><%	
 									%></tr><%
 								}
 						%>
@@ -415,6 +419,11 @@
 			<div>
 				<img alt="" width="15px" src="../IMAGES/user.svg">
 				<small style="color: white;"><%=username %></small>
+				
+				<small style="color: white;">></small>
+				<small style="color: white;">Reports</small>
+				<small style="color: white;">></small>
+				<a href=""><small style="color: white;">Issue Category Report</small></a>
 			</div>
 			<div style="color: white; margin-left: auto; margin-right: 5px;">
 				

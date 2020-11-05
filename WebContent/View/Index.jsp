@@ -303,7 +303,11 @@
 			<div>
 				<img alt="" width="15px" src="../IMAGES/user.svg">
 				<small style="color: white;"><%=username %></small>
+				<small style="color: white;">></small>
+				<a href=""><small style="color: white;">Book</small></a>
+					
 			</div>
+			
 			<div style="color: white; margin-left: auto; margin-right: 5px;">
 				
 				<small >
