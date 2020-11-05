@@ -8,6 +8,7 @@
 <%@ page import="java.io.*,java.util.*, javax.servlet.*, java.text.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<% try { %>
 <head>
 <meta charset="ISO-8859-1">
 <title>Skybook - Issue Category Report</title>
@@ -21,6 +22,7 @@
 			userID = session.getAttribute("userID").toString();
 		} else {
 			response.sendRedirect("../View/login.jsp");
+			throw new Exception("User session timed out!");
 		}
 		
 		Connection dbConn = DBConfig.connection(); ;
@@ -499,4 +501,19 @@ function exportTableToCSV(filename) {
 	downloadCSV(csv.join("\n"), filename);
 }
 </script>
+<% 
+} catch (Exception e) {
+	
+	e.printStackTrace();
+	%>
+	<script>
+		swal({
+			title : "Your session timed out!",
+			text : "",
+			icon : "error",
+			button : "Let me loginnn!",
+		});
+	</script>
+	<%
+} %>
 </html>
