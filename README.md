@@ -27,3 +27,8 @@ support efficiency.
 360-degree analysis: Support user/manager seeing in one screen all the communication done
 by all your team members with all the team members of your customer. You come to know
 who is talking to whom and when.
+
+# Screenshots
+
+![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/1.0%20Book.png "Customer Call Book")
+
