@@ -20,11 +20,7 @@ public class LoginServlet extends HttpServlet {
 	private LoginDAO loginDao;
 	
 	public void init() {
-        try {
-			loginDao = new LoginDAO();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
+        loginDao = new LoginDAO();
     }
 
     public LoginServlet() {

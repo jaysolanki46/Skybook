@@ -9,23 +9,19 @@ import java.sql.Statement;
 import bean.FollowUp;
 import bean.Log;
 import bean.User;
-import db.DBConfig;
+import config.DBConfig;
 
 public class FollowUpDAO {
 
 	private Connection cnn;
 	private ResultSet rs;
 
-	public FollowUpDAO() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated constructor stub
-		new DBConfig();
-		cnn = DBConfig.connection();
-	}
-
-	public ResultSet insert(FollowUp followUp) {
+	public ResultSet insert(FollowUp followUp) throws ClassNotFoundException {
 
 		try {
-
+			new DBConfig();
+			cnn = DBConfig.connection();
+			
 			PreparedStatement preparedStatement = cnn.prepareStatement("Insert into follow_ups "
 					+ "(follow_up_date, follow_up_time, contact, note, is_completed, log)"
 					+ "values (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -47,10 +43,13 @@ public class FollowUpDAO {
 		return rs;
 	}
 	
-	public Boolean update(FollowUp followUp) {
+	public Boolean update(FollowUp followUp) throws ClassNotFoundException {
 		
 		try {
-        	
+			
+			new DBConfig();
+			cnn = DBConfig.connection();
+			
             PreparedStatement preparedStatement =  cnn.prepareStatement("Update follow_ups set "
             		+ "follow_up_date = ?, follow_up_time = ?, contact = ?, note = ?, is_completed = ?, updated_by = ?, updated_on = ?"
             		+ "WHERE id = ?", Statement.RETURN_GENERATED_KEYS);

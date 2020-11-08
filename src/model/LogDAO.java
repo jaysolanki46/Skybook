@@ -7,22 +7,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import bean.Log;
-import db.DBConfig;
+import config.DBConfig;
 
 public class LogDAO {
 
 	private Connection cnn;
 	private ResultSet rs;
 	
-	public LogDAO() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated constructor stub
-		new DBConfig();
-		cnn = DBConfig.connection();
-	}
-	
-	public ResultSet insert(Log log) {
+	public ResultSet insert(Log log) throws ClassNotFoundException {
 		
 		try {
+			
+			new DBConfig();
+			cnn = DBConfig.connection();
         	
             PreparedStatement preparedStatement =  cnn.prepareStatement("Insert into logs "
             		+ "(user, log_date, log_time, is_voicemail, is_instructed, dealer, technician, serial, "
@@ -66,10 +63,13 @@ public class LogDAO {
 		return rs;
 	}
 	
-	public Boolean update(Log log) {
+	public Boolean update(Log log) throws ClassNotFoundException {
 		
 		try {
         	
+			new DBConfig();
+			cnn = DBConfig.connection();
+			
             PreparedStatement preparedStatement =  cnn.prepareStatement("Update logs set "
             		+ "description = ?, new_issue = ?, new_solution = ?, status = ? "
             		+ "WHERE id = ?", Statement.RETURN_GENERATED_KEYS);

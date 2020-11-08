@@ -6,17 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import bean.User;
-import db.DBConfig; 
+import config.DBConfig; 
 
 public class LoginDAO {
 	
 	private Connection cnn;
 	private ResultSet rs;
-	
-	public LoginDAO() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated constructor stub
-		
-	}
 
 	public ResultSet validate(User user) throws ClassNotFoundException {
 

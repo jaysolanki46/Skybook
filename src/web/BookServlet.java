@@ -34,12 +34,8 @@ public class BookServlet extends HttpServlet {
 	private FollowUpDAO followUpDAO;
 	
     public BookServlet() {
-    	try {
-    		logDao = new LogDAO();
-    		followUpDAO = new FollowUpDAO();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
+    	logDao = new LogDAO();
+		followUpDAO = new FollowUpDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
