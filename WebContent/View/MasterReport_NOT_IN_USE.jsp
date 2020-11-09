@@ -2,7 +2,7 @@
 <%@page import="java.util.Date"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" import="java.sql.*" %>
-<%@ page language="java" import="db.DBConfig" %>
+<%@ page language="java" import="config.DBConfig" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page session="true" %>
 <%@ page import="java.io.*,java.util.*, javax.servlet.*, java.text.*" %>

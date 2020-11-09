@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" import="java.sql.*" %>
-<%@ page language="java" import="db.DBConfig" %>
+<%@ page language="java" import="config.DBConfig" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page session="true" %>
@@ -13,10 +13,12 @@
 <%@include  file="../header.html" %>
 
 	<%
+		String userEmail = "";
 		String username = "";
 		String userID = "";
-		if(session.getAttribute("username") != null) {
-			username = session.getAttribute("username").toString();
+		if(session.getAttribute("userName") != null) {
+			userEmail = session.getAttribute("userEmail").toString();
+			username = session.getAttribute("userName").toString();
 			userID = session.getAttribute("userID").toString();
 		} else {
 			response.sendRedirect("../View/login.jsp");

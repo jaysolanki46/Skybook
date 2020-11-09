@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" import="java.sql.*" %>
-<%@ page language="java" import="db.DBConfig" %>
+<%@ page language="java" import="config.DBConfig" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page session="true" %>
@@ -13,10 +13,12 @@
 <%@include  file="../header.html" %>
 
 	<%
+		String userEmail = "";
 		String username = "";
 		String userID = "";
-		if(session.getAttribute("username") != null) {
-			username = session.getAttribute("username").toString();
+		if(session.getAttribute("userName") != null) {
+			userEmail = session.getAttribute("userEmail").toString();
+			username = session.getAttribute("userName").toString();
 			userID = session.getAttribute("userID").toString();
 		} else {
 			response.sendRedirect("../View/login.jsp");
@@ -60,6 +62,8 @@
 			<h5 style="color: white;">Call #<%=rs.getString("id") %> [<%=rs.getString("log_date") %>]</h5>
 			<input type="hidden" name="hiddenLogID" value=<%=rs.getString("id") %>>
 			<input type="hidden" id="user" name="user" value='<%=userID%>' />
+			<input type="hidden" id="userName" name="userName" value='<%=username%>'/>
+			<input type="hidden" id="userEmail" name="userEmail" value='<%=userEmail%>'/>
 		</div>
 
 		<div class="card-group">
@@ -225,6 +229,7 @@
 						<input type="hidden" name="hiddenFollowUpID" value=<%=rs.getString("follow_up_id") %>>
 						<input type="date" id="followUpDate" name="followUpDate" max="31-12-3000" min="01-01-1000" class="form-control col-sm-10 center_div" value=<%=rs.getString("follow_up_date") %>>						
 						<input type="time" id="followUpTime" name="followUpTime" min="00:00" max="23:59" class="form-control col-sm-10 center_div" value=<%=rs.getString("follow_up_time") %>>
+						<input type="hidden" id="hiddenFollowUpTime" name="hiddenFollowUpTime"  value=<%=rs.getString("follow_up_time") %>>
 						<input type="text" id="followUpContact" name="followUpContact" placeholder="Email/Phone" class="form-control col-sm-10 center_div" value=<%=rs.getString("contact") %>>
         				<textarea class="col-sm-10 form-control center_div" placeholder="Follow up notes..." rows="3" name="followUpNote"><%=rs.getString("note") %></textarea>
 						

@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.mysql.cj.util.StringUtils;
+
 import bean.Dealer;
 import bean.FollowUp;
 import bean.Issue;
@@ -21,6 +24,7 @@ import bean.Release;
 import bean.Status;
 import bean.Terminal;
 import bean.User;
+import config.SendFollowUpNotificationEmail;
 import model.FollowUpDAO;
 import model.LogDAO;
 
@@ -58,6 +62,9 @@ public class BookServlet extends HttpServlet {
 	private void insertLog(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession insertStatus = request.getSession();
 		String userID =  request.getParameter("user");
+		String userName =  request.getParameter("userName");
+		String userEmail = request.getParameter("userEmail");
+		
 		String date =  LocalDate.now().toString();
 		String time =  request.getParameter("time");
 		String[] isVoicemail = request.getParameterValues("isVoicemail");
@@ -159,8 +166,13 @@ public class BookServlet extends HttpServlet {
     				followUp.setLog(log);
     				
     				ResultSet FollowRS = followUpDAO.insert(followUp);
+    				
     				if(FollowRS != null && FollowRS.next())
     	            {
+    					String last_follow_up_id = FollowRS.getString(1);
+    					String followUpBody = "<html><body><h3>Contact: "+ followUpContact +"</h3><h4>"+ followUpNote +"</h4></body></html>";
+    					new SendFollowUpNotificationEmail(userEmail, userEmail, userName, last_follow_up_id,  "Follow Up SBT - " + last_follow_up_id ,followUpDate.replace("-", ""), followUpTime.replace(":", ""), followUpBody);
+        				
     					insertStatus.setAttribute("insertStatus", "success");
     		    		response.sendRedirect("View/Index.jsp");
     	            } else {
@@ -188,6 +200,8 @@ public class BookServlet extends HttpServlet {
 
 		HttpSession updateStatus = request.getSession();
 		String userID =  request.getParameter("user");
+		String userName =  request.getParameter("userName");
+		String userEmail = request.getParameter("userEmail");
 		
 		String redirectPage = request.getParameter("hiddenRedirectPage");
 		String logID = request.getParameter("hiddenLogID");
@@ -198,6 +212,7 @@ public class BookServlet extends HttpServlet {
 		String[] isFollowUp = request.getParameterValues("isFollowUp");
 		String followUpID = request.getParameter("hiddenFollowUpID");
 		String followUpDate = request.getParameter("followUpDate");
+		String oldFollowUpTime = request.getParameter("hiddenFollowUpTime"); // Update in viuew
 		String followUpTime = request.getParameter("followUpTime");
 		String followUpContact = request.getParameter("followUpContact");
 		String followUpNote = request.getParameter("followUpNote");
@@ -239,8 +254,24 @@ public class BookServlet extends HttpServlet {
 			}
 			if(followUp.getId() != null) {
 				followUpDAO.update(followUp);
+				
+				if(oldFollowUpTime != null && oldFollowUpTime != "") {
+					if(oldFollowUpTime != followUpTime && !oldFollowUpTime.equals(followUpTime)) {
+						String followUpBody = "<html><body><h3>Contact: "+ followUpContact +"</h3><h4>"+ followUpNote +"</h4></body></html>";
+						new SendFollowUpNotificationEmail(userEmail, userEmail, userName, followUpID,  "Follow Up SBT - " + followUpID ,followUpDate.replace("-", ""), followUpTime.replace(":", ""), followUpBody);
+					}
+					
+				}
+				
 			} else if(isFollowUp != null) {
-				followUpDAO.insert(followUp);
+				ResultSet FollowRS = followUpDAO.insert(followUp);
+				
+				if(FollowRS != null && FollowRS.next())
+	            {
+					String last_follow_up_id = FollowRS.getString(1);
+					String followUpBody = "<html><body><h3>Contact: "+ followUpContact +"</h3><h4>"+ followUpNote +"</h4></body></html>";
+					new SendFollowUpNotificationEmail(userEmail, userEmail, userName, last_follow_up_id,  "Follow Up SBT - " + last_follow_up_id ,followUpDate.replace("-", ""), followUpTime.replace(":", ""), followUpBody);
+	            }
 			}
 			
 			if(isLogUpdated) {
