@@ -324,7 +324,7 @@ function myTimer() {
     time = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds(), 
 
     date = [now.getDate(), 
-            now.getMonth(),
+            now.getMonth() + 1,
             now.getFullYear()].join('-');
 
 	document.getElementById('clock').innerHTML = [date, time].join(' / ');
