@@ -19,6 +19,8 @@
 		String userEmail = "";
 		String username = "";
 		String userID = "";
+		Integer entries = 0;
+		
 		if(session.getAttribute("userName") != null) {
 			userEmail = session.getAttribute("userEmail").toString();
 			username = session.getAttribute("userName").toString();
@@ -159,6 +161,8 @@
 					    <%
 								while (rs.next()) {
 									
+									entries += 1;
+									
 									%><tr><%
 									%><td scope="row"><%=rs.getString("id") %></td><%		
 									%><td style="white-space: nowrap;"><%=rs.getString("log_date") + " <br/> <small>" + rs.getString("log_time") + "</small>"%></td><%	
@@ -297,7 +301,7 @@
 				<small style="color: white;">></small>
 				<small style="color: white;">Reports</small>
 				<small style="color: white;">></small>
-				<a href=""><small style="color: white;">General Report</small></a>
+				<a href=""><small style="color: white;">General Report [Showing <%=entries %> entries]</small></a>
 				
 			</div>
 			<div style="color: white; margin-left: auto; margin-right: 5px;">
