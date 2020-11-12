@@ -365,7 +365,7 @@
 				<small style="color: white;">></small>
 				<small style="color: white;">Reports</small>
 				<small style="color: white;">></small>
-				<a href=""><small style="color: white;">Status Report [Showing <%=entries %> entries]</small></a>
+				<a href=""><small style="color: white;">Attendees/Status Report [Showing <%=entries %> entries]</small></a>
 				
 			</div>
 			<div style="color: white; margin-left: auto; margin-right: 5px;">
