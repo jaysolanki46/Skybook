@@ -47,21 +47,44 @@
 		stExport = dbConn.createStatement();
 		
 		String clause = "";
+		String startDate = request.getParameter("startDate");
+	    String endDate = request.getParameter("endDate");
 	    String user = request.getParameter("user");
 	    String status = request.getParameter("status");
 	    
 	    System.out.println(user);
 	    System.out.println(status);
 	 
-	    if(user != null && !user.equals("0")) {  
-	    	clause = "WHERE l.user = " + user;
-	    }
-	    if(status != null && !status.equals("0")) {  
-	    	clause = "WHERE l.status = " + status;
-	    }
-	    if(user != null && !user.equals("0") && status != null && !status.equals("0")) {  
-	    	clause = "WHERE l.user = " + user + " and status = " + status;
-	    }
+	    
+	    if(startDate != null && endDate != null) {
+		   	 if(startDate == "" || endDate == "") {
+			    	%>
+			    	<script type='text/javascript'>
+			    	document.addEventListener("DOMContentLoaded", function(event) {		
+			    			swal({
+								title : "Invalid dates!",
+								text : "",
+								icon : "error",
+								button : "Aww okiee!",
+							});
+			    	});
+					</script>
+			    	<%
+			    } else {
+			    	if(user != null && !user.equals("0")) {  
+				    	clause = "WHERE log_date between '" + startDate + "' and '" + endDate + "' and l.user = " + user;
+				    }
+				    if(status != null && !status.equals("0")) {  
+				    	clause = "WHERE log_date between '" + startDate + "' and '" + endDate + "' and l.status = " + status;
+				    }
+				    if(user != null && !user.equals("0") && status != null && !status.equals("0")) {  
+				    	clause = "WHERE log_date between '" + startDate + "' and '" + endDate + "' and l.user = " + user + " and status = " + status;
+				    }
+				    if(startDate != "" && endDate != "" && (user == null || user.equals("0")) && (status == null || status.equals("0"))) {
+				    	clause = "WHERE log_date between '" + startDate + "' and '" + endDate + "'";
+				    }
+			    }
+		 }
 	    
 		System.out.println(clause);
 	    
@@ -123,6 +146,11 @@
 								 
 								 <form class="form-inline" action="../View/StatusReport.jsp" method="post">
 								 	 
+								 	 <label class="col-sm-0 col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">Date:</label> 
+									 <input type="date" id="startDate" name="startDate" max="31-12-3000" min="01-01-1000" value="<%=startDate %>" class="form-control col-sm-2">	
+									 <label class="col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">To</label> 
+									 <input type="date" id="endDate" name="endDate" max="31-12-3000" min="01-01-1000" value="<%=endDate %>" class="form-control col-sm-2">	
+									
 								 	 <label class="col-sm-0 col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">User:</label> 
 										<select class="form-control col-sm-2" name="user">
 											<option value="0" selected>All</option>
@@ -163,9 +191,9 @@
 											%>
 									</select>
 									
-									<button type="submit" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();">Search</button>
-									<button type="button" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Status Report.csv');">Export</button>
-									<a href="../View/StatusReport.jsp"><button type="button" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
+									<button type="submit" title="Search" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();"><i class="fas fa-search"></i></button>
+									<button type="button" title="Export"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Status Report.csv');"><i class="fas fa-file-download"></i></button>
+									<a href="../View/StatusReport.jsp"><button type="button" title="Reset"  class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
 								</form>
 								
 							</div>

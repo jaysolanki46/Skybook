@@ -128,9 +128,9 @@
 									 <label class="col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">To</label> 
 									 <input type="date" id="endDate" name="endDate" max="31-12-3000" min="01-01-1000" value="<%=endDate %>" class="form-control col-sm-2">	
 									
-									<button type="submit" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();">Search</button>
-									<button type="button" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('General Report.csv');">Export</button>
-									<a href="../View/GeneralReport.jsp"><button type="button" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
+									<button type="submit" title="Search"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();"><i class="fas fa-search"></i></button>
+									<button type="button" title="Export" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('General Report.csv');"><i class="fas fa-file-download"></i></button>
+									<a href="../View/GeneralReport.jsp"><button type="button" title="Reset" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
 								</form>
 								
 							</div>

@@ -34,6 +34,10 @@
 		ResultSet rs = null;
 		st = dbConn.createStatement();
 		
+		Statement stDealer = null;
+		ResultSet rsDealer = null;
+		stDealer = dbConn.createStatement();
+		
 		Statement stIssueMaster = null;
 		ResultSet rsIssueMaster = null;
 		stIssueMaster = dbConn.createStatement();
@@ -57,6 +61,8 @@
 		String clause = "";
 	    String startDate = request.getParameter("startDate");
 	    String endDate = request.getParameter("endDate");
+	    String dealer =  request.getParameter("hiddenDealerID");
+	    String dealerString =  request.getParameter("dealer");
 	    String issueMaster =  request.getParameter("hiddenIssueMasterID");
 	    String issueMasterString =  request.getParameter("issueMaster");
 		String issue =  request.getParameter("hiddenIssueID");
@@ -64,13 +70,13 @@
 		String release =  request.getParameter("release");
 		String terminal =  request.getParameter("terminal");
 	    
-	   	if(issueMaster != null) {
-	   		if(issueMaster.equals("0") || issueMaster.equals("undefined") || startDate == "" || endDate == "") {
-		   		%>
+		if(dealer != null) {
+			if(startDate == "" || endDate == "" || dealer.equals("0") || dealer.equals("undefined")) {
+				%>
 		    	<script type='text/javascript'>
 		    	document.addEventListener("DOMContentLoaded", function(event) {		
 		    			swal({
-							title : "Invalid dates/category!",
+							title : "Invalid dates/dealer!",
 							text : "",
 							icon : "error",
 							button : "Aww okiee!",
@@ -78,34 +84,68 @@
 		    	});
 				</script>
 		    	<%
-		   	} else if ((issue.equals("0") || issue.equals("undefined")) && release.equals("0") && terminal.equals("0")) {
-		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + issueMaster;
-		   	} else if ((!issue.equals("0") && !issue.equals("undefined")) && release.equals("0") && terminal.equals("0")) {
-		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + issueMaster + " and l.issue = " + issue;
-		   	} else if ((!issue.equals("0") && !issue.equals("undefined")) && !release.equals("0") && terminal.equals("0")) {
-		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
-		   					issueMaster + " and l.issue = " + issue + " and l.current_release = " + release;
-		   	} else if ((!issue.equals("0") && !issue.equals("undefined")) && !release.equals("0") && !terminal.equals("0")) {
-		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
-	   					issueMaster + " and l.issue = " + issue + " and l.current_release = " + release + " and l.terminal = " + terminal;
-	   		} else if ((issue.equals("0") || issue.equals("undefined")) && !release.equals("0") && !terminal.equals("0")) {
-		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
-	   					issueMaster + " and l.current_release = " + release + " and l.terminal = " + terminal;
-	   		} else if ((issue.equals("0") || issue.equals("undefined")) && release.equals("0") && !terminal.equals("0")) {
-		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
-	   					issueMaster + " and l.terminal = " + terminal;
-	   		} else if ((issue.equals("0") || issue.equals("undefined")) && !release.equals("0") && terminal.equals("0")) {
-		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
-	   					issueMaster + " and l.current_release = " + release;
-	   		} else if ((!issue.equals("0") || !issue.equals("undefined")) && release.equals("0") && !terminal.equals("0")) {
-		   		clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.issue_master = " + 
-	   					issueMaster + " and l.issue = " + issue + " and l.terminal = " + terminal;
-	   		}
-	   	}
-		
+			} else if ((issueMaster.equals("0") || issueMaster.equals("undefined")) && (issue.equals("0") || issue.equals("undefined")) && release.equals("0") && terminal.equals("0")) {
+				//XXXX
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = "+ dealer;
+			} else if ((!issueMaster.equals("0") && !issueMaster.equals("undefined")) && (issue.equals("0") || issue.equals("undefined")) && release.equals("0") && terminal.equals("0")) {
+				//1XXX
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.issue_master = "+ issueMaster;
+			} else if ((!issueMaster.equals("0") && !issueMaster.equals("undefined")) && (!issue.equals("0") && !issue.equals("undefined")) && release.equals("0") && terminal.equals("0")) {
+				//11XX
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.issue_master = "+ issueMaster  + " and l.issue = "+ issue;
+			} else if ((!issueMaster.equals("0") && !issueMaster.equals("undefined")) && (!issue.equals("0") && !issue.equals("undefined")) && !release.equals("0") && terminal.equals("0")) {
+				//111X
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.issue_master = "+ issueMaster  + " and l.issue = "+ issue
+						+ " and l.current_release = "+ release;
+			} else if ((!issueMaster.equals("0") && !issueMaster.equals("undefined")) && (!issue.equals("0") && !issue.equals("undefined")) && !release.equals("0") && !terminal.equals("0")) {
+				//1111
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.issue_master = "+ issueMaster  + " and l.issue = "+ issue
+						+ " and l.current_release = "+ release + " and l.terminal = "+ terminal;
+			} else if ((issueMaster.equals("0") || issueMaster.equals("undefined")) && (!issue.equals("0") && !issue.equals("undefined")) && release.equals("0") && terminal.equals("0")) {
+				//X1XX
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.issue = "+ issue;
+			} else if ((issueMaster.equals("0") || issueMaster.equals("undefined")) && (!issue.equals("0") && !issue.equals("undefined")) && !release.equals("0") && terminal.equals("0")) {
+				//X11X
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.issue = "+ issue + " and l.current_release = "+ release;
+			} else if ((issueMaster.equals("0") || issueMaster.equals("undefined")) && (!issue.equals("0") && !issue.equals("undefined")) && !release.equals("0") && !terminal.equals("0")) {
+				//X111
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.issue = "+ issue + " and l.current_release = "+ release
+						+ " and l.terminal = "+ terminal;
+			} else if ((issueMaster.equals("0") || issueMaster.equals("undefined")) && (issue.equals("0") || issue.equals("undefined")) && !release.equals("0") && terminal.equals("0")) {
+				//XX1X
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.current_release = "+ release;
+			} else if ((issueMaster.equals("0") || issueMaster.equals("undefined")) && (issue.equals("0") || issue.equals("undefined")) && release.equals("0") && !terminal.equals("0")) {
+				//XXX1
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.terminal = "+ terminal;
+			} else if ((!issueMaster.equals("0") && !issueMaster.equals("undefined")) && (issue.equals("0") || issue.equals("undefined")) && !release.equals("0") && !terminal.equals("0")) {
+				//1X11
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer  + " and l.issue_master = "+ issueMaster + " and l.current_release = "+ release + " and l.terminal = "+ terminal;
+			} else if ((issueMaster.equals("0") || issueMaster.equals("undefined")) && (issue.equals("0") || issue.equals("undefined")) && !release.equals("0") && !terminal.equals("0")) {
+				//XX11
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer + " and l.current_release = "+ release + " and l.terminal = "+ terminal;
+			} else if ((issueMaster.equals("0") || issueMaster.equals("undefined")) && (issue.equals("0") || issue.equals("undefined")) && release.equals("0") && !terminal.equals("0")) {
+				//XXX1
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer + " and l.terminal = "+ terminal;
+			} else if ((!issueMaster.equals("0") && !issueMaster.equals("undefined")) && (!issue.equals("0") && !issue.equals("undefined")) && release.equals("0") && !terminal.equals("0")) {
+				//11X1
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer + " and l.issue_master = "+ issueMaster + " and l.issue = "+ issue + " and l.terminal = "+ terminal;
+			} else if ((!issueMaster.equals("0") && !issueMaster.equals("undefined")) && (issue.equals("0") || issue.equals("undefined")) && release.equals("0") && !terminal.equals("0")) {
+				//1XX1
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer + " and l.issue_master = "+ issueMaster + " and l.terminal = "+ terminal;
+			}  else if ((issueMaster.equals("0") || issueMaster.equals("undefined")) && (!issue.equals("0") && !issue.equals("undefined")) && release.equals("0") && !terminal.equals("0")) {
+				//X1X1
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer + " and l.issue = "+ issue + " and l.terminal = "+ terminal;
+			} else if ((!issueMaster.equals("0") && !issueMaster.equals("undefined")) && (issue.equals("0") || issue.equals("undefined")) && !release.equals("0") && terminal.equals("0")) {
+				//1X1X
+				clause = "WHERE l.log_date between '" + startDate + "' and '" + endDate  + "' and l.dealer = " + dealer + " and l.issue_master = "+ issueMaster + " and l.current_release = "+ release;
+			}
+		}
+	   	
 	   	 System.out.println("--");
 		 System.out.println(startDate);
 		 System.out.println(endDate);
+		 System.out.println(dealer);
+		 System.out.println(dealerString);
 		 System.out.println(issueMaster);
 		 System.out.println(issueMasterString);
 		 System.out.println(issue);
@@ -169,8 +209,7 @@
 					<div class="card mb-3">
 				
 						<div class="card-body" style="padding: 10px;">
-									
-								 
+
 								 <form class="form-inline" action="../View/IssueCategoryReport.jsp" method="post">
 								 	 
 								 	 <label class="col-sm-0 col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">Date:</label> 
@@ -178,6 +217,22 @@
 									 
 									 <label class="col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">To</label> 
 									 <input type="date" id="endDate" name="endDate" max="31-12-3000" min="01-01-1000" value="<%=endDate %>" class="form-control col-sm-1.5">	
+									
+									<input class=" form-control col-sm-2" list="dealers" id="dealer" name="dealer" placeholder="Select dealer..." style="margin-left: 0.5rem" value="<% if(dealerString != null) out.print(dealerString); %>">
+									<datalist id="dealers">
+										<%	
+											 rsDealer = stDealer.executeQuery("select * from dealers");
+			
+										    while(rsDealer.next())
+										    {   
+												%>
+													<option data-dealer=<%=rsDealer.getString("id") %>><%=rsDealer.getString("name") %></option>
+			
+										    	<%
+										    }    
+										%>
+									</datalist>
+									<input type="hidden" id="hiddenDealerID" name="hiddenDealerID" value="<% int dealerDefault = 0; if(dealer != null) out.print(dealer); else out.print(dealerDefault); %>"/>
 									
 									<input class=" form-control col-sm-1.5" list="issuesMaster" id="issueMaster" name="issueMaster" style="margin-left: 0.5rem" placeholder="Select issue category..." value="<% if(issueMasterString != null) out.print(issueMasterString); %>">
 									<datalist id="issuesMaster">
@@ -211,7 +266,7 @@
 									</datalist>
 									<input type="hidden" id="hiddenIssueID" name="hiddenIssueID" value="<% int issueDefault = 0; if(issue != null) out.print(issue); else out.print(issueDefault); %>"/>
 									
-									<select class="form-control col-sm-1.5" name="release" style="margin-left: 0.5rem">
+									<select class="form-control col-sm-1" name="release" style="margin-left: 0.5rem">
 									<option value ="0" selected>Select release...</option>
 									<%	
 									rsRelease = stRelease.executeQuery("SELECT * FROM releases");
@@ -255,9 +310,9 @@
 									%>
 									</select>
 									
-									<button type="submit" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();">Search</button>
-									<button type="button" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Issue Category Report.csv');">Export</button>
-									<a href="../View/IssueCategoryReport.jsp"><button type="button" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
+									<button type="submit" title="Search" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();"><i class="fas fa-search"></i></button>
+									<button type="button" title="Export" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Issue Category Report.csv');"><i class="fas fa-file-download"></i></button>
+									<a href="../View/IssueCategoryReport.jsp"><button type="button"  title="Reset" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
 								</form>
 							</div>
 					</div>
@@ -462,6 +517,15 @@ function myTimer() {
 	
 	setTimeout(myTimer, 1000);//This method will call for every second
 }
+$("#dealer").change(function() {
+	var val = $('#dealer').val()
+	var dealerID = $('#dealers option').filter(function() {
+	        return this.value == val;
+	    }).data('dealer');
+	 
+	 document.getElementById("hiddenDealerID").value  = dealerID;
+	 
+})
 $("#issueMaster").change(function() {
 	var val = $('#issueMaster').val()
 	var issueMasterID = $('#issuesMaster option').filter(function() {
