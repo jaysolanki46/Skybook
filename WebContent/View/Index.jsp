@@ -72,7 +72,7 @@
 						<h5 class="card-title">Dealer</h5>
 						<div class="form-group row">
 						
-							<label class="col-sm-1 col-form-label">Name:</label>
+							<label class="col-sm-1 col-form-label">Name:<span style="color: red;">*</span></label>
 							<input class="col-sm-1"  id="technician" name="technician" placeholder="Technician..." onfocusout="freezeLogTime()">
 							<input class="col-sm-3" list="dealers" id="dealer" name="dealer" placeholder="Dealer...">
 							&nbsp;&nbsp;&nbsp;

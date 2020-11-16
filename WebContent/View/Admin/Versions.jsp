@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Skybook - Dealers</title>
+    <title>Skybook - Software Versions</title>
 
     <%@include  file="header.html" %>
 
@@ -92,7 +92,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dealers</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Software Versions</h1>
                     </div>
 
 
@@ -101,15 +101,15 @@
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
                                     role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                    <h6 class="m-0 font-weight-bold text-primary">Add New Dealer</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Add New Software Version</h6>
                                 </a>
                                 <!-- Card Content - Collapse -->
                                 <div class="collapse show" id="collapseCardExample">
                                     <div class="card-body form-group row">
                                       
                                      <label class="col-sm-1 col-form-label">Name:<span style="color: red;">*</span></label>
-									 <input class="col-sm-3" class="form-control"  id="dealer" name="dealer" placeholder="Ex. 1027 Calcullus Ltd">
-                                      &nbsp;&nbsp;&nbsp;
+									 <input class="col-sm-3" class="form-control"  id="dealer" name="dealer" placeholder="Ex. [143] - Tetra Paymark Release 2018.1 R6">
+                                       &nbsp;&nbsp;&nbsp;
                                       <button type="button" class="btn btn-primary">Add</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                       <button type="reset" class="btn btn-danger">Cancel</button>
                                     </div>
@@ -119,7 +119,7 @@
 					 <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Dealers</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Software Versions</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
