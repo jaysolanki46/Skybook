@@ -17,7 +17,16 @@
 
     <title>Skybook - Software Versions</title>
 
-    <%@include  file="header.html" %>
+    <%@include  file="ADMIN-WEB-INF/header.html" %>
+    <%
+    
+	    Connection dbConn = DBConfig.connection(); ;
+		Statement st = null;
+		ResultSet rs = null;
+		st = dbConn.createStatement();
+    
+		rs = st.executeQuery("Select * from releases");
+    %>
 
 </head>
 
@@ -26,7 +35,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-      	<%@include  file="sidebar.html" %>
+      	<%@include  file="ADMIN-WEB-INF/sidebar.html" %>
       
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -141,12 +150,14 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                    	<% while (rs.next()) { %>
                                         <tr>
-                                            <td>1</td>
-                                            <td>Skyzer</td>
+                                            <td><%=rs.getString("id") %></td>
+                                            <td><%=rs.getString("name") %></td>
                                             <td><center><a title="Edit" href=""><i class="fas fa-edit"></i></a></center></td>
                                             <td><center><a title="Delete" href=""><i class="fas fa-trash-alt"></i></a></center></td>
                                         </tr>
+                                        <% } %>
                                     </tbody>
                                 </table>
                             </div>
@@ -172,7 +183,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-   <%@include  file="footer.html" %>
+   <%@include  file="ADMIN-WEB-INF/footer.html" %>
 </body>
 
 </html>

@@ -19,7 +19,7 @@
 
     <title>Skybook - Users</title>
 
-    <%@include  file="header.html" %>
+    <%@include  file="ADMIN-WEB-INF/header.html" %>
     <%
     
 	    Connection dbConn = DBConfig.connection(); ;
@@ -37,7 +37,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-      	<%@include  file="sidebar.html" %>
+      	<%@include  file="ADMIN-WEB-INF/sidebar.html" %>
       
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -204,7 +204,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-   <%@include  file="footer.html" %>
+   <%@include  file="ADMIN-WEB-INF/footer.html" %>
 </body>
 <script>
 $(function () {

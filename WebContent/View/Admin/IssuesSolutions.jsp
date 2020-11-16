@@ -17,14 +17,19 @@
 
     <title>Skybook - Issues / Solutions</title>
 
-    <%@include  file="header.html" %>
+    <%@include  file="ADMIN-WEB-INF/header.html" %>
     <%
     
 	    Connection dbConn = DBConfig.connection(); ;
+		Statement stIssueMaster = null;
+		ResultSet rsIssueMaster = null;
+		stIssueMaster = dbConn.createStatement();
+		
 		Statement st = null;
 		ResultSet rs = null;
 		st = dbConn.createStatement();
     
+		rs = st.executeQuery("select issue_master.name as category, issues.* from issues INNER JOIN issue_master ON issues.issue_master = issue_master.id");
     %>
 
 </head>
@@ -34,7 +39,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-      	<%@include  file="sidebar.html" %>
+      	<%@include  file="ADMIN-WEB-INF/sidebar.html" %>
       
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -114,26 +119,30 @@
                                 <!-- Card Content - Collapse -->
                                 <div class="collapse show" id="collapseCardExample">
                                     <div class="card-body">
-                                      
+                                     
                                      <div class="form-group row">
                                      <label class="col-sm-1 col-form-label">Issue:<span style="color: red;">*</span></label>
-                                     <input class="col-sm-4" list="dealers" id="dealer" name="dealer" placeholder="Select/Type Issue...">
+                                     <input class="col-sm-4" list="dealers" id="dealer" name="dealer" placeholder="Select/Type Issue Category...">
 										&nbsp;&nbsp;&nbsp;
 										<datalist id="dealers">
 										
 										<%	
-											 rs = st.executeQuery("select * from issues");
+											rsIssueMaster = stIssueMaster.executeQuery("select * from issue_master");
 			
-										    while(rs.next())
+										    while(rsIssueMaster.next())
 										    {   
 												%>
-													<option data-dealer=<%=rs.getString("id") %>><%=rs.getString("name") %></option>
+													<option data-dealer=<%=rsIssueMaster.getString("id") %>><%=rsIssueMaster.getString("name") %></option>
 			
 										    	<%
 										    }    
 									    
 										%>
 										</datalist> 
+									</div> 
+                                     <div class="form-group row">
+                                      	<label class="col-sm-1 col-form-label">Name:<span style="color: red;">*</span></label>
+									 	<input class="col-sm-4 form-control"  id="dealer" name="dealer" placeholder="Ex. No Communication between POS and Terminal">
 									</div>
 									<div class="form-group row">
 									 <label class="col-sm-1 col-form-label">Solution:<span style="color: red;">*</span></label>
@@ -161,7 +170,9 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Name</th>
+                                            <th>Category</th>
+                                            <th>Issue</th>
+                                            <th>Solutions</th>
                                             <th></th>
                                            <th></th>
                                         </tr>
@@ -169,18 +180,24 @@
                                     <tfoot>
                                         <tr>
                                            <th>#</th>
-                                           <th>Name</th>
+                                           <th>Category</th>
+                                           <th>Issue</th>
+                                           <th>Solutions</th>
                                            <th></th>
                                            <th></th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                   		<% while (rs.next()) { %>
                                         <tr>
-                                            <td>1</td>
-                                            <td>Skyzer</td>
+                                           	<td><%=rs.getString("id") %></td>
+                                           	<td><%=rs.getString("category") %></td>
+                                            <td><%=rs.getString("name") %></td>
+                                            <td><%=rs.getString("solution") %></td>
                                             <td><center><a title="Edit" href=""><i class="fas fa-edit"></i></a></center></td>
                                             <td><center><a title="Delete" href=""><i class="fas fa-trash-alt"></i></a></center></td>
                                         </tr>
+                                        <% } %>
                                     </tbody>
                                 </table>
                             </div>
@@ -206,7 +223,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-   <%@include  file="footer.html" %>
+   <%@include  file="ADMIN-WEB-INF/footer.html" %>
 </body>
 <script>
 $(function () {

@@ -17,7 +17,7 @@
 
     <title>Skybook - Dashboard</title>
 
-    <%@include  file="header.html" %>
+    <%@include  file="ADMIN-WEB-INF/header.html" %>
 
 </head>
 
@@ -26,7 +26,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-      	<%@include  file="sidebar.html" %>
+      	<%@include  file="ADMIN-WEB-INF/sidebar.html" %>
       
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -604,7 +604,7 @@
         </div>
     </div>
 
-   <%@include  file="footer.html" %>
+   <%@include  file="ADMIN-WEB-INF/footer.html" %>
 
 </body>
 
