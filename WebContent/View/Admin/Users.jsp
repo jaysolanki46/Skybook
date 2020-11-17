@@ -108,7 +108,7 @@
 
 
                     <!-- Content Row -->
-                     <form action="<%=request.getContextPath()%>/user" method="post">
+                     <form id="user" action="<%=request.getContextPath()%>/user" method="post">
 					 <div class="card shadow mb-4">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
@@ -122,6 +122,14 @@
 										 <label class="col-sm-1 col-form-label">Name:<span style="color: red;">*</span></label>
 										 <input class="col-sm-3" class="form-control"  id="name" name="name" placeholder="Ex. TOM">
 	                                    </div>
+	                                    <div class="form-group row">
+										 <label class="col-sm-1 col-form-label">Email:<span style="color: red;">*</span></label>
+										 <input class="col-sm-3" class="form-control"  id="email" name="email" placeholder="Ex. xyz@mail.co.nz">
+	                                    </div>
+	                                    <div class="form-group row">
+										 <label class="col-sm-1 col-form-label">Password:<span style="color: red;">*</span></label>
+										 <input type="password" class="col-sm-3" class="form-control"  id="pass" name="pass" placeholder="***">
+	                                    </div>
 	                                    <div class="form-check form-check-inline" style="margin-left: 8rem;">
 										  <input class="form-check-input" type="checkbox" id="isAdmin"  name="isAdmin" value="1"/>
 										  <label class="form-check-label"">Admin</label>
@@ -132,7 +140,7 @@
 										</div><br/><br/>
 	                                     <div class="form-group row">
 	                                      	<label class="col-sm-1 col-form-label"></label>
-	                                      	<button type="submit" class="btn btn-primary">Add</button>&nbsp;&nbsp;&nbsp;&nbsp;
+	                                      	<input type="button" class="btn btn-primary" value="Add" onclick="validate()">&nbsp;&nbsp;&nbsp;&nbsp;
                                       		<button type="reset" class="btn btn-danger">Cancel</button>
 	                                      </div>
                                     </div>
@@ -205,10 +213,61 @@
     </a>
 
    <%@include  file="ADMIN-WEB-INF/footer.html" %>
+   <%
+			if (session.getAttribute("status") != null) {
+				if (session.getAttribute("status").toString().equals("success")) {
+					%>
+					<script>
+						swal({
+							title : "Good job!",
+							text : "",
+							icon : "success",
+							button : "Aww yiss!",
+						});
+					</script>
+					<%
+						session.setAttribute("status", "killed");
+				} else if (session.getAttribute("status").toString().equals("error")) {
+					%>
+					<script>
+						swal({
+							title : "Something went wrong!",
+							text : "",
+							icon : "error",
+							button : "Aww okiee!",
+						});
+					</script>
+					<%
+						session.setAttribute("status", "killed");
+				}
+			}
+		%>
 </body>
 <script>
 $(function () {
 	  $('[data-toggle="popover"]').popover()
-	})
+})
+
+function validate() {
+	
+	var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;
+	var name = document.getElementById("name").value;
+	var email = document.getElementById("email").value;
+	var pass = document.getElementById("pass").value;
+	var isAdmin = document.getElementById("isAdmin").checked;
+	var isSupport = document.getElementById("isSupport").checked;
+
+	if(name == "") {
+		swal("Error!", "Invalid user name", "error");
+	} else if (email == "" || !pattern.test(email)) {
+		swal("Error!", "Invalid user email", "error");
+	} else if (pass == "") {
+		swal("Error!", "Invalid user password", "error");
+	} else if (isAdmin == false && isSupport == false) {
+		swal("Error!", "Either user should be support or admin", "error");
+	} else {
+		document.getElementById("user").submit();
+	}
+}
 </script>
 </html>

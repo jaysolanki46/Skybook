@@ -106,6 +106,7 @@
 
 
                     <!-- Content Row -->
+                    <form id="issueMaster" action="<%=request.getContextPath()%>/issueMaster" method="post">
 					 <div class="card shadow mb-4">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
@@ -117,13 +118,14 @@
                                     <div class="card-body form-group row">
                                       
                                      <label class="col-sm-1 col-form-label">Name:<span style="color: red;">*</span></label>
-									 <input class="col-sm-3" class="form-control"  id="dealer" name="dealer" placeholder="Ex. NITRO">
+									 <input class="col-sm-3" class="form-control"  id="name" name="name" placeholder="Ex. NITRO">
                                        &nbsp;&nbsp;&nbsp;
-                                      <button type="button" class="btn btn-primary">Add</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                      <input type="button" class="btn btn-primary" value="Add" onclick="validate()">&nbsp;&nbsp;&nbsp;&nbsp;
                                       <button type="reset" class="btn btn-danger">Cancel</button>
                                     </div>
                                 </div>
                        </div>
+					</form>
 					
 					 <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -184,6 +186,46 @@
     </a>
 
    <%@include  file="ADMIN-WEB-INF/footer.html" %>
+    <%
+			if (session.getAttribute("status") != null) {
+				if (session.getAttribute("status").toString().equals("success")) {
+					%>
+					<script>
+						swal({
+							title : "Good job!",
+							text : "",
+							icon : "success",
+							button : "Aww yiss!",
+						});
+					</script>
+					<%
+						session.setAttribute("status", "killed");
+				} else if (session.getAttribute("status").toString().equals("error")) {
+					%>
+					<script>
+						swal({
+							title : "Something went wrong!",
+							text : "",
+							icon : "error",
+							button : "Aww okiee!",
+						});
+					</script>
+					<%
+						session.setAttribute("status", "killed");
+				}
+			}
+		%>
 </body>
+<script type="text/javascript">
+function validate() {
+	
+	var name = document.getElementById("name").value;
 
+	if(name == "") {
+		swal("Error!", "Invalid category name", "error");
+	} else {
+		document.getElementById("issueMaster").submit();
+	}
+}
+</script>
 </html>

@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Skybook - Software Versions</title>
+    <title>Skybook - Software Versions/Releases</title>
 
     <%@include  file="ADMIN-WEB-INF/header.html" %>
     <%
@@ -101,11 +101,12 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Software Versions</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Software Versions/Releases</h1>
                     </div>
 
 
                     <!-- Content Row -->
+                    <form id="version" action="<%=request.getContextPath()%>/version" method="post">
 					 <div class="card shadow mb-4">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
@@ -117,13 +118,14 @@
                                     <div class="card-body form-group row">
                                       
                                      <label class="col-sm-1 col-form-label">Name:<span style="color: red;">*</span></label>
-									 <input class="col-sm-3" class="form-control"  id="dealer" name="dealer" placeholder="Ex. [143] - Tetra Paymark Release 2018.1 R6">
+									 <input class="col-sm-3" class="form-control"  id="name" name="name" placeholder="Ex. [143] - Tetra Paymark Release 2018.1 R6">
                                        &nbsp;&nbsp;&nbsp;
-                                      <button type="button" class="btn btn-primary">Add</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                      <input type="button" class="btn btn-primary" value="Add" onclick="validate()">&nbsp;&nbsp;&nbsp;&nbsp;
                                       <button type="reset" class="btn btn-danger">Cancel</button>
                                     </div>
                                 </div>
                        </div>
+					</form>
 					
 					 <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -184,6 +186,46 @@
     </a>
 
    <%@include  file="ADMIN-WEB-INF/footer.html" %>
+   <%
+			if (session.getAttribute("status") != null) {
+				if (session.getAttribute("status").toString().equals("success")) {
+					%>
+					<script>
+						swal({
+							title : "Good job!",
+							text : "",
+							icon : "success",
+							button : "Aww yiss!",
+						});
+					</script>
+					<%
+						session.setAttribute("status", "killed");
+				} else if (session.getAttribute("status").toString().equals("error")) {
+					%>
+					<script>
+						swal({
+							title : "Something went wrong!",
+							text : "",
+							icon : "error",
+							button : "Aww okiee!",
+						});
+					</script>
+					<%
+						session.setAttribute("status", "killed");
+				}
+			}
+		%>
 </body>
+<script type="text/javascript">
+function validate() {
+	
+	var name = document.getElementById("name").value;
 
+	if(name == "") {
+		swal("Error!", "Invalid version name", "error");
+	} else {
+		document.getElementById("version").submit();
+	}
+}
+</script>
 </html>

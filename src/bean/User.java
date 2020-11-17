@@ -6,6 +6,8 @@ public class User {
 	private String name;
 	private String pass;
 	private String email;
+	private boolean is_admin;
+	private boolean is_support;
 	
 	public Integer getId() {
 		return id;
@@ -30,5 +32,17 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public boolean isIs_admin() {
+		return is_admin;
+	}
+	public void setIs_admin(boolean is_admin) {
+		this.is_admin = is_admin;
+	}
+	public boolean isIs_support() {
+		return is_support;
+	}
+	public void setIs_support(boolean is_support) {
+		this.is_support = is_support;
 	}
 }

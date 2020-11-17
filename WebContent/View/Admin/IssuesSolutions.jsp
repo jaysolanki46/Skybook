@@ -110,6 +110,7 @@
 
 
                     <!-- Content Row -->
+                    <form id="issueSolution" action="<%=request.getContextPath()%>/issueSolution" method="post">
 					 <div class="card shadow mb-4">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
@@ -121,10 +122,10 @@
                                     <div class="card-body">
                                      
                                      <div class="form-group row">
-                                     <label class="col-sm-1 col-form-label">Issue:<span style="color: red;">*</span></label>
-                                     <input class="col-sm-4" list="dealers" id="dealer" name="dealer" placeholder="Select/Type Issue Category...">
+                                     <label class="col-sm-1 col-form-label">Category:<span style="color: red;">*</span></label>
+                                     <input class="col-sm-4" list="masterList" id="issueMaster" name="issueMaster" placeholder="Select/Type Issue Category...">
 										&nbsp;&nbsp;&nbsp;
-										<datalist id="dealers">
+										<datalist id="masterList">
 										
 										<%	
 											rsIssueMaster = stIssueMaster.executeQuery("select * from issue_master");
@@ -132,32 +133,35 @@
 										    while(rsIssueMaster.next())
 										    {   
 												%>
-													<option data-dealer=<%=rsIssueMaster.getString("id") %>><%=rsIssueMaster.getString("name") %></option>
+													<option data-issue-master=<%=rsIssueMaster.getString("id") %>><%=rsIssueMaster.getString("name") %></option>
 			
 										    	<%
 										    }    
 									    
 										%>
 										</datalist> 
+										
+										<input type="hidden" id="hiddenIssueMasterID" name="hiddenIssueMasterID" value="0"/>
 									</div> 
                                      <div class="form-group row">
-                                      	<label class="col-sm-1 col-form-label">Name:<span style="color: red;">*</span></label>
-									 	<input class="col-sm-4 form-control"  id="dealer" name="dealer" placeholder="Ex. No Communication between POS and Terminal">
+                                      	<label class="col-sm-1 col-form-label">Issue:<span style="color: red;">*</span></label>
+									 	<input class="col-sm-4 form-control"  id="name" name="name" placeholder="Ex. No Communication between POS and Terminal">
 									</div>
 									<div class="form-group row">
 									 <label class="col-sm-1 col-form-label">Solution:<span style="color: red;">*</span></label>
-									 <textarea class="col-sm-4 form-control" placeholder="Solution..." rows="3" name="description"></textarea>
+									 <textarea class="col-sm-4 form-control" placeholder="Solution..." rows="3" id="solution" name="solution"></textarea>
 									 &nbsp;&nbsp;&nbsp;
 									 <a href="https://wordtohtml.net" title="HTML Formatter" style="align-self:center;" target="_blank"><i class="fas fa-file-code"></i></a>
                                     </div>
                                      <div class="form-group row">
                                       	<label class="col-sm-1 col-form-label"></label>
-                                      	<button type="button" class="btn btn-primary">Add</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                      <input type="button" class="btn btn-primary" value="Add" onclick="validate()">&nbsp;&nbsp;&nbsp;&nbsp;
                                       <button type="reset" class="btn btn-danger">Cancel</button>
                                       </div>
                                     </div>
                                 </div>
                        </div>
+					</form>
 					
 					 <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -224,10 +228,65 @@
     </a>
 
    <%@include  file="ADMIN-WEB-INF/footer.html" %>
+   <%
+			if (session.getAttribute("status") != null) {
+				if (session.getAttribute("status").toString().equals("success")) {
+					%>
+					<script>
+						swal({
+							title : "Good job!",
+							text : "",
+							icon : "success",
+							button : "Aww yiss!",
+						});
+					</script>
+					<%
+						session.setAttribute("status", "killed");
+				} else if (session.getAttribute("status").toString().equals("error")) {
+					%>
+					<script>
+						swal({
+							title : "Something went wrong!",
+							text : "",
+							icon : "error",
+							button : "Aww okiee!",
+						});
+					</script>
+					<%
+						session.setAttribute("status", "killed");
+				}
+			}
+		%>
 </body>
 <script>
 $(function () {
 	  $('[data-toggle="popover"]').popover()
-	})
+})
+
+$("#issueMaster").change(function() {
+	
+	var val = $('#issueMaster').val();
+	
+	var issueMasterID = $('#masterList option').filter(function() {
+	        return this.value == val;
+	    }).data('issue-master');
+	 
+	 document.getElementById("hiddenIssueMasterID").value  = issueMasterID;
+})
+
+function validate() {
+	
+	var category = document.getElementById("hiddenIssueMasterID").value;
+	var name = document.getElementById("name").value;
+	var solution = document.getElementById("solution").value;
+
+	if(category == "undefined" || category == 0) {
+		swal("Error!", "Invalid category", "error");
+	} else if (name == "" || solution == "") {
+		swal("Error!", "Invalid issue / solution", "error");
+	} else {
+		document.getElementById("issueSolution").submit();
+	}
+}
 </script>
 </html>

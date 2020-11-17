@@ -2,26 +2,25 @@ package web.admin;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import bean.User;
-import model.UserDAO;
+import bean.Issue;
+import bean.IssueMaster;
+import model.IssueDAO;
 
-/**
- * Servlet implementation class UserServlet
- */
-@WebServlet("/user")
-public class UserServlet extends HttpServlet {
+@WebServlet("/issueSolution")
+public class IssueServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-    private UserDAO userDAO;
+	private IssueDAO issueDAO;
 	
-    public UserServlet() {
-        userDAO = new UserDAO();
+    public IssueServlet() {
+        issueDAO = new IssueDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,38 +28,38 @@ public class UserServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
 		HttpSession status = request.getSession();
 		
 		try {
 			
 			String name = request.getParameter("name");
-			String email = request.getParameter("email");
-			String pass = request.getParameter("pass");
-			String isAdmin = request.getParameter("isAdmin");
-			String isSupport = request.getParameter("isSupport");
+			String solution = request.getParameter("solution");
+			String category = request.getParameter("hiddenIssueMasterID");
 			
-			User user = new User();
-			user.setName(name);
-			user.setEmail(email);
-			user.setPass(pass);
-			if(isAdmin != null) user.setIs_admin(true);
-			if(isSupport != null) user.setIs_support(true);
+			Issue issue = new Issue();
+			issue.setName(name);
+			issue.setSolution(solution);
+
+			IssueMaster master = new IssueMaster();
+			master.setId(Integer.valueOf(category));
+			issue.setIssueMaster(master);
 			
-			ResultSet rs = userDAO.insert(user);
+			ResultSet rs = issueDAO.insert(issue);
 			
 			if(rs != null && rs.next()) {
 				status.setAttribute("status", "success");
-	    		response.sendRedirect("View/Admin/Users.jsp");
+	    		response.sendRedirect("View/Admin/IssuesSolutions.jsp");
 			} else {
 				status.setAttribute("status", "error");
-	    		response.sendRedirect("View/Admin/Users.jsp");
+	    		response.sendRedirect("View/Admin/IssuesSolutions.jsp");
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			status.setAttribute("status", "error");
-    		response.sendRedirect("View/Admin/Users.jsp");
+    		response.sendRedirect("View/Admin/IssuesSolutions.jsp");
 		}
 	}
+
 }
