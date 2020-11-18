@@ -52,7 +52,7 @@
                             </div>
                             <div class="tab-pane fade show" id="admin" role="tabpanel" aria-labelledby="admin-tab">
                                  <img alt="" loading="lazy" style="margin-top: 5rem; margin-left: 5rem;"  data-src="https://www.skyzer.co.nz/wp-content/uploads/2019/08/Skyzer-Technologies-Logo.svg" class="vc_single_image-img attachment-full lazyloaded" src="https://www.skyzer.co.nz/wp-content/uploads/2019/08/Skyzer-Technologies-Logo.svg">
-                                 <form action="" method="post">
+                                 <form action="<%=request.getContextPath()%>/admin" method="post">
                                  <div class="row register-form">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -61,7 +61,8 @@
                                         <div class="form-group">
                                             <input type="password" class="form-control" placeholder="Password *" value="" name="password"/>
                                         </div>
-                                         <input type="button" class="btnRegister" data-toggle="modal" data-target="#myModal" value="Secure Login" />
+                                          <!--  While maintanance <input type="submit" class="btnRegister" data-toggle="modal" data-target="#myModal" value="Secure Login" /> -->
+                                          <input type="submit" class="btnRegister" value="Secure Login" />
                                     </div>
                                 </div>
                                 </form>

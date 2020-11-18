@@ -6,7 +6,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page session="true" %>
 <html lang="en">
-
+<% try { %>
 <head>
 
     <meta charset="utf-8">
@@ -19,7 +19,18 @@
 
     <%@include  file="ADMIN-WEB-INF/header.html" %>
     <%
-    
+	    String adminUserID = "";
+		String adminUserName = "";
+		String adminUserEmail = "";
+		if(session.getAttribute("adminUserName") != null) {
+			adminUserID = session.getAttribute("adminUserID").toString();
+			adminUserName = session.getAttribute("adminUserName").toString();
+			adminUserEmail = session.getAttribute("adminUserEmail").toString();
+		} else {
+			response.sendRedirect("../login.jsp");
+			throw new Exception("User session timed out!");
+		} 
+		
 	    Connection dbConn = DBConfig.connection(); ;
 		Statement st = null;
 		ResultSet rs = null;
@@ -43,59 +54,10 @@
             <!-- Main Content -->
             <div id="content">
 
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Topbar Search -->
-                    <a class="navbar-brand" href="#">
-					    <img alt="" loading="lazy" height="49.373333" width="370.16" data-src="https://www.skyzer.co.nz/wp-content/uploads/2019/08/Skyzer-Technologies-Logo.svg" class="vc_single_image-img attachment-full lazyloaded" src="https://www.skyzer.co.nz/wp-content/uploads/2019/08/Skyzer-Technologies-Logo.svg">
-					  </a>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Skyzer Admin</span>
-                                <img class="img-profile rounded-circle"
-                                    src="../img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
-                <!-- End of Topbar -->
-
+				<!-- Top Bar -->
+                <%@include  file="ADMIN-WEB-INF/topbar.html" %>
+				<!-- Top Bar End-->
+				
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
@@ -228,4 +190,19 @@ function validate() {
 	}
 }
 </script>
+<% 
+} catch (Exception e) {
+	
+	e.printStackTrace();
+	%>
+	<script>
+		swal({
+			title : "Your session timed out!",
+			text : "",
+			icon : "error",
+			button : "Let me loginnn!",
+		});
+	</script>
+	<%
+} %>
 </html>
