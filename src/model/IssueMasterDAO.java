@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import bean.Dealer;
 import bean.IssueMaster;
 import config.DBConfig;
 
@@ -24,6 +26,27 @@ public class IssueMasterDAO {
             		+ "(name)" 
             		+ " values (?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, issueMaster.getName());
+            
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+            
+            rs = preparedStatement.getGeneratedKeys();
+            
+        } catch (SQLException e) {
+           	e.printStackTrace();
+        }
+		return rs;
+	}
+	
+	public ResultSet delete(IssueMaster issueMaster) throws ClassNotFoundException {
+		
+		try {
+			
+			new DBConfig();
+			cnn = DBConfig.connection();
+        	
+            PreparedStatement preparedStatement =  cnn.prepareStatement("Delete from issue_master where id = ?", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, issueMaster.getId());
             
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();

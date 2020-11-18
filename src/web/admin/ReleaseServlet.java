@@ -22,24 +22,51 @@ public class ReleaseServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
     private ReleaseDAO releaseDAO;
+    HttpSession status;
+    Release release;
+    
 	
     public ReleaseServlet() {
     	releaseDAO = new ReleaseDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		try {
+			
+			status = request.getSession();
+			
+			String id = request.getParameter("id");
+			
+			release = new Release();
+			release.setId(Integer.valueOf(id));
+			
+			ResultSet rs = releaseDAO.delete(release);
+			
+			if(rs != null) {
+				status.setAttribute("status", "success");
+	    		response.sendRedirect("View/Admin/Versions.jsp");
+			} else {
+				status.setAttribute("status", "error");
+	    		response.sendRedirect("View/Admin/Versions.jsp");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			status.setAttribute("status", "error");
+    		response.sendRedirect("View/Admin/Versions.jsp");
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HttpSession status = request.getSession();
+		status = request.getSession();
 		
 		try {
 			
 			String name = request.getParameter("name");
 			
-			Release release = new Release();
+			release = new Release();
 			release.setName(name);
 			
 			ResultSet rs = releaseDAO.insert(release);

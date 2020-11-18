@@ -101,7 +101,6 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
-                                            <th></th>
                                            <th></th>
                                         </tr>
                                     </thead>
@@ -110,7 +109,6 @@
                                            <th>#</th>
                                            <th>Name</th>
                                            <th></th>
-                                           <th></th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -118,8 +116,8 @@
                                         <tr>
                                             <td><%=rs.getString("id") %></td>
                                             <td><%=rs.getString("name") %></td>
-                                            <td><center><a title="Edit" href=""><i class="fas fa-edit"></i></a></center></td>
-                                            <td><center><a title="Delete" href=""><i class="fas fa-trash-alt"></i></a></center></td>
+                                             <!-- <td><center><a href=""><i class="fas fa-edit"/></a></center></td> -->
+                                            <td><center><a href="<%=request.getContextPath()%>/issueMaster?id=<%=rs.getString("id") %>"><i class="fas fa-trash-alt"/></a></center></td>
                                         </tr>
                                         <% } %>
                                     </tbody>

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import bean.Dealer;
 import bean.Issue;
 import bean.IssueMaster;
 import model.IssueDAO;
@@ -18,18 +20,45 @@ public class IssueServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	private IssueDAO issueDAO;
+	HttpSession status;
+	Issue issue;
+	
 	
     public IssueServlet() {
         issueDAO = new IssueDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		try {
+			
+			status = request.getSession();
+			
+			String id = request.getParameter("id");
+			
+			issue = new Issue();
+			issue.setId(Integer.valueOf(id));
+			
+			ResultSet rs = issueDAO.delete(issue);
+			
+			if(rs != null) {
+				status.setAttribute("status", "success");
+	    		response.sendRedirect("View/Admin/IssuesSolutions.jsp");
+			} else {
+				status.setAttribute("status", "error");
+	    		response.sendRedirect("View/Admin/IssuesSolutions.jsp");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			status.setAttribute("status", "error");
+    		response.sendRedirect("View/Admin/IssuesSolutions.jsp");
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		HttpSession status = request.getSession();
+		status = request.getSession();
 		
 		try {
 			
@@ -37,7 +66,7 @@ public class IssueServlet extends HttpServlet {
 			String solution = request.getParameter("solution");
 			String category = request.getParameter("hiddenIssueMasterID");
 			
-			Issue issue = new Issue();
+			issue = new Issue();
 			issue.setName(name);
 			issue.setSolution(solution);
 

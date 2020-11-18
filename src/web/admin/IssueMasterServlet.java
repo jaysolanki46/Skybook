@@ -22,24 +22,51 @@ public class IssueMasterServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
     private IssueMasterDAO issueMasterDAO;
+    HttpSession status;
+    IssueMaster issueMaster;
+    
 	
     public IssueMasterServlet() {
         issueMasterDAO = new IssueMasterDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		try {
+			
+			status = request.getSession();
+			
+			String id = request.getParameter("id");
+			
+			issueMaster = new IssueMaster();
+			issueMaster.setId(Integer.valueOf(id));
+			
+			ResultSet rs = issueMasterDAO.delete(issueMaster);
+			
+			if(rs != null) {
+				status.setAttribute("status", "success");
+	    		response.sendRedirect("View/Admin/Categories.jsp");
+			} else {
+				status.setAttribute("status", "error");
+	    		response.sendRedirect("View/Admin/Categories.jsp");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			status.setAttribute("status", "error");
+    		response.sendRedirect("View/Admin/Categories.jsp");
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HttpSession status = request.getSession();
+		status = request.getSession();
 		
 		try {
 			
 			String name = request.getParameter("name");
 			
-			IssueMaster issueMaster = new IssueMaster();
+			issueMaster = new IssueMaster();
 			issueMaster.setName(name);
 			
 			ResultSet rs = issueMasterDAO.insert(issueMaster);

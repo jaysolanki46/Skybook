@@ -35,4 +35,25 @@ public class DealerDAO {
         }
 		return rs;
 	}
+	
+	public ResultSet delete(Dealer dealer) throws ClassNotFoundException {
+		
+		try {
+			
+			new DBConfig();
+			cnn = DBConfig.connection();
+        	
+            PreparedStatement preparedStatement =  cnn.prepareStatement("Delete from dealers where id = ?", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, dealer.getId());
+            
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+            
+            rs = preparedStatement.getGeneratedKeys();
+            
+        } catch (SQLException e) {
+           	e.printStackTrace();
+        }
+		return rs;
+	}
 }

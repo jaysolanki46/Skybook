@@ -37,4 +37,25 @@ public class TerminalDAO {
         }
 		return rs;
 	}
+	
+	public ResultSet delete(Terminal terminal) throws ClassNotFoundException {
+		
+		try {
+			
+			new DBConfig();
+			cnn = DBConfig.connection();
+        	
+            PreparedStatement preparedStatement =  cnn.prepareStatement("Delete from terminals where id = ?", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, terminal.getId());
+            
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+            
+            rs = preparedStatement.getGeneratedKeys();
+            
+        } catch (SQLException e) {
+           	e.printStackTrace();
+        }
+		return rs;
+	}
 }
