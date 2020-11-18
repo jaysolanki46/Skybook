@@ -123,9 +123,9 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
+                                            <th>Email</th>
                                             <th>Admin</th>
                                             <th>Support</th>
-                                           	<th>Edit</th>
                                            	<th>Delete</th>
                                         </tr>
                                     </thead>
@@ -133,9 +133,9 @@
                                         <tr>
                                            <th>#</th>
                                             <th>Name</th>
+                                            <th>Email</th>
                                             <th>Admin</th>
                                             <th>Support</th>
-                                           	<th>Edit</th>
                                            	<th>Delete</th>
                                         </tr>
                                     </tfoot>
@@ -144,10 +144,11 @@
                                         <tr>
                                             <td><%=rs.getString("id") %></td>
                                             <td><%=rs.getString("name") %></td>
+                                            <td><%=rs.getString("email") %></td>
                                             <td><center><% if(rs.getString("is_admin").equals("1")) %> <i class="far fa-check-square"></i></center></td>
                                             <td><center><% if(rs.getString("is_support").equals("1")) %> <i class="far fa-check-square"></i></center></td>
-                                            <td><center><a title="Edit" href=""><i class="fas fa-edit"></i></a></center></td>
-                                            <td><center><a title="Delete" href=""><i class="fas fa-trash-alt"></i></a></center></td>
+                                            <!-- <td><center><a href=""><i class="fas fa-edit"/></a></center></td> -->
+                                            <td><center><a onclick="return confirm('Are you sure?')" onclick="return confirm('Are you sure?')" href="<%=request.getContextPath()%>/user?id=<%=rs.getString("id") %>"><i class="fas fa-trash-alt"/></a></center></td>
                                         </tr>
                                         <% } %>
                                     </tbody>

@@ -117,7 +117,7 @@
                                             <td><%=rs.getString("id") %></td>
                                             <td><%=rs.getString("name") %></td>
                                             <!-- <td><center><a href=""><i class="fas fa-edit"/></a></center></td> -->
-                                            <td><center><a href="<%=request.getContextPath()%>/dealer?id=<%=rs.getString("id") %>"><i class="fas fa-trash-alt"/></a></center></td>
+                                            <td><center><a onclick="return confirm('Are you sure?')" href="<%=request.getContextPath()%>/dealer?id=<%=rs.getString("id") %>"><i class="fas fa-trash-alt"/></a></center></td>
                                         </tr>
                                         <% } %>
                                     </tbody>
@@ -187,28 +187,6 @@ function validate() {
 		document.getElementById("dealer").submit();
 	}
 }
-
-function deletePrompt(id) {
-	swal({
-		  title: "Are you sure?",
-		  text: "Once deleted, you will not be able to recover this record!",
-		  icon: "warning",
-		  buttons: true,
-		  dangerMode: true,
-		})
-		.then((willDelete) => {
-		  if (willDelete) {
-			 
-			//val deleteURL = "delete.jsp?id="+id;
-			window.location.href = "delete?type=dealer&id="+id;//deleteURl;
-			
-		    swal("Record has been deleted!", {
-		      icon: "success",
-		    });
-		  }
-		});
-}
-
 </script>
 <% 
 } catch (Exception e) {

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import bean.Dealer;
 import bean.User;
 import config.DBConfig;
 
@@ -28,6 +30,27 @@ public class UserDAO {
             preparedStatement.setString(3, user.getEmail());
             preparedStatement.setBoolean(4, user.isIs_admin());
             preparedStatement.setBoolean(5, user.isIs_support());
+            
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+            
+            rs = preparedStatement.getGeneratedKeys();
+            
+        } catch (SQLException e) {
+           	e.printStackTrace();
+        }
+		return rs;
+	}
+	
+	public ResultSet delete(User user) throws ClassNotFoundException {
+		
+		try {
+			
+			new DBConfig();
+			cnn = DBConfig.connection();
+        	
+            PreparedStatement preparedStatement =  cnn.prepareStatement("Delete from users where id = ?", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, user.getId());
             
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();

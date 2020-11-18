@@ -160,7 +160,7 @@
                                             <td><%=rs.getString("name") %></td>
                                             <td><%=rs.getString("solution") %></td>
                                              <!-- <td><center><a href=""><i class="fas fa-edit"/></a></center></td> -->
-                                            <td><center><a href="<%=request.getContextPath()%>/issueSolution?id=<%=rs.getString("id") %>"><i class="fas fa-trash-alt"/></a></center></td>
+                                            <td><center><a onclick="return confirm('Are you sure?')" href="<%=request.getContextPath()%>/issueSolution?id=<%=rs.getString("id") %>"><i class="fas fa-trash-alt"/></a></center></td>
                                         </tr>
                                         <% } %>
                                     </tbody>

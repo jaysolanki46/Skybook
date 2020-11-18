@@ -117,7 +117,7 @@
                                             <td><%=rs.getString("id") %></td>
                                             <td><%=rs.getString("name") %></td>
                                              <!-- <td><center><a href=""><i class="fas fa-edit"/></a></center></td> -->
-                                            <td><center><a href="<%=request.getContextPath()%>/terminal?id=<%=rs.getString("id") %>"><i class="fas fa-trash-alt"/></a></center></td>
+                                            <td><center><a onclick="return confirm('Are you sure?')" href="<%=request.getContextPath()%>/terminal?id=<%=rs.getString("id") %>"><i class="fas fa-trash-alt"/></a></center></td>
                                         </tr>
                                         <% } %>
                                     </tbody>
