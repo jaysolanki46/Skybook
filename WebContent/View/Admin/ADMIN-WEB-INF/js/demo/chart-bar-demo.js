@@ -28,17 +28,30 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 }
 
 // Bar Chart Example
+var jan = document.getElementById("janKiwiMonthCalls").value;
+var feb = document.getElementById("febKiwiMonthCalls").value;
+var mar = document.getElementById("marKiwiMonthCalls").value;
+var apr = document.getElementById("aprKiwiMonthCalls").value;
+var may = document.getElementById("mayKiwiMonthCalls").value;
+var jun = document.getElementById("junKiwiMonthCalls").value;
+var jul = document.getElementById("julKiwiMonthCalls").value;
+var aug = document.getElementById("augKiwiMonthCalls").value;
+var sep = document.getElementById("sepKiwiMonthCalls").value;
+var oct = document.getElementById("octKiwiMonthCalls").value;
+var nov = document.getElementById("novKiwiMonthCalls").value;
+var dec = document.getElementById("decKiwiMonthCalls").value;
+
 var ctx = document.getElementById("myBarChart");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ["January", "February", "March", "April", "May", "June"],
+	labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [{
       label: "Revenue",
-      backgroundColor: "#4e73df",
+      backgroundColor: "#22994D",
       hoverBackgroundColor: "#2e59d9",
       borderColor: "#4e73df",
-      data: [4215, 5312, 6251, 7841, 9821, 14984],
+      data: [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec],
     }],
   },
   options: {
@@ -61,19 +74,17 @@ var myBarChart = new Chart(ctx, {
           drawBorder: false
         },
         ticks: {
-          maxTicksLimit: 6
+          maxTicksLimit: 12
         },
         maxBarThickness: 25,
       }],
       yAxes: [{
         ticks: {
-          min: 0,
-          max: 15000,
-          maxTicksLimit: 5,
+          maxTicksLimit: 7,
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return '$' + number_format(value);
+            return '' + number_format(value);
           }
         },
         gridLines: {
@@ -103,7 +114,7 @@ var myBarChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+          return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
         }
       }
     },
