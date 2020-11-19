@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" import="java.sql.*" %>
 <%@ page language="java" import="java.util.*" %>
+<%@ page language="java" import="java.time.*" %>
 <%@ page language="java" import="config.DBConfig" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -104,6 +105,60 @@
 			if(month.equals("November")) novMonthCalls =  count;
 			if(month.equals("December")) decMonthCalls = count;
 		}
+		
+		// Attendees Overview (MONTHLY)
+		rs = null;
+		rs = st.executeQuery("select u.name as usr, count(l.id) as cnt from users as u LEFT JOIN logs as l ON u.id = l.user WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) group by usr");
+		int jayMonthCalls = 0;
+		int ashenMonthCalls = 0;
+		int kishanMonthCalls = 0;
+		int henryMonthCalls = 0;
+		int nileshMonthCalls = 0;
+		
+		while(rs.next()) {
+			String usr = rs.getString("usr");
+			int count =   rs.getInt("cnt");
+				
+			if(usr.equalsIgnoreCase("Jay")) jayMonthCalls =  count;
+			if(usr.equalsIgnoreCase("Ashen")) ashenMonthCalls =  count;
+			if(usr.equalsIgnoreCase("Kishan")) kishanMonthCalls =  count;
+			if(usr.equalsIgnoreCase("Henry")) henryMonthCalls =  count;
+			if(usr.equalsIgnoreCase("Nilesh")) nileshMonthCalls =  count;
+		}
+		
+		// Support Calls Overview (2020)
+		rs = null;
+		rs = st.executeQuery("select dealer, date_format(log_date,'%M') as month ,count(*) as cnt from logs WHERE dealer = 67 group by year(log_date),month(log_date) order by year(log_date),month(log_date)");
+		int janKiwiMonthCalls = 0;
+		int febKiwiMonthCalls = 0;
+		int marKiwiMonthCalls = 0;
+		int aprKiwiMonthCalls = 0;
+		int mayKiwiMonthCalls = 0;
+		int junKiwiMonthCalls = 0;
+		int julKiwiMonthCalls = 0;
+		int augKiwiMonthCalls = 0;
+		int sepKiwiMonthCalls = 0;
+		int octKiwiMonthCalls = 0;
+		int novKiwiMonthCalls = 0;
+		int decKiwiMonthCalls = 0;
+		
+		while(rs.next()) {
+			String month = rs.getString("month");
+			int count =   rs.getInt("cnt");
+			
+			if(month.equals("January")) janKiwiMonthCalls =  count;
+			if(month.equals("February")) febKiwiMonthCalls =  count;
+			if(month.equals("March")) marKiwiMonthCalls =  count;
+			if(month.equals("April")) aprKiwiMonthCalls =  count;
+			if(month.equals("May")) mayKiwiMonthCalls =  count;
+			if(month.equals("June")) junKiwiMonthCalls =  count;
+			if(month.equals("July")) julKiwiMonthCalls =  count;
+			if(month.equals("August")) augKiwiMonthCalls =  count;
+			if(month.equals("September")) sepKiwiMonthCalls =  count;
+			if(month.equals("October")) octKiwiMonthCalls =  count;
+			if(month.equals("November")) novKiwiMonthCalls =  count;
+			if(month.equals("December")) decKiwiMonthCalls = count;
+		}
 	%>
 
 </head>
@@ -143,7 +198,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                	Calls (monthly)</div>
+                                                	Calls (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><%=lastMonthCount %></div>
                                         </div>
                                         <div class="col-auto">
@@ -252,7 +307,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Attendees Overview (MONTHLY)</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Attendees Overview (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -262,23 +317,23 @@
                                     <div class="mt-4 text-center small">
                                         <span class="mr-2">
                                             <i class="fas fa-circle text-primary"></i> Jay
-                                            <input type="hidden" id="jayMonthCalls" value="570"/>
+                                            <input type="hidden" id="jayMonthCalls" value=<%=jayMonthCalls %>>
                                         </span>
                                         <span class="mr-2">
                                             <i class="fas fa-circle text-success"></i> Ashen
-                                            <input type="hidden" id="ashenMonthCalls" value="200"/>
+                                            <input type="hidden" id="ashenMonthCalls" value=<%=ashenMonthCalls %>>
                                         </span>
                                         <span class="mr-2">
                                             <i class="fas fa-circle text-info"></i> Kishan
-                                            <input type="hidden" id="kishanMonthCalls" value="50"/>
+                                            <input type="hidden" id="kishanMonthCalls" value=<%=kishanMonthCalls %>>
                                         </span>
                                          <span class="mr-2">
                                             <i class="fas fa-circle text-warning"></i> Henry
-                                            <input type="hidden" id="henryMonthCalls" value="32"/>
+                                            <input type="hidden" id="henryMonthCalls" value=<%=henryMonthCalls %>>
                                         </span>
                                          <span class="mr-2">
                                             <i class="fas fa-circle text-dark"></i> Nilesh
-                                            <input type="hidden" id="nileshMonthCalls" value="250"/>
+                                            <input type="hidden" id="nileshMonthCalls" value=<%=nileshMonthCalls %>>
                                         </span>
                                     </div>
                                 </div>
@@ -290,18 +345,18 @@
 					<div class="card shadow mb-4">
 						<div class="card-header py-3">
 							<h6 class="m-0 font-weight-bold text-primary">Kiwibank Calls Chart</h6>
-									<input type="hidden" id="janKiwiMonthCalls" value="500"/>
-                                    <input type="hidden" id="febKiwiMonthCalls" value="3000"/>
-                                    <input type="hidden" id="marKiwiMonthCalls" value="1200"/>
-                                    <input type="hidden" id="aprKiwiMonthCalls" value="2300"/>
-                                    <input type="hidden" id="mayKiwiMonthCalls" value="230"/>
-                                    <input type="hidden" id="junKiwiMonthCalls" value="800"/>
-                                    <input type="hidden" id="julKiwiMonthCalls" value="200"/>
-                                    <input type="hidden" id="augKiwiMonthCalls" value="556"/>
-                                    <input type="hidden" id="sepKiwiMonthCalls" value="380"/>
-                                    <input type="hidden" id="octKiwiMonthCalls" value="540"/>
-                                    <input type="hidden" id="novKiwiMonthCalls" value="500"/>
-                                    <input type="hidden" id="decKiwiMonthCalls" value="570"/>
+							 		<input type="hidden" id="janKiwiMonthCalls" value=<%=janKiwiMonthCalls %>>
+                                    <input type="hidden" id="febKiwiMonthCalls" value=<%=febKiwiMonthCalls %>>
+                                    <input type="hidden" id="marKiwiMonthCalls" value=<%=marKiwiMonthCalls %>>
+                                    <input type="hidden" id="aprKiwiMonthCalls" value=<%=aprKiwiMonthCalls %>>
+                                    <input type="hidden" id="mayKiwiMonthCalls" value=<%=mayKiwiMonthCalls %>>
+                                    <input type="hidden" id="junKiwiMonthCalls" value=<%=junKiwiMonthCalls %>>
+                                    <input type="hidden" id="julKiwiMonthCalls" value=<%=julKiwiMonthCalls %>>
+                                    <input type="hidden" id="augKiwiMonthCalls" value=<%=augKiwiMonthCalls %>>
+                                    <input type="hidden" id="sepKiwiMonthCalls" value=<%=sepKiwiMonthCalls %>>
+                                    <input type="hidden" id="octKiwiMonthCalls" value=<%=octKiwiMonthCalls %>>
+                                    <input type="hidden" id="novKiwiMonthCalls" value=<%=novKiwiMonthCalls %>>
+                                    <input type="hidden" id="decKiwiMonthCalls" value=<%=decKiwiMonthCalls %>>
 						</div>
 						<div class="card-body">
 							<div class="chart-bar">
