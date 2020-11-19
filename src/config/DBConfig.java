@@ -15,7 +15,7 @@ public class DBConfig {
 		
 		// For test
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/skybook?useSSL=false", "root", "Js0322!@");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/skybook?useSSL=false", "root", "Sisterbro46@");
 		 
 		 
 		 return connection;
