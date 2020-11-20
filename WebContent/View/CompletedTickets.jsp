@@ -106,9 +106,9 @@
 										      <h5>SBT - <%=rs.getString("id") %> 
 										      <%
 										      if(rs.getString("is_completed") == null || rs.getString("is_completed").equals("0")) {
-										    	  %><img alt="" width="70px" src="../IMAGES/awaiting.svg"></h5><%
+										    	  %><div class="badge badge-warning badge-pill">Awaiting</div></h5><%
 										      } else {
-										    	  %><img alt="" width="70px" src="../IMAGES/completed.svg"></h5><%
+										    	  %><div class="badge badge-success badge-pill">Completed</div></h5><%
 										      }
 										      %>
 										      

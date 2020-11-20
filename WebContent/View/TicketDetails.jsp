@@ -181,7 +181,7 @@
 				<div class="card mb-3">
 					<div class="card-body" style="padding: 10px" id="buttonDiv">
 						<a href="../View/Index.jsp"><input type="button" class="btn btn-danger float-right" style="margin-left:10px;" value="Cancel"></a>
-						<input type="button" class="btn btn-skyzer float-right" value="Update" onclick="validate()">
+						<input type="button" class="btn btn-primary float-right" value="Update" onclick="validate()">
 						
 					</div>
 				</div>
