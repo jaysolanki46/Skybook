@@ -75,22 +75,22 @@
 		// Support Calls Overview (2020)
 		rs = null;
 		rs = st.executeQuery("select date_format(log_date,'%M') as month ,count(*) as cnt from logs group by year(log_date),month(log_date) order by year(log_date),month(log_date)");
-		int janMonthCalls = 0;
-		int febMonthCalls = 0;
-		int marMonthCalls = 0;
-		int aprMonthCalls = 0;
-		int mayMonthCalls = 0;
-		int junMonthCalls = 0;
-		int julMonthCalls = 0;
-		int augMonthCalls = 0;
-		int sepMonthCalls = 0;
-		int octMonthCalls = 0;
-		int novMonthCalls = 0;
-		int decMonthCalls = 0;
+		String janMonthCalls = null;
+		String febMonthCalls = null;
+		String marMonthCalls = null;
+		String aprMonthCalls = null;
+		String mayMonthCalls = null;
+		String junMonthCalls = null;
+		String julMonthCalls = null;
+		String augMonthCalls = null;
+		String sepMonthCalls = null;
+		String octMonthCalls = null;
+		String novMonthCalls = null;
+		String decMonthCalls = null;
 		
 		while(rs.next()) {
 			String month = rs.getString("month");
-			int count =   rs.getInt("cnt");
+			String count =   rs.getString("cnt");
 			
 			if(month.equals("January")) janMonthCalls =  count;
 			if(month.equals("February")) febMonthCalls =  count;

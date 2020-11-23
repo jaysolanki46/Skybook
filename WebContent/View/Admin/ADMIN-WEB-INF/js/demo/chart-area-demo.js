@@ -83,14 +83,15 @@ var myLineChart = new Chart(ctx, {
           drawBorder: true
         },
         ticks: {
-          maxTicksLimit: 15
+          maxTicksLimit: 10
         }
       }],
       yAxes: [{
         ticks: {
+          min: 0,
           maxTicksLimit: 10,
           padding: 10,
-          // Include a dollar sign in the ticks
+
           callback: function(value, index, values) {
             return '' + number_format(value);
           }
