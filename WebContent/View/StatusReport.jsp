@@ -97,11 +97,11 @@
 				        "issmaster.name as category, "+
 				        "st.name as status from "+
 							"logs as l "+
-							"INNER JOIN dealers as d ON l.dealer = d.id "+
-							"INNER JOIN issues as iss ON iss.id = l.issue "+
-							"INNER JOIN issue_master as issmaster ON issmaster.id = l.issue_master "+
-							"INNER JOIN users as u ON l.user = u.id "+
-                         "INNER JOIN status as st ON l.status = st.id "+
+							"LEFT JOIN dealers as d ON l.dealer = d.id "+
+							"LEFT JOIN issues as iss ON iss.id = l.issue "+
+							"LEFT JOIN issue_master as issmaster ON issmaster.id = l.issue_master "+
+							"LEFT JOIN users as u ON l.user = u.id "+
+                         "LEFT JOIN status as st ON l.status = st.id "+
                          "LEFT JOIN terminals as ter ON l.terminal = ter.id "+
                          "LEFT JOIN releases as rel ON l.current_release = rel.id " +
                          clause + 
@@ -116,11 +116,11 @@
 					        "issmaster.name as category, "+
 					        "st.name as status from "+
 								"logs as l "+
-								"INNER JOIN dealers as d ON l.dealer = d.id "+
-								"INNER JOIN issues as iss ON iss.id = l.issue "+
-								"INNER JOIN issue_master as issmaster ON issmaster.id = l.issue_master "+
-								"INNER JOIN users as u ON l.user = u.id "+
-	                         "INNER JOIN status as st ON l.status = st.id "+
+								"LEFT JOIN dealers as d ON l.dealer = d.id "+
+								"LEFT JOIN issues as iss ON iss.id = l.issue "+
+								"LEFT JOIN issue_master as issmaster ON issmaster.id = l.issue_master "+
+								"LEFT JOIN users as u ON l.user = u.id "+
+	                         "LEFT JOIN status as st ON l.status = st.id "+
 	                         "LEFT JOIN terminals as ter ON l.terminal = ter.id "+
 	                         "LEFT JOIN releases as rel ON l.current_release = rel.id " +
 	                         clause + 

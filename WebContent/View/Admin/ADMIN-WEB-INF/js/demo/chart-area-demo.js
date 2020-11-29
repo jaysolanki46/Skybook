@@ -76,14 +76,14 @@ var myLineChart = new Chart(ctx, {
     scales: {
       xAxes: [{
         time: {
-          unit: 'date'
+          unit: 'month'
         },
         gridLines: {
           display: false,
           drawBorder: true
         },
         ticks: {
-          maxTicksLimit: 10
+          maxTicksLimit: 12
         }
       }],
       yAxes: [{
