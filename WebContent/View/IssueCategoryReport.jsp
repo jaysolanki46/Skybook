@@ -318,8 +318,8 @@
 					</div>
 					
 					<!-- Table -->
-					<div class="table-wrap">
-					<table class="table table-bordered">
+					<div class="table-wrap" style="margin: 1rem;">
+					<table class="table table-bordered" id="dataTable">
 					  <thead>
 					    <tr>
 					      <th scope="col">#Call</th>
