@@ -40,14 +40,6 @@
 		ResultSet rs = null;
 		st = dbConn.createStatement();
 		
-		// CALLS (MONTHLY)
-		rs = null;
-		rs = st.executeQuery("SELECT COUNT(*) as lastMonthCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)");
-		int lastMonthCount = 0;
-		while(rs.next()) {
-			lastMonthCount = rs.getInt("lastMonthCount");
-		}
-		
 		// CALLS (ANNUAL/2020)
 		rs = null;
 		rs = st.executeQuery("SELECT COUNT(*) as currentYearCount FROM logs WHERE YEAR(log_date) = YEAR(CURDATE())");
@@ -56,9 +48,17 @@
 			currentYearCount = rs.getInt("currentYearCount");
 		}
 		
+		// CALLS (MONTHLY)
+		rs = null;
+		rs = st.executeQuery("SELECT COUNT(*) as lastMonthCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)");
+		int lastMonthCount = 0;
+		while(rs.next()) {
+			lastMonthCount = rs.getInt("lastMonthCount");
+		}
+		
 		// OUTSTANDING ISSUES
 		rs = null;
-		rs = st.executeQuery("SELECT COUNT(*) as outstandingIssuesCount FROM logs WHERE status != " + RESOLVED);
+		rs = st.executeQuery("SELECT COUNT(*) as outstandingIssuesCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND status != " + RESOLVED);
 		int outstandingIssuesCount = 0;
 		while(rs.next()) {
 			outstandingIssuesCount = rs.getInt("outstandingIssuesCount");
@@ -66,7 +66,7 @@
 		
 		// RESOLVED ISSUES
 		rs = null;
-		rs = st.executeQuery("SELECT COUNT(*) as resolvedIssuesCount FROM logs WHERE status = " + RESOLVED);
+		rs = st.executeQuery("SELECT COUNT(*) as resolvedIssuesCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND status = " + RESOLVED);
 		int resolvedIssuesCount = 0;
 		while(rs.next()) {
 			resolvedIssuesCount = rs.getInt("resolvedIssuesCount");
@@ -191,25 +191,7 @@
                     <!-- Content Row -->
                     <div class="row">
 
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                	Calls (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=lastMonthCount %></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x" style="color: #0066cb;"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
+ 						<!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
@@ -226,6 +208,26 @@
                                 </div>
                             </div>
                         </div>
+                     </div>
+                     
+                     <div class="row">   
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                	Total Calls (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=lastMonthCount %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x" style="color: #0066cb;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -233,7 +235,7 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Outstanding Issues
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Outstanding Issues (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
@@ -256,7 +258,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Resolved Issues</div>
+                                                Resolved Issues (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><%=resolvedIssuesCount %></div>
                                         </div>
                                         <div class="col-auto">
