@@ -4518,7 +4518,9 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 	padding: .75rem 1.25rem;
 	margin-bottom: 0;
 	background-color: #f8f9fc;
-	border-bottom: 1px solid #e3e6f0
+	border-bottom: 1px solid #e3e6f0;
+	font-weight: 700;
+	color: #0061f2
 }
 
 .card-header:first-child {

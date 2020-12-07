@@ -36,6 +36,10 @@
 		ResultSet rs = null;
 		st = dbConn.createStatement();
 		
+		Statement stUserOutstanding = null;
+		ResultSet rsUserOutstanding = null;
+		stUserOutstanding = dbConn.createStatement();
+		
 		
 		String clause = ""; 
 		String filteredMonth = request.getParameter("month");
@@ -84,9 +88,28 @@
 		rs = null;
 		rs = st.executeQuery("select issues.name as issue, count(logs.id) as total from issues LEFT JOIN logs ON issues.id = logs.issue " + clause + " group by issue order by total DESC LIMIT 10");
 		
+		// Outstanding issue
+		rsUserOutstanding = stUserOutstanding.executeQuery(
+					"select l.id, l.log_date, l.log_time, l.technician, l.description, l.new_issue, l.new_solution, l.is_voicemail, l.is_instructed, "+
+						"ter.name as terminal, l.serial as serialNumber, rel.name as current_release, "+
+				        "d.name as dealer, "+
+						"u.name as user, "+
+				        "iss.name as issue, "+
+				        "issmaster.name as category, "+
+				        "st.name as status from "+
+							"logs as l "+
+							"LEFT JOIN dealers as d ON l.dealer = d.id "+
+							"LEFT JOIN issues as iss ON iss.id = l.issue "+
+							"LEFT JOIN issue_master as issmaster ON issmaster.id = l.issue_master "+
+							"LEFT JOIN users as u ON l.user = u.id "+
+                         "LEFT JOIN status as st ON l.status = st.id "+
+                         "LEFT JOIN terminals as ter ON l.terminal = ter.id "+
+                         "LEFT JOIN releases as rel ON l.current_release = rel.id " +
+                         clause + 
+                         " AND l.user != " + userID +" AND l.status != " + RESOLVED);
+		
 		System.out.println(selectedMonth);
 		System.out.println(clause);
-		System.out.println("select issues.name as issue, count(logs.id) as total from issues LEFT JOIN logs ON issues.id = logs.issue " + clause + " group by issue order by total DESC LIMIT 10");
 		
 	%>
 
@@ -171,7 +194,7 @@
                                     <div class="col-xl-4 col-md-7 mb-5">
                                        
                                         <div class="card mb-4">
-                                            <div class="card-header" style="font-weight: 700;color: #0061f2;"><i class="fas fa-bug fa-1x"></i> Top Issues</div>
+                                            <div class="card-header"><i class="fas fa-bug fa-1x"></i> Top Issues</div>
                                             <div class="card-body">
                                             
                                              <%  while(rs.next()) { %>
@@ -180,7 +203,7 @@
                                                     <div class="d-flex align-items-center flex-shrink-0 mr-3">
                                                         <div class="d-flex flex-column font-weight-bold">
                                                             <a class="text-dark line-height-normal mb-1" href="#!"><%=rs.getString("issue") %></a>
-                                                            <div class="small text-muted line-height-normal"><%=rs.getString("total") %></div>
+                                                            <div class="small text-muted line-height-normal">Number of issues: <%=rs.getString("total") %></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -189,6 +212,54 @@
                                      		</div>
                                         </div>
                                     </div>
+                                    
+                                    <div class="col-lg-8 mb-4">
+                                       
+                                        <div class="card mb-4">
+                                            <div class="card-header"><i class="fas fa-bug fa-1x"></i> Outstanding Issues</div>
+                                            <div class="card-body">
+                                            
+                                               <div class="table-wrap" style="margin: 1rem;">
+                                               
+                                               	<table class="table table-bordered" id="dataTable">
+												  <thead>
+												    <tr>
+												      <th scope="col">#Call</th>
+												      <th scope="col">Dealer</th>
+												      <th scope="col">Issue</th>
+												      <th scope="col">Description</th>
+												      <th scope="col">New Issue</th>
+												      <th scope="col">New Solution</th>
+												      <th scope="col">More</th>
+												    </tr>
+												  </thead>
+												  <tbody>
+												   <%
+					
+															while (rsUserOutstanding.next()) {
+																	
+																%><tr><%
+																%><td scope="row"><%=rsUserOutstanding.getString("id") %></td><%		
+																%><td style="white-space: nowrap;"><%=rsUserOutstanding.getString("technician") + " <br/> <small>" + rsUserOutstanding.getString("dealer") + "</small>"%></td><%
+																%><td style="white-space: nowrap;"><%=rsUserOutstanding.getString("issue") + " <br/> <small>" + rsUserOutstanding.getString("category") + "</small>" %></td><%
+																%><td><small><%=rsUserOutstanding.getString("description") %></small></td><%
+																%><td><small><%=rsUserOutstanding.getString("new_issue") %></small></td><%
+																%><td><small><%=rsUserOutstanding.getString("new_solution") %></small></td><%
+																%><td><center><a href=../View/HistoryDetails.jsp?log=<%=rsUserOutstanding.getString("id") %>><i class="fas fa-edit"></i></a></center></td><%
+																%></tr><%
+															}
+													%>
+												  </tbody>
+                                               </table>
+                                               
+                                               </div>
+                                                
+                                     		</div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
 	                    </div>
 
                     </div>
