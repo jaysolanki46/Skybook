@@ -106,7 +106,7 @@
                          "LEFT JOIN terminals as ter ON l.terminal = ter.id "+
                          "LEFT JOIN releases as rel ON l.current_release = rel.id " +
                          clause + 
-                         " AND l.user != " + userID +" AND l.status != " + RESOLVED);
+                         " AND l.status != " + RESOLVED);
 		
 		System.out.println(selectedMonth);
 		System.out.println(clause);
@@ -283,9 +283,9 @@
 				<small style="color: white;"><%=username %></small>
 				
 				<small style="color: white;">></small>
-				<small style="color: white;">Reports</small>
+				<small style="color: white;">Dashboard</small>
 				<small style="color: white;">></small>
-				<a href=""><small style="color: white;">Dashboard</small></a>
+				<a href=""><small style="color: white;">Call Metrics</small></a>
 				
 			</div>
 			<div style="color: white; margin-left: auto; margin-right: 5px;">

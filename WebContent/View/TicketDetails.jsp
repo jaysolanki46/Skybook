@@ -58,8 +58,12 @@
 	<div class="card center_div">
 	
 		<div class="card-header"
-			style="color: white; background-color: #0066cb;">
+			style="color: white; background-color: #0066cb; display: flex; justify-content: space-around;">
 			<h5 style="color: white;">Call #<%=rs.getString("id") %> [<%=rs.getString("log_date") %>]</h5>
+			<div style="margin-left: auto;">
+				<span>Attendant: <%=rs.getString("user") %></span>
+			</div>
+			
 			<input type="hidden" name="hiddenLogID" value=<%=rs.getString("id") %>>
 			<input type="hidden" id="user" name="user" value='<%=userID%>' />
 			<input type="hidden" id="userName" name="userName" value='<%=username%>'/>

@@ -259,9 +259,9 @@
 				<small style="color: white;"><%=username %></small>
 				
 				<small style="color: white;">></small>
-				<small style="color: white;">Reports</small>
+				<small style="color: white;">Dashboard</small>
 				<small style="color: white;">></small>
-				<a href=""><small style="color: white;">Dashboard</small></a>
+				<a href=""><small style="color: white;">Overview</small></a>
 				
 			</div>
 			<div style="color: white; margin-left: auto; margin-right: 5px;">
