@@ -11,7 +11,7 @@
 <% try { %>
 <head>
 <meta charset="ISO-8859-1">
-<title>Skybook - Dashboard</title>
+<title>Skybook - Overview (<%=Calendar.getInstance().get(Calendar.YEAR) %>)</title>
 <%@include  file="../header.html" %>
 
 	<%
@@ -35,41 +35,8 @@
 		Statement st = null;
 		ResultSet rs = null;
 		st = dbConn.createStatement();
-		
-		// CALLS (ANNUAL/2020)
-		rs = null;
-		rs = st.executeQuery("SELECT COUNT(*) as currentYearCount FROM logs WHERE YEAR(log_date) = YEAR(CURDATE())");
-		int currentYearCount = 0;
-		while(rs.next()) {
-			currentYearCount = rs.getInt("currentYearCount");
-		}
-				
-		
-		// CALLS (MONTHLY)
-		rs = null;
-		rs = st.executeQuery("SELECT COUNT(*) as currentMonthCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = MONTH(CURRENT_DATE)");
-		int currentMonthCount = 0;
-		while(rs.next()) {
-			currentMonthCount = rs.getInt("currentMonthCount");
-		}
-		
-		// OUTSTANDING ISSUES
-		rs = null;
-		rs = st.executeQuery("SELECT COUNT(*) as outstandingIssuesCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = MONTH(CURRENT_DATE) AND status != " + RESOLVED);
-		int outstandingIssuesCount = 0;
-		while(rs.next()) {
-			outstandingIssuesCount = rs.getInt("outstandingIssuesCount");
-		}
-		
-		// RESOLVED ISSUES
-		rs = null;
-		rs = st.executeQuery("SELECT COUNT(*) as resolvedIssuesCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = MONTH(CURRENT_DATE) AND status = " + RESOLVED);
-		int resolvedIssuesCount = 0;
-		while(rs.next()) {
-			resolvedIssuesCount = rs.getInt("resolvedIssuesCount");
-		}
-		
-		// Support Calls Overview (2020)
+			
+		// Support Calls Overview
 		rs = null;
 		rs = st.executeQuery("select date_format(log_date,'%M') as month ,count(*) as cnt from logs group by year(log_date),month(log_date) order by year(log_date),month(log_date)");
 		String janMonthCalls = null;
@@ -103,9 +70,9 @@
 			if(month.equals("December")) decMonthCalls = count;
 		}
 		
-		// Attendees Overview (MONTHLY)
+		// Attendees Overview
 		rs = null;
-		rs = st.executeQuery("select u.name as usr, count(l.id) as cnt from users as u LEFT JOIN logs as l ON u.id = l.user WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = MONTH(CURRENT_DATE) group by usr");
+		rs = st.executeQuery("select u.name as usr, count(l.id) as cnt from users as u LEFT JOIN logs as l ON u.id = l.user WHERE YEAR(log_date) = YEAR(CURRENT_DATE) group by usr");
 		int jayMonthCalls = 0;
 		int ashenMonthCalls = 0;
 		int kishanMonthCalls = 0;
@@ -123,7 +90,7 @@
 			if(usr.equalsIgnoreCase("Nilesh")) nileshMonthCalls =  count;
 		}
 		
-		// Support Calls Overview (2020)
+		// Support Calls Overview
 		rs = null;
 		rs = st.executeQuery("select dealer, date_format(log_date,'%M') as month ,count(*) as cnt from logs WHERE dealer = 67 group by year(log_date),month(log_date) order by year(log_date),month(log_date)");
 		int janKiwiMonthCalls = 0;
@@ -164,7 +131,7 @@
 	<div class="card center_div"  >
 	
 	 	<div class="card-header" style="color: white; background-color: #0066cb; ">
-			<h5 style="color: white;">Dashboard</h5>
+			<h5 style="color: white;">Overview (<%=Calendar.getInstance().get(Calendar.YEAR) %>)</h5>
 		</div>
 		
 		<div class="card-group">
@@ -177,88 +144,6 @@
                 <div class="container-fluid">
 
                     <!-- Content Row -->
-                    <div class="row">
-
- 						<!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Calls (Annual/<%=Calendar.getInstance().get(Calendar.YEAR) %>)</div>
-                                            <div class="h5 mb-0 font-weight-bold"><%=currentYearCount %></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-layer-group fa-2x" style="color: #1cc88a;"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                	Calls (<%=LocalDate.now().getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=currentMonthCount %></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x" style="color: #0066cb;"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                       
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Outstanding Issues (<%=LocalDate.now().getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><%=outstandingIssuesCount %></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-bug fa-2x" style="color: #36b9cc;"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Resolved Issues (<%=LocalDate.now().getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=resolvedIssuesCount %></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-check fa-2x" style="color: #f6c23e;"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
 
                     <div class="row">
 
@@ -268,7 +153,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Support Calls Overview (<%=Calendar.getInstance().get(Calendar.YEAR) %>)</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Support Calls Overview</h6>
                                     <input type="hidden" id="janMonthCalls" value=<%=janMonthCalls %>>
                                     <input type="hidden" id="febMonthCalls" value=<%=febMonthCalls %>>
                                     <input type="hidden" id="marMonthCalls" value=<%=marMonthCalls %>>
@@ -297,7 +182,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Attendees Overview (<%=LocalDate.now().getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Attendees Overview</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -334,7 +219,7 @@
                     <!-- Bar Chart -->
 					<div class="card shadow mb-4">
 						<div class="card-header py-3">
-							<h6 class="m-0 font-weight-bold text-primary">Kiwibank Calls Overview (<%=Calendar.getInstance().get(Calendar.YEAR) %>)</h6>
+							<h6 class="m-0 font-weight-bold text-primary">Kiwibank Calls Overview</h6>
 							 		<input type="hidden" id="janKiwiMonthCalls" value=<%=janKiwiMonthCalls %>>
                                     <input type="hidden" id="febKiwiMonthCalls" value=<%=febKiwiMonthCalls %>>
                                     <input type="hidden" id="marKiwiMonthCalls" value=<%=marKiwiMonthCalls %>>
