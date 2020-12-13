@@ -193,6 +193,7 @@
 									
 									<button type="submit" title="Search" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();"><i class="fas fa-search"></i></button>
 									<button type="button" title="Export"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Status Report.csv');"><i class="fas fa-file-download"></i></button>
+									<button type="button" title="Export pdf"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Status Report.csv');"><i class="fas fa-file-download"></i></button>
 									<a href="../View/StatusReport.jsp"><button type="button" title="Reset"  class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
 								</form>
 								
