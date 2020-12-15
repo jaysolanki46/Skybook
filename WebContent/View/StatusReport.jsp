@@ -94,6 +94,7 @@
 				        "d.name as dealer, "+
 						"u.name as user, "+
 				        "iss.name as issue, "+
+				        "iss.solution as solution, "+
 				        "issmaster.name as category, "+
 				        "st.name as status from "+
 							"logs as l "+
@@ -113,6 +114,7 @@
 					        "d.name as dealer, "+
 							"u.name as user, "+
 					        "iss.name as issue, "+
+					        "iss.solution as solution, "+
 					        "issmaster.name as category, "+
 					        "st.name as status from "+
 								"logs as l "+
@@ -193,7 +195,7 @@
 									
 									<button type="submit" title="Search" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();"><i class="fas fa-search"></i></button>
 									<button type="button" title="Export"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Status Report.csv');"><i class="fas fa-file-download"></i></button>
-									<button type="button" title="Export pdf"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Status Report.csv');"><i class="fas fa-file-download"></i></button>
+									<button type="button" title="Export pdf"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToPDF();"><i class="fas fa-file-download"></i></button>
 									<a href="../View/StatusReport.jsp"><button type="button" title="Reset"  class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
 								</form>
 								
@@ -272,84 +274,81 @@
 					  
 					</table>
 					<!-- Hidden table for export -->
-					<table class="table table-bordered" id="exportTable" style="display: none;">
-					  <thead>
-					    <tr>
-					      <th scope="col">#Call</th>
-					      <th scope="col">Date/Time</th>
-					      <th scope="col">Technician</th>
-					      <th scope="col">Dealer</th>
-					      <th scope="col">Terminal Details</th>
-					      <th scope="col">Current Release</th>
-					      <th scope="col">Issue Category</th>
-					      <th scope="col">Issue</th>
-					      <th scope="col">Description</th>
-					      <th scope="col">New Issue</th>
-					      <th scope="col">New Solution</th>
-					      <th scope="col">Voicemail</th>
-					      <th scope="col">Outgoing</th>
-					      <th scope="col">Status</th>
-					      <th scope="col">Attendee</th>
-					    </tr>
-					  </thead>
-					  <tbody>
-					    
-					    <%
-								while (rsExport.next()) {
-									
-									%><tr><%
-									%><td><%=rsExport.getString("id") %></td><%		
-									%><td><%='\"'+rsExport.getString("log_date") + " " + rsExport.getString("log_time") + '\"'%></td><%	
-									%><td><%='\"'+rsExport.getString("technician")+'\"'%></td><%
-									%><td><%='\"'+rsExport.getString("dealer")+'\"'%></td><%
-									%><td><%
-									if(rsExport.getString("terminal") != null) {
-										out.print('\"' + rsExport.getString("terminal") + " ");
-									} else {
-										out.print('\"' + " ");	
+					<div id=tab style="display: none;">
+
+						<table style="border-collapse: collapse; width: 100%;" border="0">
+							<tbody>
+								<tr>
+									<td style="width: 50%;"><img
+										src="https://www.skyzer.co.nz/wp-content/uploads/2019/08/Skyzer-Technologies-Logo.svg"
+										alt="skyzer-logo" width="370" height="49" /></td>
+									<td style="width: 50%;">
+										<p style="text-align: right;">
+											<strong>Skyzer Technologies<br /></strong>269 Mount Smart
+											Road,<br />Onehunga, Auckland 1061<br />New Zealand
+										</p>
+										<p style="text-align: right;">
+											Telephone:&nbsp;<a href="tel:+6492590322">+64 9 259 0322</a>
+										</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<hr />
+						<h2 style="text-align: center;">Dealer Report</h2>
+						<p>Name: Calnar Business System</p>
+						<p>Period: 12/12/2020 - 12/12/2020</p>
+
+						<table style="font-family: arial, sans-serif;  border-collapse: collapse;  width: 100%;">
+								<colgroup>
+									<col width="10%">
+									<col width="10%">
+									<col width="10%">
+								</colgroup>
+								<thead>
+						    <tr>
+						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Date/Time</th>
+						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Technician</th>
+						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Terminal Details</th>
+						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Issue</th>
+						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Possible Solutions</th>
+						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Description</th>
+						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Status</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    
+						    <%
+									while (rsExport.next()) {
+										
+										%><tr><%
+										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("log_date") + " " + rsExport.getString("log_time")%></td><%	
+										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("technician")%></td><%
+										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%
+										if(rsExport.getString("terminal") != null) {
+											out.print(rsExport.getString("terminal"));
+										} else {
+											out.print(" ");	
+										}
+																			
+										if(rsExport.getString("serialNumber") != null) {
+											out.print(rsExport.getString("serialNumber"));
+										} else {
+											out.print(" ");	
+										}
+										%></td><%
+										
+										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("issue")%></td><%
+										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("solution")%></td><%
+										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("description")%></td><%
+										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("status")%></td><%
+										%></tr><%
 									}
-																		
-									if(rsExport.getString("serialNumber") != null) {
-										out.print(rsExport.getString("serialNumber") + '\"');
-									} else {
-										out.print(" " + '\"');	
-									}
-									%></td><%
-									%><td><%
-									
-									if(rsExport.getString("current_release") != null) {
-										out.print('\"' + rsExport.getString("current_release") + '\"');
-									} else {
-										out.print('\"' + " " + '\"');	
-									}
-									%></td><%
-									%><td><%='\"'+rsExport.getString("category") + '\"'%></td><%
-									%><td><%='\"'+rsExport.getString("issue") + '\"'%></td><%
-									%><td><%='\"'+rsExport.getString("description") + '\"'%></td><%
-									%><td><%='\"'+rsExport.getString("new_issue") + '\"'%></td><%
-									%><td><%='\"'+rsExport.getString("new_solution") + '\"'%></td><%
-									%><td><%
-											if(rsExport.getString("is_voicemail").equals("1")) {
-												out.print('\"' + "Yes" + '\"');
-											} else {
-												out.print('\"' + "-" + '\"');	
-											}
-									%></td><%
-									%><td><%
-											if(rsExport.getString("is_instructed").equals("1")) {
-												out.print('\"' + "Yes" + '\"');
-											} else {
-												out.print('\"' + "-" + '\"');	
-											}
-									%></td><%									
-									%><td><%='\"'+rsExport.getString("status") + '\"'%></td><%
-									%><td><%='\"'+rsExport.getString("user") + '\"'%></td><%	
-									%></tr><%
-								}
-						%>
-					  </tbody>
-					  
-					</table>
+							%>
+						  </tbody>
+						</table>
+					</div>
+					</div>
 					<!-- End export -->
 					</div>
 				<!-- End -->
@@ -418,26 +417,42 @@ function downloadCSV(csv, filename) {
 	downloadLink.click();
 }
 
-function exportTableToCSV(filename) {
+function exportTableToPDF() {
 	
-	var csv = [];
-	var rows = document.getElementById('exportTable').getElementsByTagName('tr');
-	
-	for(var i = 0; i < rows.length; i++) {
-		var row = [];
-		var cols = rows[i].querySelectorAll("td, th");
-		
-		for(var j = 0; j < cols.length; j++) {
-			row.push(cols[j].innerText);
-		}
-		
-		csv.push(row.join(","));
-	}
-	
-	downloadCSV(csv.join("\n"), filename);
+	var sTable = document.getElementById('tab').innerHTML;
+	var win = window.open("file.pdf", "_blank");
+
+    win.document.write('<html><head>');
+    win.document.write('</head>');
+    win.document.write('<body>');
+    win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+    win.document.write('</body></html>');
+
+    win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+    win.print();
+    
+    
 }
 
+	function exportTableToCSV(filename) {
 
+		var csv = [];
+		var rows = document.getElementById('exportTable').getElementsByTagName(
+				'tr');
+
+		for (var i = 0; i < rows.length; i++) {
+			var row = [];
+			var cols = rows[i].querySelectorAll("td, th");
+
+			for (var j = 0; j < cols.length; j++) {
+				row.push(cols[j].innerText);
+			}
+
+			csv.push(row.join(","));
+		}
+
+		downloadCSV(csv.join("\n"), filename);
+	}
 </script>
 <% 
 } catch (Exception e) {
