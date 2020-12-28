@@ -157,7 +157,7 @@
                                         "LEFT JOIN releases as rel ON l.current_release = rel.id " +
                                         clause + 
 		                         		" ORDER BY l.id DESC");
-					
+					    
 								while (rs.next()) {
 									
 									entries += 1;

@@ -154,7 +154,7 @@
 									 <input type="date" id="endDate" name="endDate" max="31-12-3000" min="01-01-1000" value="<%=endDate %>" class="form-control col-sm-2">	
 									
 								 	 <label class="col-sm-0 col-form-label" style="margin-left: 0.5rem;margin-right: 0.5rem;">User:</label> 
-										<select class="form-control col-sm-2" name="user">
+										<select class="form-control col-sm-2" id="user" name="user">
 											<option value="0" selected>All</option>
 											<%
 												rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1");
@@ -194,8 +194,7 @@
 									</select>
 									
 									<button type="submit" title="Search" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();"><i class="fas fa-search"></i></button>
-									<button type="button" title="Export"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Status Report.csv');"><i class="fas fa-file-download"></i></button>
-									<button type="button" title="Export pdf"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToPDF();"><i class="fas fa-file-download"></i></button>
+									<button type="button" title="Export as PDF"  class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToPDF();"><i class="fas fa-file-pdf"></i></button>
 									<a href="../View/StatusReport.jsp"><button type="button" title="Reset"  class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
 								</form>
 								
@@ -295,9 +294,9 @@
 							</tbody>
 						</table>
 						<hr />
-						<h2 style="text-align: center;">Dealer Report</h2>
-						<p>Name: Calnar Business System</p>
-						<p>Period: 12/12/2020 - 12/12/2020</p>
+						<h2 style="text-align: center;">Support Status Report</h2>
+						<p>Status: <span id="pdfStatus">All</span></p>
+						<p>Period: <span id="pdfStartDate">##/##/####</span> - <span id="pdfEndDate">##/##/####</span></p>
 
 						<table style="font-family: arial, sans-serif;  border-collapse: collapse;  width: 100%;">
 								<colgroup>
@@ -312,7 +311,6 @@
 						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Terminal Details</th>
 						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Issue</th>
 						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Possible Solutions</th>
-						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Description</th>
 						      <th style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;">Status</th>
 						    </tr>
 						  </thead>
@@ -340,7 +338,6 @@
 										
 										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("issue")%></td><%
 										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("solution")%></td><%
-										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("description")%></td><%
 										%><td style="border: 1px solid #dddddd;  text-align: left;  padding: 8px;"><%=rsExport.getString("status")%></td><%
 										%></tr><%
 									}
@@ -417,6 +414,13 @@ function downloadCSV(csv, filename) {
 	downloadLink.click();
 }
 
+// PDF Report Strats
+$(document).ready(function() {   
+	document.getElementById("pdfStatus").innerHTML = $("#status option:selected").text();
+	document.getElementById("pdfStartDate").innerHTML = $('#startDate').val();;
+	document.getElementById("pdfEndDate").innerHTML = $('#endDate').val();
+});
+
 function exportTableToPDF() {
 	
 	var sTable = document.getElementById('tab').innerHTML;
@@ -433,26 +437,8 @@ function exportTableToPDF() {
     
     
 }
+//PDF Report Ends
 
-	function exportTableToCSV(filename) {
-
-		var csv = [];
-		var rows = document.getElementById('exportTable').getElementsByTagName(
-				'tr');
-
-		for (var i = 0; i < rows.length; i++) {
-			var row = [];
-			var cols = rows[i].querySelectorAll("td, th");
-
-			for (var j = 0; j < cols.length; j++) {
-				row.push(cols[j].innerText);
-			}
-
-			csv.push(row.join(","));
-		}
-
-		downloadCSV(csv.join("\n"), filename);
-	}
 </script>
 <% 
 } catch (Exception e) {
