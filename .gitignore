@@ -1,3 +1,2 @@
 .classpath
-\src\config\DBConfig.java
-\WebContent\View\login.jsp
+src/config/DBConfig.java
