@@ -1,9 +1,8 @@
 package web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDate;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,7 +45,30 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("userName",rs.getString("name"));
                 session.setAttribute("userEmail",rs.getString("email"));
                 
-                response.sendRedirect("View/Index.jsp");
+                ResultSet rsLicence = loginDao.validateLicence();
+                
+                //Licence
+                if (rsLicence.next()) {
+
+                	LocalDate licenceDate = rsLicence.getDate("expireDate").toLocalDate();
+                	LocalDate todayDate = java.time.LocalDate.now();
+                	
+                	System.err.println(licenceDate);
+                	System.out.println(todayDate); 
+                	
+                	if(todayDate.compareTo(licenceDate) <= 0) {
+                		
+                		response.sendRedirect("View/Index.jsp");
+                		
+                	} else {
+                		response.getWriter().write("<html><body><script>alert('Your licence has been expired! Please email on jaysolanki46@gmail.com for new key.')</script></body></html>");
+                    	RequestDispatcher rd = request.getRequestDispatcher("View/login.jsp");
+                    	rd.include(request, response);
+                	}
+                }
+                
+                
+                
             } else {
             	
             	response.getWriter().write("<html><body><script>alert('Invalid username or password!')</script></body></html>");

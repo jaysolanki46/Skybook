@@ -1,5 +1,11 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="java.time.*" %>
+<%@ page language="java" import="java.time.format.*" %>
+<%@ page language="java" import="config.DBConfig" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page session="true" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -13,6 +19,18 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <%
 	session.invalidate();
+	Connection dbConn = DBConfig.licenceConnection(); ;
+	Statement st = null;
+	ResultSet rs = null;
+	st = dbConn.createStatement();
+	String expireDate = "";
+
+	rs = st.executeQuery("select * from Licence where status = 1");
+	while(rs.next()) {
+		
+		LocalDate licenceDate = rs.getDate("expireDate").toLocalDate();
+		expireDate = licenceDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+	}
 %>
 </head>
 <body style="background: #0066cb; margin-top:10rem;">
@@ -61,13 +79,17 @@
                                         <div class="form-group">
                                             <input type="password" class="form-control" placeholder="Password *" value="" name="password"/>
                                         </div>
-                                          <!--  While maintanance <input type="submit" class="btnRegister" data-toggle="modal" data-target="#myModal" value="Secure Login" /> -->
                                           <input type="submit" class="btnRegister" value="Secure Login" />
                                     </div>
                                 </div>
                                 </form>
-                                
-                                <!-- Modal -->
+                            </div>
+                        </div>
+                    </div>
+                    		  <!--  While maintanance -->
+                    		  <div class="row" style="width: 100%">
+                    		  <a style="margin-left: auto; color: white;">Licence Expires: <%=expireDate %></a>
+                    		  <a style="margin-left: auto; color: white; text-decoration: underline; cursor: pointer" data-toggle="modal" data-target="#myModal">Extend Licence Now!</a>
 							  <div class="modal fade" id="myModal" role="dialog">
 							    <div class="modal-dialog modal-lg">
 							      <div class="modal-content">
@@ -81,10 +103,7 @@
 							      </div>
 							    </div>
 							  </div>
-							  
-                            </div>
-                        </div>
-                    </div>
+							  </div>
                 </div>
 
             </div>

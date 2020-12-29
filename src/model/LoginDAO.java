@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import bean.Licence;
 import bean.User;
 import config.DBConfig; 
 
@@ -54,4 +55,24 @@ public class LoginDAO {
         
 		return rs;
     }
+	
+	public ResultSet validateLicence() throws ClassNotFoundException {
+
+        try {
+        	new DBConfig();
+    		cnn = DBConfig.licenceConnection();
+    		
+            PreparedStatement preparedStatement =  cnn.prepareStatement("select * from Licence where status = ?");
+            preparedStatement.setBoolean(1, true);
+            
+            System.out.println(preparedStatement);
+            rs = preparedStatement.executeQuery();
+            
+        } catch (SQLException e) {
+           	e.printStackTrace();
+        }
+        
+		return rs;
+    }
+	
 }
