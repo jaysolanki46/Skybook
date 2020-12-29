@@ -1,2 +1,3 @@
 .classpath
 src/config/DBConfig.java
+build/*.class
