@@ -58,8 +58,13 @@
 	<div class="card center_div">
 	
 		<div class="card-header"
-			style="color: white; background-color: #0066cb;">
+			style="color: white; background-color: #0066cb; display: flex; justify-content: space-around;">
 			<h5 style="color: white;">Call #<%=rs.getString("id") %> [<%=rs.getString("log_date") %>]</h5>
+			<div style="margin-left: auto;">
+				<span>Attendant: <%=rs.getString("user") %></span>
+			</div>
+			
+			
 			<input type="hidden" name="hiddenLogID" value=<%=rs.getString("id") %>>
 			<input type="hidden" id="user" name="user" value='<%=userID%>' />
 			<input type="hidden" id="userName" name="userName" value='<%=username%>'/>
@@ -182,7 +187,7 @@
 				<div class="card mb-3">
 					<div class="card-body" style="padding: 10px" id="buttonDiv">
 						<a href="../View/Index.jsp"><input type="button" class="btn btn-danger float-right" style="margin-left:10px;" value="Cancel"></a>
-						<input type="button" class="btn btn-skyzer float-right" value="Update" onclick="validate()">
+						<input type="button" class="btn btn-primary float-right" value="Update" onclick="validate()">
 						
 					</div>
 				</div>
@@ -231,7 +236,7 @@
 					</div>
 					
 					<div class="card bg-light mb-3" style="max-width: 26rem; <% if(rs.getString("follow_up_id") == null) {  %> display:none; <%   } %>" id="followUp">
-						<h5 class="card-header" style="background-color: transparent;">Follow Up</h5>
+						<h5 class="card-header" style="background-color: transparent;">Follow Up (SBT - <%=rs.getString("follow_up_id") %>)</h5>
 						<input type="hidden" name="hiddenFollowUpID" value=<%=rs.getString("follow_up_id") %>>
 						<input type="date" id="followUpDate" name="followUpDate" max="31-12-3000" min="01-01-1000" class="form-control col-sm-10 center_div" value=<%=rs.getString("follow_up_date") %>>						
 						<input type="time" id="followUpTime" name="followUpTime" min="00:00" max="23:59" class="form-control col-sm-10 center_div" value=<%=rs.getString("follow_up_time") %>>

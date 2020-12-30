@@ -47,7 +47,7 @@ var myBarChart = new Chart(ctx, {
   data: {
 	labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [{
-      label: "Revenue",
+      label: "Calls",
       backgroundColor: "#22994D",
       hoverBackgroundColor: "#2e59d9",
       borderColor: "#4e73df",
@@ -82,7 +82,7 @@ var myBarChart = new Chart(ctx, {
         ticks: {
           maxTicksLimit: 7,
           padding: 10,
-          // Include a dollar sign in the ticks
+
           callback: function(value, index, values) {
             return '' + number_format(value);
           }

@@ -76,21 +76,22 @@ var myLineChart = new Chart(ctx, {
     scales: {
       xAxes: [{
         time: {
-          unit: 'date'
+          unit: 'month'
         },
         gridLines: {
           display: false,
           drawBorder: true
         },
         ticks: {
-          maxTicksLimit: 15
+          maxTicksLimit: 12
         }
       }],
       yAxes: [{
         ticks: {
+          min: 0,
           maxTicksLimit: 10,
           padding: 10,
-          // Include a dollar sign in the ticks
+
           callback: function(value, index, values) {
             return '' + number_format(value);
           }

@@ -117,8 +117,8 @@
 					</div>
 					
 					<!-- Table -->
-					<div class="table-wrap">
-					<table class="table table-bordered">
+					<div class="table-wrap" style="margin: 1rem;">
+					<table class="table table-bordered" id="dataTable">
 					  <thead>
 					    <tr>
 					      <th scope="col">#Call</th>
@@ -157,7 +157,7 @@
                                         "LEFT JOIN releases as rel ON l.current_release = rel.id " +
                                         clause + 
 		                         		" ORDER BY l.id DESC");
-					
+					    
 								while (rs.next()) {
 									
 									entries += 1;

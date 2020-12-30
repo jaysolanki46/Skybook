@@ -7,31 +7,27 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page session="true" %>
-<html lang="en">
+<html>
 <% try { %>
 <head>
+<meta charset="ISO-8859-1">
+<title>Skybook - Dashboard</title>
+<%@include  file="../header.html" %>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Skybook - Dashboard</title>
-
-    <%@include  file="ADMIN-WEB-INF/header.html" %>
-    <%
-    	final int RESOLVED = 1;
-    
-		String adminUserID = "";
-		String adminUserName = "";
-		String adminUserEmail = "";
-		if(session.getAttribute("adminUserName") != null) {
-			adminUserID = session.getAttribute("adminUserID").toString();
-			adminUserName = session.getAttribute("adminUserName").toString();
-			adminUserEmail = session.getAttribute("adminUserEmail").toString();
+	<%
+		final int RESOLVED = 1;
+	
+		String userEmail = "";
+		String username = "";
+		String userID = "";
+		Integer entries = 0;
+		
+		if(session.getAttribute("userName") != null) {
+			userEmail = session.getAttribute("userEmail").toString();
+			username = session.getAttribute("userName").toString();
+			userID = session.getAttribute("userID").toString();
 		} else {
-			response.sendRedirect("../login.jsp");
+			response.sendRedirect("../View/login.jsp");
 			throw new Exception("User session timed out!");
 		}
 		
@@ -39,6 +35,39 @@
 		Statement st = null;
 		ResultSet rs = null;
 		st = dbConn.createStatement();
+		
+		// TOTAL CALLS
+		rs = null;
+		rs = st.executeQuery("SELECT COUNT(*) as totalCalls FROM logs");
+		int totalCalls = 0;
+		while(rs.next()) {
+			totalCalls = rs.getInt("totalCalls");
+		}
+				
+		
+		// CALLS (CURRENT MONTHLY)
+		rs = null;
+		rs = st.executeQuery("SELECT COUNT(*) as currentMonthCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = MONTH(CURRENT_DATE)");
+		int currentMonthCount = 0;
+		while(rs.next()) {
+			currentMonthCount = rs.getInt("currentMonthCount");
+		}
+		
+		// OUTSTANDING ISSUES (CURRENT MONTHLY)
+		rs = null;
+		rs = st.executeQuery("SELECT COUNT(*) as outstandingIssuesCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = MONTH(CURRENT_DATE) AND status != " + RESOLVED);
+		int outstandingIssuesCount = 0;
+		while(rs.next()) {
+			outstandingIssuesCount = rs.getInt("outstandingIssuesCount");
+		}
+		
+		// RESOLVED ISSUES (CURRENT MONTHLY)
+		rs = null;
+		rs = st.executeQuery("SELECT COUNT(*) as resolvedIssuesCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = MONTH(CURRENT_DATE) AND status = " + RESOLVED);
+		int resolvedIssuesCount = 0;
+		while(rs.next()) {
+			resolvedIssuesCount = rs.getInt("resolvedIssuesCount");
+		}
 		
 		// CALLS (ANNUAL/2020)
 		rs = null;
@@ -48,29 +77,29 @@
 			currentYearCount = rs.getInt("currentYearCount");
 		}
 		
-		// CALLS (MONTHLY)
+		// CALLS (LAST MONTHLY)
 		rs = null;
 		rs = st.executeQuery("SELECT COUNT(*) as lastMonthCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)");
 		int lastMonthCount = 0;
 		while(rs.next()) {
 			lastMonthCount = rs.getInt("lastMonthCount");
+		}		
+		
+		// OUTSTANDING ISSUES (LAST MONTHLY)
+		rs = null;
+		rs = st.executeQuery("SELECT COUNT(*) as lastMonthOutstandingCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND status != " + RESOLVED);
+		int lastMonthOutstandingCount = 0;
+		while(rs.next()) {
+			lastMonthOutstandingCount = rs.getInt("lastMonthOutstandingCount");
 		}
 		
-		// OUTSTANDING ISSUES
+		// RESOLVED ISSUES (LAST MONTHLY)
 		rs = null;
-		rs = st.executeQuery("SELECT COUNT(*) as outstandingIssuesCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND status != " + RESOLVED);
-		int outstandingIssuesCount = 0;
+		rs = st.executeQuery("SELECT COUNT(*) as lastMonthResolvedCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND status = " + RESOLVED);
+		int lastMonthResolvedCount = 0;
 		while(rs.next()) {
-			outstandingIssuesCount = rs.getInt("outstandingIssuesCount");
-		}
-		
-		// RESOLVED ISSUES
-		rs = null;
-		rs = st.executeQuery("SELECT COUNT(*) as resolvedIssuesCount FROM logs WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND status = " + RESOLVED);
-		int resolvedIssuesCount = 0;
-		while(rs.next()) {
-			resolvedIssuesCount = rs.getInt("resolvedIssuesCount");
-		}
+			lastMonthResolvedCount = rs.getInt("lastMonthResolvedCount");
+		}		
 		
 		// Support Calls Overview (2020)
 		rs = null;
@@ -108,7 +137,7 @@
 		
 		// Attendees Overview (MONTHLY)
 		rs = null;
-		rs = st.executeQuery("select u.name as usr, count(l.id) as cnt from users as u LEFT JOIN logs as l ON u.id = l.user WHERE YEAR(log_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(log_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) group by usr");
+		rs = st.executeQuery("select u.name as usr, count(l.id) as cnt from users as u LEFT JOIN logs as l ON u.id = l.user WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = MONTH(CURRENT_DATE) group by usr");
 		int jayMonthCalls = 0;
 		int ashenMonthCalls = 0;
 		int kishanMonthCalls = 0;
@@ -162,36 +191,107 @@
 	%>
 
 </head>
-
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-      	<%@include  file="ADMIN-WEB-INF/sidebar.html" %>
-      
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-               	<!-- Top Bar -->
-                <%@include  file="ADMIN-WEB-INF/topbar.html" %>
-				<!-- Top Bar End-->
+<body>
+<%@include  file="../navbar.html" %>
+	<div class="card center_div"  >
+	
+	 	<div class="card-header" style="color: white; background-color: #0066cb; ">
+			<h5 style="color: white;">Dashboard</h5>
+		</div>
+		
+		<div class="card-group">
+			<div class="card-body" style="width:66%; padding: 0px;">
+				<!-- Begin -->
+				 <!-- Main Content -->
+            <div id="content"  style="margin-top: 10px;">
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </div>
-
                     <!-- Content Row -->
                     <div class="row">
 
- 						<!-- Earnings (Monthly) Card Example -->
+ 						<!-- TOTAL CALLS -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Total Calls At Skyzer</div>
+                                            <div class="h5 mb-0 font-weight-bold"><%=totalCalls %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-layer-group fa-2x" style="color: #1cc88a;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CALLS (CURRENT MONTH/2020) -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                	Calls (<%=LocalDate.now().getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=currentMonthCount %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x" style="color: #0066cb;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+
+                        <!-- OUTSTANDING ISSUES (CURRENT MONTH/2020) -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Outstanding Issues (<%=LocalDate.now().getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><%=outstandingIssuesCount %></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-bug fa-2x" style="color: #36b9cc;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RESOLVED ISSUES (CURRENT MONTH/2020) -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Resolved Issues (<%=LocalDate.now().getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=resolvedIssuesCount %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-check fa-2x" style="color: #f6c23e;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+					<div class="row">
+						<!-- CALLS (ANNUAL/2020) -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
@@ -208,17 +308,16 @@
                                 </div>
                             </div>
                         </div>
-                     </div>
-                     
-                     <div class="row">   
-                        <!-- Earnings (Monthly) Card Example -->
+					
+					
+						<!-- CALLS (LAST MONTH/2020) -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                	Total Calls (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
+                                                	Calls (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><%=lastMonthCount %></div>
                                         </div>
                                         <div class="col-auto">
@@ -229,7 +328,9 @@
                             </div>
                         </div>
 
-                        <!-- Earnings (Monthly) Card Example -->
+                       
+
+                        <!-- OUTSTANDING ISSUES (LAST MONTH/2020) -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
@@ -239,7 +340,7 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><%=outstandingIssuesCount %></div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><%=lastMonthOutstandingCount %></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -251,7 +352,7 @@
                             </div>
                         </div>
 
-                        <!-- Pending Requests Card Example -->
+                        <!-- RESOLVED ISSUES (LAST MONTH/2020) -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
@@ -259,7 +360,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Resolved Issues (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=resolvedIssuesCount %></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=lastMonthResolvedCount %></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-clipboard-check fa-2x" style="color: #f6c23e;"></i>
@@ -269,6 +370,7 @@
                             </div>
                         </div>
                     </div>
+					</div>
 
                     <!-- Content Row -->
 
@@ -309,7 +411,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Attendees Overview (<%=LocalDate.now().minusMonths(1).getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Attendees Overview (<%=LocalDate.now().getMonth() + "/" + Calendar.getInstance().get(Calendar.YEAR) %>)</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -346,7 +448,7 @@
                     <!-- Bar Chart -->
 					<div class="card shadow mb-4">
 						<div class="card-header py-3">
-							<h6 class="m-0 font-weight-bold text-primary">Kiwibank Calls Chart</h6>
+							<h6 class="m-0 font-weight-bold text-primary">Kiwibank Calls Overview (<%=Calendar.getInstance().get(Calendar.YEAR) %>)</h6>
 							 		<input type="hidden" id="janKiwiMonthCalls" value=<%=janKiwiMonthCalls %>>
                                     <input type="hidden" id="febKiwiMonthCalls" value=<%=febKiwiMonthCalls %>>
                                     <input type="hidden" id="marKiwiMonthCalls" value=<%=marKiwiMonthCalls %>>
@@ -373,42 +475,57 @@
                 <!-- /.container-fluid -->
 
             </div>
-            <!-- End of Main Content -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-   <%@include  file="ADMIN-WEB-INF/footer.html" %>
-
+            <!-- End of Main Content -->	
+		
+			</div>
+		</div>
+	</div>
+	<footer id="sticky-footer" class="py-0 bg-dark text-white-50 fixed-bottom">
+		    
+		 <div style="color: white; background-color: #0066cb; display: flex; justify-content: space-around">
+			<div>
+				<img alt="" width="15px" src="../IMAGES/user.svg">
+				<small style="color: white;"><%=username %></small>
+				
+				<small style="color: white;">></small>
+				<small style="color: white;">Reports</small>
+				<small style="color: white;">></small>
+				<a href=""><small style="color: white;">Dashboard</small></a>
+				
+			</div>
+			<div style="color: white; margin-left: auto; margin-right: 5px;">
+				
+				<small >
+					<img alt="" width="15px" src="../IMAGES/clock.svg">
+					<span id="clock"></span>
+				</small>
+			</div>
+			
+		</div>
+	  </footer>
+	<%@include  file="../footer.html" %>
 </body>
+
+<script type="text/javascript">
+var myVar=setInterval(function () {myTimer()}, 1000);
+var counter = 0;
+
+
+function myTimer() {
+	var now = new Date(),	 
+    months = ['January', 'February', '...']; 
+    time = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds(), 
+
+    date = [now.getDate(), 
+            now.getMonth() + 1,
+            now.getFullYear()].join('-');
+
+	document.getElementById('clock').innerHTML = [date, time].join(' / ');
+	
+	setTimeout(myTimer, 1000);//This method will call for every second
+}
+
+</script>
 <% 
 } catch (Exception e) {
 	

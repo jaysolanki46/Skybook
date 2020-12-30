@@ -30,6 +30,8 @@ who is talking to whom and when.
 
 # Screenshots
 
+![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/0.1%20Dashboard.JPG "Dashboard")
+
 ![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/1.0%20Book.png "Customer Call Book")
 
 ![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/2.0%20History.JPG "Call History")

@@ -196,7 +196,7 @@
 				
 				<div class="card mb-3">
 					<div class="card-body" style="padding: 10px">
-						<h5 class="card-title">Description</h5>
+						<h5 class="card-title">Unknown Issue</h5>
 						<div class="form-group row">
 						
 							<label class="col-sm-2 col-form-label">Issue:</label>
@@ -217,7 +217,7 @@
 					<div class="card-body" style="padding: 10px">
 						
 						<input type="reset" class="btn btn-danger float-right" style="margin-left:10px;" value="Cancel">
-						<input type="button" class="btn btn-skyzer float-right" value="Complete" onclick="validate()">
+						<input type="button" class="btn btn-primary float-right" value="Complete" onclick="validate()">
 						
 					</div>
 				</div>
