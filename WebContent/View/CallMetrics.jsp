@@ -53,6 +53,10 @@
 			clause = "WHERE MONTH(log_date) = " + filteredMonth;
 			selectedMonth = Integer.valueOf(filteredMonth);
 		} else if (filteredMonth != null && Integer.valueOf(filteredMonth) == 0) {
+			//clause = "WHERE YEAR(log_date) = YEAR(CURRENT_DATE)";
+			clause ="WHERE 1=1";
+			selectedMonth = Integer.valueOf(filteredMonth);
+		} else if (filteredMonth != null && Integer.valueOf(filteredMonth) == -1) {
 			clause = "WHERE YEAR(log_date) = YEAR(CURRENT_DATE)";
 			selectedMonth = Integer.valueOf(filteredMonth);
 		} else {
@@ -126,6 +130,7 @@
 				 <form action="../View/CallMetrics.jsp" method="post">
 					 <select class="custom-select" name="month" onchange="this.form.submit();">
 						<option value="0" <% if(selectedMonth == 0) {	%> selected <% } %>>All</option>
+						<option value="-1" <% if(selectedMonth == -1) {	%> selected <% } %>>This Year</option>
 						<option value="1" <% if(selectedMonth == 1) {	%> selected <% } %>>Jan</option>
 						<option value="2" <% if(selectedMonth == 2) {	%> selected <% } %>>Feb</option>
 						<option value="3" <% if(selectedMonth == 3) {	%> selected <% } %>>Mar</option>

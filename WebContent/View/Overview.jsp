@@ -75,7 +75,7 @@
 		rs = null;
 		rs = st.executeQuery("select u.name as usr, count(l.id) as cnt from users as u LEFT JOIN logs as l ON u.id = l.user WHERE YEAR(log_date) = YEAR(CURRENT_DATE) group by usr");
 		int jayMonthCalls = 0;
-		int ashenMonthCalls = 0;
+		int axitaMonthCalls = 0;
 		int kishanMonthCalls = 0;
 		int henryMonthCalls = 0;
 		int nileshMonthCalls = 0;
@@ -85,7 +85,7 @@
 			int count =   rs.getInt("cnt");
 				
 			if(usr.equalsIgnoreCase("Jay")) jayMonthCalls =  count;
-			if(usr.equalsIgnoreCase("Ashen")) ashenMonthCalls =  count;
+			if(usr.equalsIgnoreCase("Axita")) axitaMonthCalls =  count;
 			if(usr.equalsIgnoreCase("Kishan")) kishanMonthCalls =  count;
 			if(usr.equalsIgnoreCase("Henry")) henryMonthCalls =  count;
 			if(usr.equalsIgnoreCase("Nilesh")) nileshMonthCalls =  count;
@@ -196,8 +196,8 @@
                                             <input type="hidden" id="jayMonthCalls" value=<%=jayMonthCalls %>>
                                         </span>
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Ashen
-                                            <input type="hidden" id="ashenMonthCalls" value=<%=ashenMonthCalls %>>
+                                            <i class="fas fa-circle text-success"></i> Axita
+                                            <input type="hidden" id="axitaMonthCalls" value=<%=axitaMonthCalls %>>
                                         </span>
                                         <span class="mr-2">
                                             <i class="fas fa-circle text-info"></i> Kishan
