@@ -41,6 +41,7 @@
 						<img src="http://10.63.192.13:8080/Skybook/IMAGES/pos-terminal.svg" alt=""/>
                         <h3>SKYBOOK</h3>
                         <p>MANAGES SKYZER SUPPORT CALLS</p>
+                        <span>Designed & Hosted by <br/><a href="http://www.solankiinfosolutions.com/" style="color: white;">Jay Solanki</a></span>
                     </div>
                     <div class="col-md-9 register-right">
                         <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
