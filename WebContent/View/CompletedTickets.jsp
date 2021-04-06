@@ -100,7 +100,7 @@
 							    {   
 									%>
 							    		 <!--  Ticket card -->
-										  <div class="card-deck col mb-4" style="min-width:31rem;  max-width: 31rem;">
+										  <div class="card-deck col mb-4" style="min-width:30rem;  max-width: 30rem;">
 										    <div class="card" style="background-color: #f4f5f7;">
 										      <div class="card-header bg-transparent" style="border-color: transparent; display: flex; justify-content: space-around">
 										      <h5>SBT - <%=rs.getString("id") %> 
@@ -152,27 +152,6 @@
 			</div>
 		</div>
 	</div>
-	<footer id="sticky-footer" class="py-0 bg-dark text-white-50 fixed-bottom">
-		    
-		 <div style="color: white; background-color: #0066cb; display: flex; justify-content: space-around">
-			<div>
-				<img alt="" width="15px" src="../IMAGES/user.svg">
-				<small style="color: white;"><%=username %></small>
-				
-				<small style="color: white;">></small>
-				<a href=""><small style="color: white;">Completed Tickets</small></a>
-				
-			</div>
-			<div style="color: white; margin-left: auto; margin-right: 5px;">
-				
-				<small >
-					<img alt="" width="15px" src="../IMAGES/clock.svg">
-					<span id="clock"></span>
-				</small>
-			</div>
-			
-		</div>
-	  </footer>
 	<%@include  file="../footer.html" %>
 	<%
 			if (session.getAttribute("updateStatus") != null) {

@@ -4682,8 +4682,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 .breadcrumb {
 	display: flex;
 	flex-wrap: wrap;
-	padding: .75rem 1rem;
-	margin-bottom: 1rem;
+	padding: 0.50rem;
 	list-style: none;
 	background-color: #eaecf4;
 	border-radius: .35rem
@@ -7512,7 +7511,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover
 }
 
 .fixed-bottom {
-	position: fixed;
+	position: absolute;
 	right: 0;
 	bottom: 0;
 	left: 0;
@@ -11698,7 +11697,8 @@ px
 }
 
 footer.sticky-footer {
-	padding: 2rem 0;
+	margin-bottom: -3rem;
+	padding: 1rem 0;
 	flex-shrink: 0
 }
 

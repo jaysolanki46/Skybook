@@ -252,29 +252,6 @@
 			</div>
 		</div>
 	</div>
-	<footer id="sticky-footer" class="py-0 bg-dark text-white-50 fixed-bottom">
-		    
-		 <div style="color: white; background-color: #0066cb; display: flex; justify-content: space-around">
-			<div>
-				<img alt="" width="15px" src="../IMAGES/user.svg">
-				<small style="color: white;"><%=username %></small>
-				
-				<small style="color: white;">></small>
-				<small style="color: white;">Dashboard</small>
-				<small style="color: white;">></small>
-				<a href=""><small style="color: white;">Overview</small></a>
-				
-			</div>
-			<div style="color: white; margin-left: auto; margin-right: 5px;">
-				
-				<small >
-					<img alt="" width="15px" src="../IMAGES/clock.svg">
-					<span id="clock"></span>
-				</small>
-			</div>
-			
-		</div>
-	  </footer>
 	<%@include  file="../footer.html" %>
 </body>
 
