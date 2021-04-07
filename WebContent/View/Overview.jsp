@@ -93,7 +93,7 @@
 		
 		// Support Calls Overview
 		rs = null;
-		rs = st.executeQuery("select dealer, date_format(log_date,'%M') as month ,count(*) as cnt from logs WHERE dealer = "+ KIWIBANK +" group by year(log_date),month(log_date) order by year(log_date),month(log_date)");
+		rs = st.executeQuery("select dealer, date_format(log_date,'%M') as month ,count(*) as cnt from logs WHERE dealer = "+ KIWIBANK +" and YEAR(log_date) = YEAR(CURRENT_DATE) group by year(log_date),month(log_date) order by year(log_date),month(log_date)");
 		int janKiwiMonthCalls = 0;
 		int febKiwiMonthCalls = 0;
 		int marKiwiMonthCalls = 0;

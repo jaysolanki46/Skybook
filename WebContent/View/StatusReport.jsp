@@ -157,7 +157,7 @@
 										<select class="form-control col-sm-2" id="user" name="user">
 											<option value="0" selected>All</option>
 											<%
-												rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1");
+												rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1 and is_active = 1");
 						
 											while (rsUser.next()) {
 											%>

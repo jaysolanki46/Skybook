@@ -62,7 +62,7 @@
 					 <select class="custom-select" name="user" onchange="this.form.submit();">
 						<option value="0">All</option>
 						<%
-						rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1");
+						rsUser = stUser.executeQuery("SELECT * FROM users where is_support = 1 and is_active = 1");
 	
 						while (rsUser.next()) {
 						%>
