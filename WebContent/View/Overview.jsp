@@ -39,7 +39,7 @@
 			
 		// Support Calls Overview
 		rs = null;
-		rs = st.executeQuery("select date_format(log_date,'%M') as month ,count(*) as cnt from logs group by year(log_date),month(log_date) order by year(log_date),month(log_date)");
+		rs = st.executeQuery("select date_format(log_date,'%M') as month ,count(*) as cnt from logs where date_format(log_date,'%Y') = '2021' group by year(log_date), month(log_date) order by year(log_date), month(log_date)");
 		String janMonthCalls = null;
 		String febMonthCalls = null;
 		String marMonthCalls = null;
@@ -74,7 +74,7 @@
 		// Attendees Overview
 		rs = null;
 		rs = st.executeQuery("select u.name as usr, count(l.id) as cnt from users as u LEFT JOIN logs as l ON u.id = l.user WHERE YEAR(log_date) = YEAR(CURRENT_DATE) group by usr");
-		int jayMonthCalls = 0;
+		int dhavinderMonthCalls = 0;
 		int axitaMonthCalls = 0;
 		int kishanMonthCalls = 0;
 		int henryMonthCalls = 0;
@@ -84,7 +84,7 @@
 			String usr = rs.getString("usr");
 			int count =   rs.getInt("cnt");
 				
-			if(usr.equalsIgnoreCase("Jay")) jayMonthCalls =  count;
+			if(usr.equalsIgnoreCase("Dhavinder")) dhavinderMonthCalls =  count;
 			if(usr.equalsIgnoreCase("Axita")) axitaMonthCalls =  count;
 			if(usr.equalsIgnoreCase("Kishan")) kishanMonthCalls =  count;
 			if(usr.equalsIgnoreCase("Henry")) henryMonthCalls =  count;
@@ -192,8 +192,8 @@
                                     </div>
                                     <div class="mt-4 text-center small">
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Jay
-                                            <input type="hidden" id="jayMonthCalls" value=<%=jayMonthCalls %>>
+                                            <i class="fas fa-circle text-primary"></i> Dhavinder
+                                            <input type="hidden" id="dhavinderMonthCalls" value=<%=dhavinderMonthCalls %>>
                                         </span>
                                         <span class="mr-2">
                                             <i class="fas fa-circle text-success"></i> Axita

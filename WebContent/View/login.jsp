@@ -41,7 +41,7 @@
 						<img src="http://10.63.192.13:8080/Skybook/IMAGES/pos-terminal.svg" alt=""/>
                         <h3>SKYBOOK</h3>
                         <p>MANAGES SKYZER SUPPORT CALLS</p>
-                        <span>Designed & Hosted by <br/><a href="http://www.solankiinfosolutions.com/" style="color: white;">Jay Solanki</a></span>
+                        <span>Designed & Hosted by <br/><a href="https://www.linkedin.com/in/jaykumar-solanki" style="color: white;">Jay Solanki</a></span>
                     </div>
                     <div class="col-md-9 register-right">
                         <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
@@ -108,7 +108,14 @@
                 </div>
 
             </div>
-	<%@include  file="../footer.html" %>
 </form>
+<script
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+	integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+	crossorigin="anonymous"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+	integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+	crossorigin="anonymous"></script>
 </body>
 </html>

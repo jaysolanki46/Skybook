@@ -50,7 +50,7 @@
 		Integer selectedMonth = month;
 		
 		if(filteredMonth != null && Integer.valueOf(filteredMonth) > 0) {
-			clause = "WHERE MONTH(log_date) = " + filteredMonth;
+			clause = "WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = " + filteredMonth;
 			selectedMonth = Integer.valueOf(filteredMonth);
 		} else if (filteredMonth != null && Integer.valueOf(filteredMonth) == 0) {
 			//clause = "WHERE YEAR(log_date) = YEAR(CURRENT_DATE)";
@@ -60,7 +60,7 @@
 			clause = "WHERE YEAR(log_date) = YEAR(CURRENT_DATE)";
 			selectedMonth = Integer.valueOf(filteredMonth);
 		} else {
-			clause = "WHERE MONTH(log_date) = " + month;
+			clause = "WHERE YEAR(log_date) = YEAR(CURRENT_DATE) AND MONTH(log_date) = " + month;
 		}
 		
 		
