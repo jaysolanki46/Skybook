@@ -56,7 +56,7 @@ public class LoginDAO {
 		return rs;
     }
 	
-	public ResultSet validateLicence() throws ClassNotFoundException {
+	/*public ResultSet validateLicence() throws ClassNotFoundException {
 
         try {
         	new DBConfig();
@@ -73,6 +73,6 @@ public class LoginDAO {
         }
         
 		return rs;
-    }
+    }*/
 	
 }

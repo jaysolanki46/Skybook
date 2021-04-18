@@ -19,6 +19,8 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <%
 	session.invalidate();
+	
+	/* Licence
 	Connection dbConn = DBConfig.licenceConnection(); ;
 	Statement st = null;
 	ResultSet rs = null;
@@ -30,7 +32,7 @@
 		
 		LocalDate licenceDate = rs.getDate("expireDate").toLocalDate();
 		expireDate = licenceDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
-	}
+	}*/
 %>
 </head>
 <body style="background: #0066cb; margin-top:10rem;">
@@ -89,8 +91,8 @@
                     </div>
                     		  <!--  While maintanance -->
                     		  <div class="row" style="width: 100%">
-                    		  <a style="margin-left: auto; color: white;">Licence Expires: <%=expireDate %></a>
-                    		  <a style="margin-left: auto; color: white; text-decoration: underline; cursor: pointer" data-toggle="modal" data-target="#myModal">Extend Licence Now!</a>
+                    		  <!-- <a style="margin-left: auto; color: white;">Licence Expires: <%//expireDate %></a>
+                    		  <a style="margin-left: auto; color: white; text-decoration: underline; cursor: pointer" data-toggle="modal" data-target="#myModal">Extend Licence Now!</a>-->
 							  <div class="modal fade" id="myModal" role="dialog">
 							    <div class="modal-dialog modal-lg">
 							      <div class="modal-content">

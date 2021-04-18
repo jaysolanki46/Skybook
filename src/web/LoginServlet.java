@@ -45,10 +45,13 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("userName",rs.getString("name"));
                 session.setAttribute("userEmail",rs.getString("email"));
                 
-                ResultSet rsLicence = loginDao.validateLicence();
+                response.sendRedirect("View/Index.jsp");
+                
+                //ResultSet rsLicence = loginDao.validateLicence();
+                
                 
                 //Licence
-                if (rsLicence.next()) {
+                /*if (rsLicence.next()) {
 
                 	LocalDate licenceDate = rsLicence.getDate("expireDate").toLocalDate();
                 	LocalDate todayDate = java.time.LocalDate.now();
@@ -65,7 +68,7 @@ public class LoginServlet extends HttpServlet {
                     	RequestDispatcher rd = request.getRequestDispatcher("View/login.jsp");
                     	rd.include(request, response);
                 	}
-                }
+                }*/
                 
                 
                 
