@@ -227,6 +227,23 @@
 			<!--  side card -->
 			<div class="card" style="width:25%">
 				<div class="card-body" >
+				
+					<div class="card bg-light mb-3" style="max-width: 26rem;">
+						<h5 class="card-header" style="background-color: transparent;">Call Duration</h5>
+						<div class="card-body row">
+							<div class="form-group col-sm-6">
+							    <label for="callDurationHR">Hours</label>
+								<input type="number" id="callDurationHR" name="callDurationHR" min="0"  placeholder="Hr"
+								 class="form-control col-sm-12" value=00>
+							 </div>	
+							 <div class="form-group col-sm-6">
+							    <label for="callDurationMI">Minutes</label>
+								<input type="number" id="callDurationMI" name="callDurationMI" min="0" max="59" placeholder="Mi" 
+								class="form-control col-sm-12" value=00>
+							 </div>		
+						</div>
+					</div>
+				
 					<div class="card bg-light mb-3" style="max-width: 26rem;">
 						<h5 class="card-header" style="background-color: transparent;">Status</h5>
 						<div class="row" style="margin-left: 0px;">
@@ -419,7 +436,9 @@ function validate() {
 	var isFollowUp = document.getElementById("isFollowUp").checked;
 	var followUpDate = document.getElementById("followUpDate").value;
 	var followUpTime = document.getElementById("followUpTime").value;
-
+	var callDurationHR = document.getElementById("callDurationHR").value;
+	var callDurationMI = document.getElementById("callDurationMI").value;
+	
 	if(dealer == 0) {
 		swal("Error!", "Invalid dealer", "error");
 	} else if (category  === "" || category == "undefined") {
@@ -430,6 +449,8 @@ function validate() {
 		swal("Error!", "Invalid status!", "error");
 	} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
 		swal("Error!", "Invalid follow up details!", "error");
+	} else if (callDurationMI  === "" || callDurationHR === "" || callDurationHR < 0 || allDurationMI > 59) {
+		swal("Error!", "Invalid call duration!", "error");
 	} else {
 		document.getElementById("book").submit();
 	}

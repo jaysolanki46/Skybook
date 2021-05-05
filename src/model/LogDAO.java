@@ -23,8 +23,8 @@ public class LogDAO {
         	
             PreparedStatement preparedStatement =  cnn.prepareStatement("Insert into logs "
             		+ "(user, log_date, log_time, is_voicemail, is_instructed, dealer, technician, serial, "
-            		+ "issue_master, issue, description, new_issue, new_solution, status, terminal, current_release)" 
-            		+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            		+ "issue_master, issue, description, new_issue, new_solution, status, terminal, current_release, duration)" 
+            		+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, log.getUser().getId().toString());
             preparedStatement.setString(2, log.getLogDate());
             preparedStatement.setString(3, log.getLogTime());
@@ -39,6 +39,7 @@ public class LogDAO {
             preparedStatement.setString(12, log.getNewIssue());
             preparedStatement.setString(13, log.getNewSolution());
             preparedStatement.setString(14, log.getStatus().getId().toString());
+            preparedStatement.setString(17, log.getDuration());
             
             if(log.getTerminal() != null) {
             	preparedStatement.setString(15, log.getTerminal().getId().toString());
@@ -71,13 +72,15 @@ public class LogDAO {
 			cnn = DBConfig.connection();
 			
             PreparedStatement preparedStatement =  cnn.prepareStatement("Update logs set "
-            		+ "description = ?, new_issue = ?, new_solution = ?, status = ? "
+            		+ "description = ?, new_issue = ?, new_solution = ?, status = ?, duration = ? "
             		+ "WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, log.getDescription());
             preparedStatement.setString(2, log.getNewIssue());
             preparedStatement.setString(3, log.getNewSolution());
             preparedStatement.setString(4, log.getStatus().getId().toString());
-            preparedStatement.setString(5, log.getId().toString());
+            preparedStatement.setString(5, log.getDuration());
+            preparedStatement.setString(6, log.getId().toString());
+            
             
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();

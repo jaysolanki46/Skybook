@@ -155,7 +155,7 @@
 		 System.out.println(clause);
 		 
 		 rs = st.executeQuery(
-					"select l.id, l.log_date, l.log_time, l.technician, l.description, l.new_issue, l.new_solution, l.is_voicemail, l.is_instructed, "+
+					"select l.id, l.log_date, l.log_time, l.technician, l.description, l.new_issue, l.new_solution, l.is_voicemail, l.is_instructed, l.duration, "+
 						"ter.name as terminal, l.serial as serialNumber, rel.name as current_release, "+
 				        "d.name as dealer, "+
 						"u.name as user, "+
@@ -174,7 +174,7 @@
                  		" ORDER BY l.id DESC");
 		 
 		 rsExport = stExport.executeQuery(
-				 	"select l.id, l.log_date, l.log_time, l.technician, l.description, l.new_issue, l.new_solution, l.is_voicemail, l.is_instructed, "+
+				 	"select l.id, l.log_date, l.log_time, l.technician, l.description, l.new_issue, l.new_solution, l.is_voicemail, l.is_instructed, l.duration, "+
 							"ter.name as terminal, l.serial as serialNumber, rel.name as current_release, "+
 					        "d.name as dealer, "+
 							"u.name as user, "+
@@ -332,8 +332,9 @@
 					      <th scope="col">New Solution</th>
 					      <th scope="col">Voicemail</th>
 					      <th scope="col">Outgoing</th>
+					      <th scope="col">Duration</th>
 					      <th scope="col">Status</th>
-					       <th scope="col">Attendee</th>
+					      <th scope="col">Attendee</th>
 					      <th scope="col">Update</th>
 					    </tr>
 					  </thead>
@@ -379,7 +380,8 @@
 										%>
 											<center><img alt="" width="22px" src="../IMAGES/yes.svg"></center>
 										<% }
-									%></td><%									
+									%></td><%	
+									%><td><% if(rs.getString("duration") != null)  %><%=rs.getString("duration")%></td><%
 									%><td><%=rs.getString("status") %></td><%
 									%><td><%=rs.getString("user") %></td><%
 									%><td><center><a href=../View/HistoryDetails.jsp?log=<%=rs.getString("id") %>><i class="fas fa-edit"></i></a></center></td><%
@@ -406,6 +408,7 @@
 					      <th scope="col">New Solution</th>
 					      <th scope="col">Voicemail</th>
 					      <th scope="col">Outgoing</th>
+					      <th scope="col">Duration</th>
 					      <th scope="col">Status</th>
 					       <th scope="col">Attendee</th>
 					    </tr>
@@ -459,7 +462,8 @@
 											} else {
 												out.print('\"' + "-" + '\"');	
 											}
-									%></td><%									
+									%></td><%					
+									%><td><% if(rsExport.getString("duration") != null)  %><%=rsExport.getString("duration")%></td><%
 									%><td><%='\"'+rsExport.getString("status") + '\"'%></td><%
 									%><td><%='\"'+rsExport.getString("user") + '\"'%></td><%	
 									%></tr><%

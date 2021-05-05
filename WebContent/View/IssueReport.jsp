@@ -94,7 +94,7 @@
 		 System.out.println(clause);
 		 
 		 rs = st.executeQuery(
-					"select l.id, l.log_date, l.log_time, l.technician, l.description, l.new_issue, l.new_solution, l.is_voicemail, l.is_instructed, "+
+					"select l.id, l.log_date, l.log_time, l.technician, l.description, l.new_issue, l.new_solution, l.is_voicemail, l.is_instructed, l.duration, "+
 						"ter.name as terminal, l.serial as serialNumber, rel.name as current_release, "+
 				        "d.name as dealer, "+
 						"u.name as user, "+
@@ -113,7 +113,7 @@
                  		" ORDER BY l.id DESC");
 		 
 		 rsExport = stExport.executeQuery(
-				 	"select l.id, l.log_date, l.log_time, l.technician, l.description, l.new_issue, l.new_solution, l.is_voicemail, l.is_instructed, "+
+				 	"select l.id, l.log_date, l.log_time, l.technician, l.description, l.new_issue, l.new_solution, l.is_voicemail, l.is_instructed, l.duration, "+
 							"ter.name as terminal, l.serial as serialNumber, rel.name as current_release, "+
 					        "d.name as dealer, "+
 							"u.name as user, "+
@@ -139,7 +139,7 @@
 	<div class="card center_div"  >
 	
 	 	<div class="card-header" style="color: white; background-color: #0066cb; ">
-			<h5 style="color: white;">Issue Category Report</h5>
+			<h5 style="color: white;">Issue Report</h5>
 		</div>
 		
 		<div class="card-group">
@@ -174,7 +174,7 @@
 									<input type="hidden" id="hiddenIssueID" name="hiddenIssueID" value="<% int issueDefault = 0; if(issue != null) out.print(issue); else out.print(issueDefault); %>"/>
 									
 									<button type="submit" title="Search" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="this.form.submit();"><i class="fas fa-search"></i></button>
-									<button type="button" title="Export" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Issue Category Report.csv');"><i class="fas fa-file-download"></i></button>
+									<button type="button" title="Export" class="btn btn-primary" style="margin-left: 0.5rem;" onclick="exportTableToCSV('Issue Report.csv');"><i class="fas fa-file-download"></i></button>
 									<a href="../View/IssueReport.jsp"><button type="button"  title="Reset" class="btn btn-primary" style="margin-left: 0.5rem;"><i class="fas fa-sync-alt"></i></button></a>
 								</form>
 							</div>
@@ -195,8 +195,9 @@
 					      <th scope="col">New Solution</th>
 					      <th scope="col">Voicemail</th>
 					      <th scope="col">Outgoing</th>
+					      <th scope="col">Duration</th>
 					      <th scope="col">Status</th>
-					       <th scope="col">Attendee</th>
+					      <th scope="col">Attendee</th>
 					      <th scope="col">Update</th>
 					    </tr>
 					  </thead>
@@ -240,7 +241,8 @@
 										%>
 											<center><img alt="" width="22px" src="../IMAGES/yes.svg"></center>
 										<% }
-									%></td><%									
+									%></td><%			
+									%><td><% if(rs.getString("duration") != null)  %><%=rs.getString("duration")%></td><%
 									%><td><%=rs.getString("status") %></td><%
 									%><td><%=rs.getString("user") %></td><%
 									%><td><center><a href=../View/HistoryDetails.jsp?log=<%=rs.getString("id") %>><i class="fas fa-edit"></i></a></center></td><%
@@ -267,6 +269,7 @@
 					      <th scope="col">New Solution</th>
 					      <th scope="col">Voicemail</th>
 					      <th scope="col">Outgoing</th>
+					      <th scope="col">Duration</th>
 					      <th scope="col">Status</th>
 					       <th scope="col">Attendee</th>
 					    </tr>
@@ -320,7 +323,8 @@
 											} else {
 												out.print('\"' + "-" + '\"');	
 											}
-									%></td><%									
+									%></td><%		
+									%><td><% if(rsExport.getString("duration") != null)  %><%=rsExport.getString("duration")%></td><%
 									%><td><%='\"'+rsExport.getString("status") + '\"'%></td><%
 									%><td><%='\"'+rsExport.getString("user") + '\"'%></td><%	
 									%></tr><%

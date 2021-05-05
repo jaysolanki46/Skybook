@@ -36,7 +36,7 @@
 		String log = request.getParameter("log");
 		
 		rs = st.executeQuery(
-				"select l.id, l.log_date, l.log_time, l.is_voicemail, l.is_instructed, l.serial, l.description, l.new_issue, l.new_solution, l.status, l.technician, " + 
+				"select l.id, l.log_date, l.log_time, l.is_voicemail, l.is_instructed, l.serial, l.description, l.new_issue, l.new_solution, l.status, l.technician, l.duration, " + 
 				"ter.name as terminal, rel.name as current_release, d.name as dealer, " +
 				"u.name as user, iss.name as issue, issmaster.name as category, fup.id as follow_up_id, fup.follow_up_date, fup.follow_up_time, fup.contact, fup.note from " +
 				"logs as l " +
@@ -195,6 +195,31 @@
 			<!--  side card -->
 			<div class="card" style="width:25%">
 				<div class="card-body" >
+				
+				  <div class="card bg-light mb-3" style="max-width: 26rem;">
+						<h5 class="card-header" style="background-color: transparent;">Call Duration</h5>
+						<div class="card-body row">
+							<%
+								String duration = rs.getString("duration");
+								String hr = "00", mi = "00";
+								if(duration != null) {
+									hr =  String.format("%02d" , Integer.valueOf(duration.substring(0, duration.indexOf(":"))));
+									mi =  String.format("%02d", Integer.valueOf(duration.substring(duration.indexOf(":") + 1)));	
+								}
+							%>
+							<div class="form-group col-sm-6">
+							    <label for="callDurationHR">Hours</label>
+								<input type="number" id="callDurationHR" name="callDurationHR" min="0"  placeholder="Hr"
+								 class="form-control col-sm-12" value=<%=hr %>>
+							 </div>	
+							 <div class="form-group col-sm-6">
+							    <label for="callDurationMI">Minutes</label>
+								<input type="number" id="callDurationMI" name="callDurationMI" min="0" max="59" placeholder="Mi" 
+								class="form-control col-sm-12" value=<%=mi %>>
+							 </div>							
+						</div>
+					</div>
+					
 					<div class="card bg-light mb-3" style="max-width: 26rem;">
 						<h5 class="card-header" style="background-color: transparent;">Status</h5>
 						<div class="row" style="margin-left: 0px;">
@@ -280,23 +305,8 @@
 		
 </body>
 <script type="text/javascript">
-var myVar=setInterval(function () {myTimer()}, 1000);
 var counter = 0;
 
-
-function myTimer() {
-	var now = new Date(),	 
-    months = ['January', 'February', '...']; 
-    time = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds(), 
-
-    date = [now.getDate(), 
-            now.getMonth() + 1,
-            now.getFullYear()].join('-');
-
-	document.getElementById('clock').innerHTML = [date, time].join(' / ');
-	
-	setTimeout(myTimer, 1000);//This method will call for every second
-}
 function freezeLogTime() {
 	var now = new Date();	
 	time = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
@@ -395,15 +405,18 @@ function validate() {
 	var isFollowUp = document.getElementById("isFollowUp").checked;
 	var followUpDate = document.getElementById("followUpDate").value;
 	var followUpTime = document.getElementById("followUpTime").value;
+	var callDurationHR = document.getElementById("callDurationHR").value;
+	var callDurationMI = document.getElementById("callDurationMI").value;
 	
 	if (status == 0) {
 		swal("Error!", "Invalid status!", "error");
 	} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
 			swal("Error!", "Invalid follow up details!", "error");
+	} else if (callDurationMI  === "" || callDurationHR === "" || callDurationHR < 0 || callDurationMI > 59) {
+		swal("Error!", "Invalid call duration!", "error");
 	} else {
 			document.getElementById("book").submit();
 	}
-	
 }
 </script>
 <% 

@@ -19,6 +19,7 @@ public class Log {
 	private String description;
 	private String newIssue;
 	private String newSolution;
+	private String duration;
 	private Status status;
 	
 	public Integer getId() {
@@ -118,12 +119,16 @@ public class Log {
 	public void setNewSolution(String newSolution) {
 		this.newSolution = newSolution;
 	}
+	public String getDuration() {
+		return duration;
+	}
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 	public Status getStatus() {
 		return status;
 	}
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	
-	
 }

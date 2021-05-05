@@ -82,6 +82,7 @@ public class BookServlet extends HttpServlet {
 		String statusID =  request.getParameter("status");
 		String[] isFollowUp = request.getParameterValues("isFollowUp");
 		
+		String duration = request.getParameter("callDurationHR") + ":" + request.getParameter("callDurationMI");
 		String followUpDate = request.getParameter("followUpDate");
 		String followUpTime = request.getParameter("followUpTime");
 		String followUpContact = request.getParameter("followUpContact");
@@ -141,6 +142,7 @@ public class BookServlet extends HttpServlet {
 		log.setDescription(description);
 		log.setNewIssue(newIssue);
 		log.setNewSolution(newSolution);
+		log.setDuration(duration);
 		log.setStatus(status);
 		
 		
@@ -210,6 +212,7 @@ public class BookServlet extends HttpServlet {
 		String newSolution =  request.getParameter("newSolution");
 		String statusID =  request.getParameter("status");
 		String[] isFollowUp = request.getParameterValues("isFollowUp");
+		String duration = request.getParameter("callDurationHR") + ":" + request.getParameter("callDurationMI");
 		String followUpID = request.getParameter("hiddenFollowUpID");
 		String followUpDate = request.getParameter("followUpDate");
 		String oldFollowUpTime = request.getParameter("hiddenFollowUpTime"); // Update in viuew
@@ -231,6 +234,7 @@ public class BookServlet extends HttpServlet {
 			log.setDescription(description);
 			log.setNewIssue(newIssue);
 			log.setNewSolution(newSolution);
+			log.setDuration(duration);
 			log.setStatus(status);
 			Boolean isLogUpdated = logDao.update(log);
 			
