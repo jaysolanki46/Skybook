@@ -52,8 +52,8 @@ Also, Skybook system measures dealer experiences, support efficiency, and many o
             </td>
       </tr>
       <tr>
-          <td><a href="#"><img alt="Chart Js" title="Chart Js" height="40px" width="50px"
-                          src="https://user-images.githubusercontent.com/25057099/117569480-fb19c180-b119-11eb-8697-89ecf08e2ca9.png" />
+          <td><a href="#"><img alt="Chart.js" title="Chart.js" height="40px" width="50px"
+                          src="https://user-images.githubusercontent.com/25057099/117569480-fb19c180-b119-11eb-8697-89ecf08e2ca9.png" /> Chart.js
                   </a>
            </td>
             <td><a href="#"><img alt="GitHub" title="GitHub" height="40px" width="50px"
