@@ -12,7 +12,7 @@ Also, Skybook system measures dealer experiences, support efficiency, and many o
 - Visual Representation: It’ll provide a visual representation of how your Skyzer support is operating, including the time per call, voicemails, number of outgoing/incoming calls, and support efficiency.
 - 360-degree analysis: Support user/manager seeing in one screen all the communication done by all your team members with all the team members of your customer. You come to know who is talking to whom and when.
 
-## 🚀 Technologies Used
+## 🚀 Technologies & Tools
 <table>
     <tbody>
         <tr>
