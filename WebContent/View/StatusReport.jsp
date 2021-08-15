@@ -358,23 +358,8 @@
 </body>
 
 <script type="text/javascript">
-var myVar=setInterval(function () {myTimer()}, 1000);
 var counter = 0;
 
-
-function myTimer() {
-	var now = new Date(),	 
-    months = ['January', 'February', '...']; 
-    time = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds(), 
-
-    date = [now.getDate(), 
-            now.getMonth() + 1,
-            now.getFullYear()].join('-');
-
-	document.getElementById('clock').innerHTML = [date, time].join(' / ');
-	
-	setTimeout(myTimer, 1000);//This method will call for every second
-}
 
 function downloadCSV(csv, filename) {
 	

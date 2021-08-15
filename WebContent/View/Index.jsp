@@ -320,23 +320,8 @@
 		
 </body>
 <script type="text/javascript">
-var myVar=setInterval(function () {myTimer()}, 1000);
 var counter = 0;
 
-
-function myTimer() {
-	var now = new Date(),	 
-    months = ['January', 'February', '...']; 
-    time = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds(), 
-
-    date = [now.getDate(), 
-            now.getMonth() + 1,
-            now.getFullYear()].join('-');
-
-	document.getElementById('clock').innerHTML = [date, time].join(' / ');
-	
-	setTimeout(myTimer, 1000);//This method will call for every second
-}
 function freezeLogTime() {
 	var now = new Date();	
 	time = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
@@ -449,7 +434,7 @@ function validate() {
 		swal("Error!", "Invalid status!", "error");
 	} else if (isFollowUp && (followUpDate === "" || followUpTime === "")) {
 		swal("Error!", "Invalid follow up details!", "error");
-	} else if (callDurationMI  === "" || callDurationHR === "" || callDurationHR < 0 || allDurationMI > 59) {
+	} else if (callDurationMI  === "" || callDurationHR === "" || callDurationHR < 0 || callDurationMI > 59) {
 		swal("Error!", "Invalid call duration!", "error");
 	} else {
 		document.getElementById("book").submit();
