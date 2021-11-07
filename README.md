@@ -68,11 +68,3 @@ Also, Skybook system measures dealer experiences, support efficiency, and many o
   </tbody>
 </table>
 
-## 🎞 Quick Look-up 
-![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/0.1%20Dashboard.JPG "Dashboard")
-![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/1.0%20Book.png "Customer Call Book")
-![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/2.0%20History.JPG "Call History")
-![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/3.1%20Awaiting%20Tickets.png "Awaiting Ticket/Follow-Ups")
-![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/3.2%20Completed%20Ticket.png "Completed Ticket/Follow-Ups")
-![Alt text](https://github.com/jaysolanki46/Skybook/blob/master/WebContent/IMAGES/SiteSnaps/4.0%20Issue%20Report.JPG "Report")
-
