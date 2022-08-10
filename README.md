@@ -68,3 +68,9 @@ Also, Skybook system measures dealer experiences, support efficiency, and many o
   </tbody>
 </table>
 
+## Pages
+
+#Booking
+
+![Booking page](https://github.com/jaysolanki46/Skybook/blob/199c0a7d3b4b9068f573310f6f84f6ba6f473585/WebContent/IMAGES/SiteSnaps/Book1.png)
+
